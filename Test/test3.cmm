@@ -4,12 +4,21 @@ int main()
 	// */
 	int i = 1;
 	// nmsadhkajshd
-	int j = 02;
+	int j = 0.5;
+	int 0X00;
 	//nmsl
 	/*
 	/*
 	asdjhakds
 	*/
 	*/
+	1.05e
+	1.05e-4
+	0.7
+	12.43
+	9.00
+	01.23E12
+	43.e-4
+	.5E03
 	return 0;	
 }
