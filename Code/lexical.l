@@ -1,5 +1,7 @@
 %{
     #include <stdio.h>
+    int char2int8(char* s);
+    int char2int16(char* s);
 %}
 %option yylineno
 
@@ -41,16 +43,16 @@ return      {printf("RETURN\n");}
 ";"         {printf("SEMI\n");}
 ","         {printf("COMMA\n");}
 
-{int}       {printf("INT: %s\n",yytext);}
-{int8}      {printf("INT8: %s\n",yytext);}
-{int16}     {printf("INT16: %s\n",yytext);}
+{int}       {printf("INT: %s %d\n",yytext,atoi(yytext));}
+{int8}      {printf("INT8: %s %d\n",yytext,char2int8(yytext));}
+{int16}     {printf("INT16: %s %d\n",yytext,char2int16(yytext));}
 {wint16}    {printf("Error type A at Line %d: Illegal hexadecimal number \'%s\'\n",yylineno, yytext);}
 {wint8}     {printf("Error type A at Line %d: Illegal octal number \'%s\'\n",yylineno, yytext);}
 
 
-{float1}      {printf("FLOAT: %s\n",yytext);}
+{float1}      {printf("FLOAT: %s %f\n",yytext,atof(yytext));}
 {wfloat1}     {printf("Error type A at Line %d: Illegal floating point number \'%s\'\n",yylineno, yytext);}
-{float2}      {printf("FLOAT: %s\n",yytext);}
+{float2}      {printf("FLOAT: %s %f\n",yytext,atof(yytext));}
 {wfloat2}     {printf("Error type A at Line %d: Illegal floating point number \'%s\'\n",yylineno, yytext);}
 
 
@@ -76,3 +78,33 @@ return      {printf("RETURN\n");}
 
 .           {printf("Error type A at Line %d: Mysterious characters \'%s\'\n",yylineno, yytext);}
 %%
+
+int char2int8(char* s){
+    int i=0;
+    int res=0;
+    int temp=0;
+    while(s[i]!='\0'){
+        temp=s[i]-'0';
+        res=res*8+temp;
+        i++;
+    }
+    return res;
+}
+
+int char2int16(char* s){
+    int i=2;
+    int res=0;
+    int temp=0;
+    while(s[i]!='\0'){
+        if(s[i]>='0'&&s[i]<='9'){
+            temp=s[i]-'0';
+        }   
+        else{
+            temp=s[i]-'a';
+            temp+=10;
+        } 
+        res=res*16+temp;
+        i++;
+    }
+    return res;
+}
