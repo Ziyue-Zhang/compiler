@@ -1,5 +1,6 @@
 %{
     #include <stdio.h>
+    #include "syntax.tab.h"
     int char2int8(char* s);
     int char2int16(char* s);
 %}
@@ -43,17 +44,23 @@ return      {printf("RETURN\n");}
 ";"         {printf("SEMI\n");}
 ","         {printf("COMMA\n");}
 
-{int}       {printf("INT: %s %d\n",yytext,atoi(yytext));}
-{int8}      {printf("INT8: %s %d\n",yytext,char2int8(yytext));}
-{int16}     {printf("INT16: %s %d\n",yytext,char2int16(yytext));}
+{int}       {printf("INT: %s %d\n",yytext,atoi(yytext));
+            yylval=atoi(yytext);
+            return INT;}
+{int8}      {printf("INT8: %s %d\n",yytext,char2int8(yytext));
+            yylval=char2int8(yytext);
+            return INT;}
+{int16}     {printf("INT16: %s %d\n",yytext,char2int16(yytext));
+            yylval=char2int16(yytext);
+            return INT;}
 {wint16}    {printf("Error type A at Line %d: Illegal hexadecimal number \'%s\'\n",yylineno, yytext);}
 {wint8}     {printf("Error type A at Line %d: Illegal octal number \'%s\'\n",yylineno, yytext);}
 
 
-{float1}      {printf("FLOAT: %s %f\n",yytext,atof(yytext));}
-{wfloat1}     {printf("Error type A at Line %d: Illegal floating point number \'%s\'\n",yylineno, yytext);}
-{float2}      {printf("FLOAT: %s %f\n",yytext,atof(yytext));}
-{wfloat2}     {printf("Error type A at Line %d: Illegal floating point number \'%s\'\n",yylineno, yytext);}
+{float1}    {printf("FLOAT: %s %f\n",yytext,atof(yytext));}
+{wfloat1}   {printf("Error type A at Line %d: Illegal floating point number \'%s\'\n",yylineno, yytext);}
+{float2}    {printf("FLOAT: %s %f\n",yytext,atof(yytext));}
+{wfloat2}   {printf("Error type A at Line %d: Illegal floating point number \'%s\'\n",yylineno, yytext);}
 
 
 {id}        {printf("ID: %s\n",yytext);}
@@ -67,10 +74,10 @@ return      {printf("RETURN\n");}
 "}"         {printf("RC\n");}
 "."         {printf("DOT\n");}
 "!"         {printf("NOT\n");}
-"*"         {printf("STAR\n");}
-"/"         {printf("DIV\n");}
-"+"         {printf("PLUS\n");}
-"-"         {printf("MINUS\n");}
+"*"         {printf("STAR\n");return MUL;}
+"/"         {printf("DIV\n");return DIV;}
+"+"         {printf("PLUS\n");return ADD;}
+"-"         {printf("MINUS\n");return SUB;}
 {relop}     {printf("RELOP\n");}
 "&&"        {printf("AND\n");}
 "||"        {printf("OR\n");}

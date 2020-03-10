@@ -1,11 +1,28 @@
 #include <stdio.h>
+#include "syntax.tab.h"
 
 extern int yylex (void);
 extern void yyrestart (FILE *input_file);
 extern FILE* yyin;
 extern int yylineno;
 
-int main(int argc, char** argv) {
+int main() {
+    yyparse();
+}
+/*int main(int argc, char** argv) {
+    if (argc <= 1) 
+        return 1;
+    FILE* f = fopen(argv[1], "r");
+    if (!f){
+        perror(argv[1]);
+        return 1;
+    }
+    yyrestart(f);
+    yyparse();
+    return 0;
+}*/
+
+/*int main(int argc, char** argv) {
     if (argc > 1) {
         if (!(yyin = fopen(argv[1], "r"))) {
             perror(argv[1]);
@@ -15,7 +32,7 @@ int main(int argc, char** argv) {
     yylex();
     printf("%8d\n", yylineno);
     return 0;
-}
+}*/
 
 /*int main(int argc, char** argv){
     int i, totchars = 0, to   twords = 0, totlines = 0;
