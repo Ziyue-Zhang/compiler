@@ -57,9 +57,13 @@ return      {printf("RETURN\n");}
 {wint8}     {printf("Error type A at Line %d: Illegal octal number \'%s\'\n",yylineno, yytext);}
 
 
-{float1}    {printf("FLOAT: %s %f\n",yytext,atof(yytext));}
+{float1}    {printf("FLOAT: %s %f\n",yytext,atof(yytext));
+            yylval=atof(yytext);
+            return FLOAT;}
 {wfloat1}   {printf("Error type A at Line %d: Illegal floating point number \'%s\'\n",yylineno, yytext);}
-{float2}    {printf("FLOAT: %s %f\n",yytext,atof(yytext));}
+{float2}    {printf("FLOAT: %s %f\n",yytext,atof(yytext));
+            yylval=atof(yytext);
+            return FLOAT;}
 {wfloat2}   {printf("Error type A at Line %d: Illegal floating point number \'%s\'\n",yylineno, yytext);}
 
 

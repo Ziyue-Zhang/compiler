@@ -957,124 +957,128 @@ YY_RULE_SETUP
 case 19:
 YY_RULE_SETUP
 #line 60 "lexical.l"
-{printf("FLOAT: %s %f\n",yytext,atof(yytext));}
+{printf("FLOAT: %s %f\n",yytext,atof(yytext));
+            yylval=atof(yytext);
+            return FLOAT;}
 	YY_BREAK
 case 20:
-YY_RULE_SETUP
-#line 61 "lexical.l"
-{printf("Error type A at Line %d: Illegal floating point number \'%s\'\n",yylineno, yytext);}
-	YY_BREAK
-case 21:
-YY_RULE_SETUP
-#line 62 "lexical.l"
-{printf("FLOAT: %s %f\n",yytext,atof(yytext));}
-	YY_BREAK
-case 22:
 YY_RULE_SETUP
 #line 63 "lexical.l"
 {printf("Error type A at Line %d: Illegal floating point number \'%s\'\n",yylineno, yytext);}
 	YY_BREAK
+case 21:
+YY_RULE_SETUP
+#line 64 "lexical.l"
+{printf("FLOAT: %s %f\n",yytext,atof(yytext));
+            yylval=atof(yytext);
+            return FLOAT;}
+	YY_BREAK
+case 22:
+YY_RULE_SETUP
+#line 67 "lexical.l"
+{printf("Error type A at Line %d: Illegal floating point number \'%s\'\n",yylineno, yytext);}
+	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 66 "lexical.l"
+#line 70 "lexical.l"
 {printf("ID: %s\n",yytext);}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 67 "lexical.l"
+#line 71 "lexical.l"
 {printf("Error type A at Line %d: Wrong ID \'%s\'\n",yylineno, yytext);}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 69 "lexical.l"
+#line 73 "lexical.l"
 {printf("LP\n");}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 70 "lexical.l"
+#line 74 "lexical.l"
 {printf("RP\n");}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 71 "lexical.l"
+#line 75 "lexical.l"
 {printf("LB\n");}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 72 "lexical.l"
+#line 76 "lexical.l"
 {printf("RB\n");}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 73 "lexical.l"
+#line 77 "lexical.l"
 {printf("LC\n");}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 74 "lexical.l"
+#line 78 "lexical.l"
 {printf("RC\n");}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 75 "lexical.l"
+#line 79 "lexical.l"
 {printf("DOT\n");}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 76 "lexical.l"
+#line 80 "lexical.l"
 {printf("NOT\n");}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 77 "lexical.l"
+#line 81 "lexical.l"
 {printf("STAR\n");return MUL;}
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 78 "lexical.l"
+#line 82 "lexical.l"
 {printf("DIV\n");return DIV;}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 79 "lexical.l"
+#line 83 "lexical.l"
 {printf("PLUS\n");return ADD;}
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 80 "lexical.l"
+#line 84 "lexical.l"
 {printf("MINUS\n");return SUB;}
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 81 "lexical.l"
+#line 85 "lexical.l"
 {printf("RELOP\n");}
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 82 "lexical.l"
+#line 86 "lexical.l"
 {printf("AND\n");}
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 83 "lexical.l"
+#line 87 "lexical.l"
 {printf("OR\n");}
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 84 "lexical.l"
+#line 88 "lexical.l"
 {printf("ASSIGNOP\n");}
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 86 "lexical.l"
+#line 90 "lexical.l"
 {printf("Error type A at Line %d: Mysterious characters \'%s\'\n",yylineno, yytext);}
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 87 "lexical.l"
+#line 91 "lexical.l"
 ECHO;
 	YY_BREAK
-#line 1078 "lex.yy.c"
+#line 1082 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2091,7 +2095,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 87 "lexical.l"
+#line 91 "lexical.l"
 
 
 int char2int8(char* s){
