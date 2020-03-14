@@ -1,15 +1,20 @@
 %{
     #include <stdio.h>
-    #define YYSTYPE float
+    //#define YYSTYPE float
     #include "lex.yy.c"
 %}
 
+%union {
+  int type_int;
+  float type_float;
+}
 %locations
 
-%token INT
-%token FLOAT
+%token <type_int> INT
+%token <type_float> FLOAT
 %token ADD SUB MUL DIV
 
+%type <type_float> Exp Factor Term
 %%
 Calc : /* empty */
 | Exp { printf("= %f\n", $1); }

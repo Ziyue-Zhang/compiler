@@ -65,7 +65,7 @@
 #line 1 "syntax.y" /* yacc.c:339  */
 
     #include <stdio.h>
-    #define YYSTYPE float
+    //#define YYSTYPE float
     #include "lex.yy.c"
 
 #line 72 "syntax.tab.c" /* yacc.c:339  */
@@ -114,7 +114,18 @@ extern int yydebug;
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+
+union YYSTYPE
+{
+#line 7 "syntax.y" /* yacc.c:355  */
+
+  int type_int;
+  float type_float;
+
+#line 126 "syntax.tab.c" /* yacc.c:355  */
+};
+
+typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif
@@ -142,7 +153,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 146 "syntax.tab.c" /* yacc.c:358  */
+#line 157 "syntax.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -442,8 +453,8 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    14,    14,    15,    17,    18,    19,    21,    22,    23,
-      25,    26
+       0,    19,    19,    20,    22,    23,    24,    26,    27,    28,
+      30,    31
 };
 #endif
 
@@ -1309,49 +1320,49 @@ yyreduce:
   switch (yyn)
     {
         case 3:
-#line 15 "syntax.y" /* yacc.c:1646  */
-    { printf("= %f\n", (yyvsp[0])); }
-#line 1315 "syntax.tab.c" /* yacc.c:1646  */
+#line 20 "syntax.y" /* yacc.c:1646  */
+    { printf("= %f\n", (yyvsp[0].type_float)); }
+#line 1326 "syntax.tab.c" /* yacc.c:1646  */
     break;
 
   case 5:
-#line 18 "syntax.y" /* yacc.c:1646  */
-    { (yyval) = (yyvsp[-2]) + (yyvsp[0]); }
-#line 1321 "syntax.tab.c" /* yacc.c:1646  */
+#line 23 "syntax.y" /* yacc.c:1646  */
+    { (yyval.type_float) = (yyvsp[-2].type_float) + (yyvsp[0].type_float); }
+#line 1332 "syntax.tab.c" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 19 "syntax.y" /* yacc.c:1646  */
-    { (yyval) = (yyvsp[-2]) - (yyvsp[0]); }
-#line 1327 "syntax.tab.c" /* yacc.c:1646  */
+#line 24 "syntax.y" /* yacc.c:1646  */
+    { (yyval.type_float) = (yyvsp[-2].type_float) - (yyvsp[0].type_float); }
+#line 1338 "syntax.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 22 "syntax.y" /* yacc.c:1646  */
-    { (yyval) = (yyvsp[-2]) * (yyvsp[0]); }
-#line 1333 "syntax.tab.c" /* yacc.c:1646  */
+#line 27 "syntax.y" /* yacc.c:1646  */
+    { (yyval.type_float) = (yyvsp[-2].type_float) * (yyvsp[0].type_float); }
+#line 1344 "syntax.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 23 "syntax.y" /* yacc.c:1646  */
-    { (yyval) = (yyvsp[-2]) / (yyvsp[0]); }
-#line 1339 "syntax.tab.c" /* yacc.c:1646  */
+#line 28 "syntax.y" /* yacc.c:1646  */
+    { (yyval.type_float) = (yyvsp[-2].type_float) / (yyvsp[0].type_float); }
+#line 1350 "syntax.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 25 "syntax.y" /* yacc.c:1646  */
-    { (yyval) = (yyvsp[0]); }
-#line 1345 "syntax.tab.c" /* yacc.c:1646  */
+#line 30 "syntax.y" /* yacc.c:1646  */
+    { (yyval.type_float) = (yyvsp[0].type_int); }
+#line 1356 "syntax.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 26 "syntax.y" /* yacc.c:1646  */
-    { (yyval) = (yyvsp[0]); }
-#line 1351 "syntax.tab.c" /* yacc.c:1646  */
+#line 31 "syntax.y" /* yacc.c:1646  */
+    { (yyval.type_float) = (yyvsp[0].type_float); }
+#line 1362 "syntax.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1355 "syntax.tab.c" /* yacc.c:1646  */
+#line 1366 "syntax.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1586,7 +1597,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 28 "syntax.y" /* yacc.c:1906  */
+#line 33 "syntax.y" /* yacc.c:1906  */
 
 yyerror(char* msg) {
     fprintf(stderr, "error: %s\n", msg);
