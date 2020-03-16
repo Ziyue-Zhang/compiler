@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include "syntax.tab.h"
+#include "tree.h"
 
 extern int yylex (void);
 extern void yyrestart (FILE *input_file);
 extern FILE* yyin;
 extern int yylineno;
+extern char eflag;
 
 /*int main() {
     yyparse();
@@ -19,7 +21,11 @@ int main(int argc, char** argv) {
     }
     yyrestart(f);
     yylineno = 1;
+    eflag=false;
     yyparse();
+    if(eflag==false){
+
+    }
     return 0;
 }
 

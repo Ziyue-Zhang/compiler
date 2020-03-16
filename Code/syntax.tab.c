@@ -62,15 +62,18 @@
 
 
 /* Copy the first part of user declarations.  */
-#line 1 "syntax.y" /* yacc.c:339  */
+#line 1 "./syntax.y" /* yacc.c:339  */
 
     #include <stdio.h>
+    #include "tree.h"
     //#define YYDEBUG 1
     //int yydebug=1;
     //#define YYSTYPE float
+    void yyerror(char* msg) ;
     #include "lex.yy.c"
+    extern char eflag;
 
-#line 74 "syntax.tab.c" /* yacc.c:339  */
+#line 77 "./syntax.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -142,12 +145,11 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 9 "syntax.y" /* yacc.c:355  */
+#line 12 "./syntax.y" /* yacc.c:355  */
 
-  int type_int;
-  float type_float;
+  struct node_t* node_type;
 
-#line 151 "syntax.tab.c" /* yacc.c:355  */
+#line 153 "./syntax.tab.c" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -178,7 +180,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 182 "syntax.tab.c" /* yacc.c:358  */
+#line 184 "./syntax.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -478,15 +480,15 @@ static const yytype_uint8 yytranslate[] =
 
 #if YYDEBUG
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
-static const yytype_uint8 yyrline[] =
+static const yytype_uint16 yyrline[] =
 {
-       0,    43,    43,    45,    46,    48,    49,    50,    51,    54,
-      55,    58,    59,    61,    62,    64,    65,    67,    70,    71,
-      72,    74,    75,    76,    78,    79,    81,    84,    85,    87,
-      88,    90,    91,    92,    93,    94,    95,    96,    99,   100,
-     102,   103,   105,   106,   108,   109,   112,   113,   114,   115,
-     116,   117,   118,   119,   120,   121,   122,   123,   124,   125,
-     126,   127,   128,   129,   130,   131,   132,   134,   135,   136
+       0,    52,    52,    57,    62,    66,    72,    77,    83,    87,
+      91,    99,   103,   108,   116,   122,   126,   130,   136,   140,
+     147,   151,   158,   164,   168,   174,   179,   186,   193,   197,
+     202,   206,   211,   215,   221,   229,   239,   247,   252,   257,
+     261,   267,   271,   275,   282,   286,   294,   300,   306,   312,
+     318,   324,   330,   336,   342,   348,   353,   358,   365,   371,
+     378,   384,   388,   392,   396,   399,   402,   406,   412,   416
 };
 #endif
 
@@ -1463,8 +1465,690 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-      
-#line 1468 "syntax.tab.c" /* yacc.c:1646  */
+        case 2:
+#line 52 "./syntax.y" /* yacc.c:1646  */
+    {
+  root=add_node("Program",SYNTAX_TYPE,NULL,1,(yylsp[0]).first_line,false);
+  root->son[0]=(yyvsp[0].node_type);
+}
+#line 1475 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 3:
+#line 57 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("ExtDefList",SYNTAX_TYPE,NULL,2,(yylsp[-1]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[-1].node_type);
+  (yyval.node_type)->son[1]=(yyvsp[0].node_type);
+}
+#line 1485 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 4:
+#line 62 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=NULL;
+}
+#line 1493 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 5:
+#line 66 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("ExtDef",SYNTAX_TYPE,NULL,3,(yylsp[-2]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[-2].node_type);
+  (yyval.node_type)->son[1]=(yyvsp[-1].node_type);
+  (yyval.node_type)->son[2]=(yyvsp[0].node_type);
+}
+#line 1504 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 6:
+#line 72 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("ExtDef",SYNTAX_TYPE,NULL,2,(yylsp[-1]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[-1].node_type);
+  (yyval.node_type)->son[1]=(yyvsp[0].node_type);
+}
+#line 1514 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 7:
+#line 77 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("ExtDef",SYNTAX_TYPE,NULL,3,(yylsp[-2]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[-2].node_type);
+  (yyval.node_type)->son[1]=(yyvsp[-1].node_type);
+  (yyval.node_type)->son[2]=(yyvsp[0].node_type);
+}
+#line 1525 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 8:
+#line 83 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type) = NULL;
+}
+#line 1533 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 9:
+#line 87 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("ExtDecList",SYNTAX_TYPE,NULL,1,(yylsp[0]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[0].node_type);
+}
+#line 1542 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 10:
+#line 91 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("ExtDecList",SYNTAX_TYPE,NULL,3,(yylsp[-2]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[-2].node_type);
+  (yyval.node_type)->son[1]=(yyvsp[-1].node_type);
+  (yyval.node_type)->son[2]=(yyvsp[0].node_type);
+}
+#line 1553 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 11:
+#line 99 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("Specifier",SYNTAX_TYPE,NULL,1,(yylsp[0]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[0].node_type);
+}
+#line 1562 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 12:
+#line 103 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("Specifier",SYNTAX_TYPE,NULL,1,(yylsp[0]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[0].node_type);
+}
+#line 1571 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 13:
+#line 108 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("StructSpecifier",SYNTAX_TYPE,NULL,5,(yylsp[-4]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[-4].node_type);
+  (yyval.node_type)->son[1]=(yyvsp[-3].node_type);
+  (yyval.node_type)->son[2]=(yyvsp[-2].node_type);
+  (yyval.node_type)->son[3]=(yyvsp[-1].node_type);
+  (yyval.node_type)->son[4]=(yyvsp[0].node_type);
+}
+#line 1584 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 14:
+#line 116 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("StructSpecifier",SYNTAX_TYPE,NULL,2,(yylsp[-1]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[-1].node_type);
+  (yyval.node_type)->son[1]=(yyvsp[0].node_type);
+}
+#line 1594 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 15:
+#line 122 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("OptTag",SYNTAX_TYPE,NULL,1,(yylsp[0]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[0].node_type);
+}
+#line 1603 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 16:
+#line 126 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=NULL;
+}
+#line 1611 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 17:
+#line 130 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("Tag",SYNTAX_TYPE,NULL,1,(yylsp[0]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[0].node_type);
+}
+#line 1620 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 18:
+#line 136 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("VarDec",SYNTAX_TYPE,NULL,1,(yylsp[0]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[0].node_type);
+}
+#line 1629 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 19:
+#line 140 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("VarDec",SYNTAX_TYPE,NULL,4,(yylsp[-3]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[-3].node_type);
+  (yyval.node_type)->son[1]=(yyvsp[-2].node_type);
+  (yyval.node_type)->son[2]=(yyvsp[-1].node_type);
+  (yyval.node_type)->son[3]=(yyvsp[0].node_type);
+}
+#line 1641 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 20:
+#line 147 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=NULL;
+}
+#line 1649 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 21:
+#line 151 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("FunDec",SYNTAX_TYPE,NULL,4,(yylsp[-3]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[-3].node_type);
+  (yyval.node_type)->son[1]=(yyvsp[-2].node_type);
+  (yyval.node_type)->son[2]=(yyvsp[-1].node_type);
+  (yyval.node_type)->son[3]=(yyvsp[0].node_type);
+}
+#line 1661 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 22:
+#line 158 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("FunDec",SYNTAX_TYPE,NULL,3,(yylsp[-2]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[-2].node_type);
+  (yyval.node_type)->son[1]=(yyvsp[-1].node_type);
+  (yyval.node_type)->son[2]=(yyvsp[0].node_type);
+}
+#line 1672 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 23:
+#line 164 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=NULL;
+}
+#line 1680 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 24:
+#line 168 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("VarList",SYNTAX_TYPE,NULL,3,(yylsp[-2]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[-2].node_type);
+  (yyval.node_type)->son[1]=(yyvsp[-1].node_type);
+  (yyval.node_type)->son[2]=(yyvsp[0].node_type);
+}
+#line 1691 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 25:
+#line 174 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("VarList",SYNTAX_TYPE,NULL,1,(yylsp[0]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[0].node_type);
+}
+#line 1700 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 26:
+#line 179 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("ParamDec",SYNTAX_TYPE,NULL,2,(yylsp[-1]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[-1].node_type);
+  (yyval.node_type)->son[1]=(yyvsp[0].node_type);
+}
+#line 1710 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 27:
+#line 186 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("CompSt",SYNTAX_TYPE,NULL,4,(yylsp[-3]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[-3].node_type);
+  (yyval.node_type)->son[1]=(yyvsp[-2].node_type);
+  (yyval.node_type)->son[2]=(yyvsp[-1].node_type);
+  (yyval.node_type)->son[3]=(yyvsp[0].node_type);
+}
+#line 1722 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 28:
+#line 193 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=NULL;
+}
+#line 1730 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 29:
+#line 197 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("StmtList",SYNTAX_TYPE,NULL,2,(yylsp[-1]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[-1].node_type);
+  (yyval.node_type)->son[1]=(yyvsp[0].node_type);
+}
+#line 1740 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 30:
+#line 202 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=NULL;
+}
+#line 1748 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 31:
+#line 206 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("Stmt",SYNTAX_TYPE,NULL,2,(yylsp[-1]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[-1].node_type);
+  (yyval.node_type)->son[1]=(yyvsp[0].node_type);
+}
+#line 1758 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 32:
+#line 211 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("Stmt",SYNTAX_TYPE,NULL,1,(yylsp[0]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[0].node_type);
+}
+#line 1767 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 33:
+#line 215 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("Stmt",SYNTAX_TYPE,NULL,3,(yylsp[-2]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[-2].node_type);
+  (yyval.node_type)->son[1]=(yyvsp[-1].node_type);
+  (yyval.node_type)->son[2]=(yyvsp[0].node_type);
+}
+#line 1778 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 34:
+#line 221 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("Stmt",SYNTAX_TYPE,NULL,5,(yylsp[-4]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[-4].node_type);
+  (yyval.node_type)->son[1]=(yyvsp[-3].node_type);
+  (yyval.node_type)->son[2]=(yyvsp[-2].node_type);
+  (yyval.node_type)->son[3]=(yyvsp[-1].node_type);
+  (yyval.node_type)->son[4]=(yyvsp[0].node_type);
+}
+#line 1791 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 35:
+#line 229 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("Stmt",SYNTAX_TYPE,NULL,7,(yylsp[-6]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[-6].node_type);
+  (yyval.node_type)->son[1]=(yyvsp[-5].node_type);
+  (yyval.node_type)->son[2]=(yyvsp[-4].node_type);
+  (yyval.node_type)->son[3]=(yyvsp[-3].node_type);
+  (yyval.node_type)->son[4]=(yyvsp[-2].node_type);
+  (yyval.node_type)->son[5]=(yyvsp[-1].node_type);
+  (yyval.node_type)->son[6]=(yyvsp[0].node_type);
+}
+#line 1806 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 36:
+#line 239 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("Stmt",SYNTAX_TYPE,NULL,5,(yylsp[-4]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[-4].node_type);
+  (yyval.node_type)->son[1]=(yyvsp[-3].node_type);
+  (yyval.node_type)->son[2]=(yyvsp[-2].node_type);
+  (yyval.node_type)->son[3]=(yyvsp[-1].node_type);
+  (yyval.node_type)->son[4]=(yyvsp[0].node_type);
+}
+#line 1819 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 37:
+#line 247 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=NULL;
+}
+#line 1827 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 38:
+#line 252 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("DefList",SYNTAX_TYPE,NULL,2,(yylsp[-1]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[-1].node_type);
+  (yyval.node_type)->son[1]=(yyvsp[0].node_type);
+}
+#line 1837 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 39:
+#line 257 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=NULL;
+}
+#line 1845 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 40:
+#line 261 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("Def",SYNTAX_TYPE,NULL,3,(yylsp[-2]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[-2].node_type);
+  (yyval.node_type)->son[1]=(yyvsp[-1].node_type);
+  (yyval.node_type)->son[2]=(yyvsp[0].node_type);
+}
+#line 1856 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 41:
+#line 267 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=NULL;
+}
+#line 1864 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 42:
+#line 271 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("DecList",SYNTAX_TYPE,NULL,1,(yylsp[0]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[0].node_type);
+}
+#line 1873 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 43:
+#line 275 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("DecList",SYNTAX_TYPE,NULL,3,(yylsp[-2]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[-2].node_type);
+  (yyval.node_type)->son[1]=(yyvsp[-1].node_type);
+  (yyval.node_type)->son[2]=(yyvsp[0].node_type);
+}
+#line 1884 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 44:
+#line 282 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("Dec",SYNTAX_TYPE,NULL,1,(yylsp[0]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[0].node_type);
+}
+#line 1893 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 45:
+#line 286 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("Dec",SYNTAX_TYPE,NULL,3,(yylsp[-2]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[-2].node_type);
+  (yyval.node_type)->son[1]=(yyvsp[-1].node_type);
+  (yyval.node_type)->son[2]=(yyvsp[0].node_type);
+}
+#line 1904 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 46:
+#line 294 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("Exp",SYNTAX_TYPE,NULL,3,(yylsp[-2]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[-2].node_type);
+  (yyval.node_type)->son[1]=(yyvsp[-1].node_type);
+  (yyval.node_type)->son[2]=(yyvsp[0].node_type);
+}
+#line 1915 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 47:
+#line 300 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("Exp",SYNTAX_TYPE,NULL,3,(yylsp[-2]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[-2].node_type);
+  (yyval.node_type)->son[1]=(yyvsp[-1].node_type);
+  (yyval.node_type)->son[2]=(yyvsp[0].node_type);
+}
+#line 1926 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 48:
+#line 306 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("Exp",SYNTAX_TYPE,NULL,3,(yylsp[-2]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[-2].node_type);
+  (yyval.node_type)->son[1]=(yyvsp[-1].node_type);
+  (yyval.node_type)->son[2]=(yyvsp[0].node_type);
+}
+#line 1937 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 49:
+#line 312 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("Exp",SYNTAX_TYPE,NULL,3,(yylsp[-2]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[-2].node_type);
+  (yyval.node_type)->son[1]=(yyvsp[-1].node_type);
+  (yyval.node_type)->son[2]=(yyvsp[0].node_type);
+}
+#line 1948 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 50:
+#line 318 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("Exp",SYNTAX_TYPE,NULL,3,(yylsp[-2]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[-2].node_type);
+  (yyval.node_type)->son[1]=(yyvsp[-1].node_type);
+  (yyval.node_type)->son[2]=(yyvsp[0].node_type);
+}
+#line 1959 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 51:
+#line 324 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("Exp",SYNTAX_TYPE,NULL,3,(yylsp[-2]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[-2].node_type);
+  (yyval.node_type)->son[1]=(yyvsp[-1].node_type);
+  (yyval.node_type)->son[2]=(yyvsp[0].node_type);
+}
+#line 1970 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 52:
+#line 330 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("Exp",SYNTAX_TYPE,NULL,3,(yylsp[-2]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[-2].node_type);
+  (yyval.node_type)->son[1]=(yyvsp[-1].node_type);
+  (yyval.node_type)->son[2]=(yyvsp[0].node_type);
+}
+#line 1981 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 53:
+#line 336 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("Exp",SYNTAX_TYPE,NULL,3,(yylsp[-2]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[-2].node_type);
+  (yyval.node_type)->son[1]=(yyvsp[-1].node_type);
+  (yyval.node_type)->son[2]=(yyvsp[0].node_type);
+}
+#line 1992 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 54:
+#line 342 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("Exp",SYNTAX_TYPE,NULL,3,(yylsp[-2]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[-2].node_type);
+  (yyval.node_type)->son[1]=(yyvsp[-1].node_type);
+  (yyval.node_type)->son[2]=(yyvsp[0].node_type);
+}
+#line 2003 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 55:
+#line 348 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("Exp",SYNTAX_TYPE,NULL,2,(yylsp[-1]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[-1].node_type);
+  (yyval.node_type)->son[1]=(yyvsp[0].node_type);
+}
+#line 2013 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 56:
+#line 353 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("Exp",SYNTAX_TYPE,NULL,2,(yylsp[-1]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[-1].node_type);
+  (yyval.node_type)->son[1]=(yyvsp[0].node_type);
+}
+#line 2023 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 57:
+#line 358 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("Exp",SYNTAX_TYPE,NULL,4,(yylsp[-3]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[-3].node_type);
+  (yyval.node_type)->son[1]=(yyvsp[-2].node_type);
+  (yyval.node_type)->son[2]=(yyvsp[-1].node_type);
+  (yyval.node_type)->son[3]=(yyvsp[0].node_type);
+}
+#line 2035 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 58:
+#line 365 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("Exp",SYNTAX_TYPE,NULL,3,(yylsp[-2]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[-2].node_type);
+  (yyval.node_type)->son[1]=(yyvsp[-1].node_type);
+  (yyval.node_type)->son[2]=(yyvsp[0].node_type);
+}
+#line 2046 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 59:
+#line 371 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("Exp",SYNTAX_TYPE,NULL,4,(yylsp[-3]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[-3].node_type);
+  (yyval.node_type)->son[1]=(yyvsp[-2].node_type);
+  (yyval.node_type)->son[2]=(yyvsp[-1].node_type);
+  (yyval.node_type)->son[3]=(yyvsp[0].node_type);
+}
+#line 2058 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 60:
+#line 378 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("Exp",SYNTAX_TYPE,NULL,3,(yylsp[-2]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[-2].node_type);
+  (yyval.node_type)->son[1]=(yyvsp[-1].node_type);
+  (yyval.node_type)->son[2]=(yyvsp[0].node_type);
+}
+#line 2069 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 61:
+#line 384 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("Exp",SYNTAX_TYPE,NULL,1,(yylsp[0]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[0].node_type);
+}
+#line 2078 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 62:
+#line 388 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("Exp",SYNTAX_TYPE,NULL,1,(yylsp[0]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[0].node_type);
+}
+#line 2087 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 63:
+#line 392 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("Exp",SYNTAX_TYPE,NULL,1,(yylsp[0]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[0].node_type);
+}
+#line 2096 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 64:
+#line 396 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=NULL;
+}
+#line 2104 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 65:
+#line 399 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=NULL;
+}
+#line 2112 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 66:
+#line 402 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=NULL;
+}
+#line 2120 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 67:
+#line 406 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("Args",SYNTAX_TYPE,NULL,3,(yylsp[-2]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[-2].node_type);
+  (yyval.node_type)->son[1]=(yyvsp[-1].node_type);
+  (yyval.node_type)->son[2]=(yyvsp[0].node_type);
+}
+#line 2131 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 68:
+#line 412 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=add_node("Args",SYNTAX_TYPE,NULL,1,(yylsp[0]).first_line,false);
+  (yyval.node_type)->son[0]=(yyvsp[0].node_type);
+}
+#line 2140 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 69:
+#line 416 "./syntax.y" /* yacc.c:1646  */
+    {
+  (yyval.node_type)=NULL;
+}
+#line 2148 "./syntax.tab.c" /* yacc.c:1646  */
+    break;
+
+
+#line 2152 "./syntax.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1699,8 +2383,9 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 142 "syntax.y" /* yacc.c:1906  */
+#line 424 "./syntax.y" /* yacc.c:1906  */
 
 void yyerror(char* msg) {
     fprintf(stdout, "Error type B at Line %d: %s.\n", yylineno,msg);
+    eflag=true;
 }
