@@ -6,10 +6,10 @@ extern void yyrestart (FILE *input_file);
 extern FILE* yyin;
 extern int yylineno;
 
-int main() {
+/*int main() {
     yyparse();
-}
-/*int main(int argc, char** argv) {
+}*/
+int main(int argc, char** argv) {
     if (argc <= 1) 
         return 1;
     FILE* f = fopen(argv[1], "r");
@@ -18,9 +18,10 @@ int main() {
         return 1;
     }
     yyrestart(f);
+    yylineno = 1;
     yyparse();
     return 0;
-}*/
+}
 
 /*int main(int argc, char** argv) {
     if (argc > 1) {

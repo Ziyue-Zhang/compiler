@@ -1,22 +1,6 @@
 int main()
 {
-	/*aksjdhkajshdhkasd
-	// */
-	int i = 1;
-	// nmsadhkajshd
-	int j = 0.5;
-	int 0X00;
-	//nmsl
-	/*
-	/*
-	asdjhakds
-	*/
-	*/
-	02
-	07
-	071
-	0xa
-	0xx
-	0xa2
-	return 0;	
+	1
+	2
+	return 0;
 }

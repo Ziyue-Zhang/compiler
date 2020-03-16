@@ -51,18 +51,18 @@ type        "int"|"float"
             if(flag)
                 yycolumn=temp;
             printf("COMMENT\n");}
-"/*"        {printf("Wrong comment at Line %d: \'%s\'\n",yylineno, yytext);}
-"*/"        {printf("Wrong comment at Line %d: \'%s\'\n",yylineno, yytext);} 
+"/*"        {printf("Wrong comment at Line %d: \'%s\'.\n",yylineno, yytext);}
+"*/"        {printf("Wrong comment at Line %d: \'%s\'.\n",yylineno, yytext);} 
 "//".*      {printf("COMMENT\n");}
 
-if          {printf("IF\n");}
-else        {printf("ELSE\n");}
-while       {printf("WHILE\n");}
-struct      {printf("STRUCT\n");}
-return      {printf("RETURN\n");}
-{type}      {printf("TYPE: %s\n",yytext);}
-";"         {printf("SEMI\n");}
-","         {printf("COMMA\n");}
+if          {printf("IF\n"); return IF;}
+else        {printf("ELSE\n"); return ELSE;}
+while       {printf("WHILE\n"); return WHILE;}
+struct      {printf("STRUCT\n"); return STRUCT;}
+return      {printf("RETURN\n"); return RETURN;}
+{type}      {printf("TYPE: %s\n",yytext); return TYPE;}
+";"         {printf("SEMI\n"); return SEMI;}
+","         {printf("COMMA\n"); return COMMA;}
 
 {int}       {printf("INT: %s %d\n",yytext,atoi(yytext));
             yylval.type_int=atoi(yytext);
@@ -73,44 +73,49 @@ return      {printf("RETURN\n");}
 {int16}     {printf("INT16: %s %d\n",yytext,char2int16(yytext));
             yylval.type_int=char2int16(yytext);
             return INT;}
-{wint16}    {printf("Error type A at Line %d: Illegal hexadecimal number \'%s\'\n",yylineno, yytext);}
-{wint8}     {printf("Error type A at Line %d: Illegal octal number \'%s\'\n",yylineno, yytext);}
-{wint}      {printf("Error type A at Line %d: Illegal number \'%s\'\n",yylineno, yytext);}
+{wint16}    {printf("Error type A at Line %d: Illegal hexadecimal number \'%s\'.\n",yylineno, yytext);
+            return INT;}
+{wint8}     {printf("Error type A at Line %d: Illegal octal number \'%s\'.\n",yylineno, yytext);
+            return INT;}
+{wint}      {printf("Error type A at Line %d: Illegal number \'%s\'.\n",yylineno, yytext);
+            return INT;}
 
 {float1}    {printf("FLOAT: %s %f\n",yytext,atof(yytext));
             yylval.type_float=atof(yytext);
             return FLOAT;}
-{wfloat1}   {printf("Error type A at Line %d: Illegal floating point number \'%s\'\n",yylineno, yytext);}
+{wfloat1}   {printf("Error type A at Line %d: Illegal floating point number \'%s\'.\n",yylineno, yytext);
+            return FLOAT;}
 {float2}    {printf("FLOAT: %s %f\n",yytext,atof(yytext));
             yylval.type_float=atof(yytext);
             return FLOAT;}
-{wfloat2}   {printf("Error type A at Line %d: Illegal floating point number \'%s\'\n",yylineno, yytext);}
+{wfloat2}   {printf("Error type A at Line %d: Illegal floating point number \'%s\'.\n",yylineno, yytext);
+            return FLOAT;}
 
 
-{id}        {printf("ID: %s\n",yytext);}
-{wid}       {printf("Error type A at Line %d: Wrong ID \'%s\'\n",yylineno, yytext);}
+{id}        {printf("ID: %s\n",yytext);return ID;}
+{wid}       {printf("Error type A at Line %d: Wrong ID \'%s\'.\n",yylineno, yytext);return ID;}
 
-"("         {printf("LP\n");}
-")"         {printf("RP\n");}
-"["         {printf("LB\n");}
-"]"         {printf("RB\n");}
-"{"         {printf("LC\n");}
-"}"         {printf("RC\n");}
-"."         {printf("DOT\n");}
-"!"         {printf("NOT\n");}
-"*"         {printf("STAR\n");return MUL;}
+"("         {printf("LP\n");return LP;}
+")"         {printf("RP\n");return RP;}
+"["         {printf("LB\n");return LB;}
+"]"         {printf("RB\n");return RB;}
+"{"         {printf("LC\n");return LC;}
+"}"         {printf("RC\n");return RC;}
+"."         {printf("DOT\n");return DOT;}
+"!"         {printf("NOT\n");return NOT;}
+"*"         {printf("STAR\n");return STAR;}
 "/"         {printf("DIV\n");return DIV;}
-"+"         {printf("PLUS\n");return ADD;}
-"-"         {printf("MINUS\n");return SUB;}
-{relop}     {printf("RELOP\n");}
-"&&"        {printf("AND\n");}
-"||"        {printf("OR\n");}
-"="         {printf("ASSIGNOP\n");}
+"+"         {printf("PLUS\n");return PLUS;}
+"-"         {printf("MINUS\n");return MINUS;}
+{relop}     {printf("RELOP\n");return RELOP;}
+"&&"        {printf("AND\n");return AND;}
+"||"        {printf("OR\n");return OR;}
+"="         {printf("ASSIGNOP\n");return ASSIGNOP;}
 
 {ws}        {/*no action*/}
 \n          { yycolumn = 1; }
 
-.           {printf("Error type A at Line %d: Mysterious characters \'%s\'\n",yylineno, yytext);}
+.           {printf("Error type A at Line %d: Mysterious characters \'%s\'.\n",yylineno, yytext);}
 %%
 
 int char2int8(char* s){
