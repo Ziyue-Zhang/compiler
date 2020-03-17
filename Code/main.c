@@ -22,9 +22,11 @@ int main(int argc, char** argv) {
     yyrestart(f);
     yylineno = 1;
     eflag=false;
+    root=NULL;
+    space_num=0;
     yyparse();
     if(eflag==false){
-
+        print_tree(root);
     }
     return 0;
 }

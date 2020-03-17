@@ -40,7 +40,7 @@ type        "int"|"float"
 %%
 
 "/*"[^\*]*[\*]+([^\*/][^\*]*[\*]+)*"/"   {
-            int temp=yycolumn;
+            /*int temp=yycolumn;
             int flag=false;
             for(int i=0;i<strlen(yytext);i++){
                 temp++;
@@ -50,7 +50,7 @@ type        "int"|"float"
                 }
             }
             if(flag)
-                yycolumn=temp;
+                yycolumn=temp;*/
             /*printf("COMMENT\n");*/}
 "/*"        {printf("Error type A at Line %d: Illegal comment \'%s\'.\n",yylineno, yytext);
             eflag=true;}
@@ -74,7 +74,7 @@ return      {//printf("RETURN\n");
             yylval.node_type=add_node("RETURN",OTHER_TYPE,yytext,0,yylloc.first_line,true);
             return RETURN;}
 {type}      {//printf("TYPE: %s\n",yytext); 
-            yylval.node_type=add_node("TYPE",OTHER_TYPE,yytext,0,yylloc.first_line,true);
+            yylval.node_type=add_node("TYPE",ID_TYPE,yytext,0,yylloc.first_line,true);
             return TYPE;}
 ";"         {//printf("SEMI\n");
             yylval.node_type=add_node("SEMI",OTHER_TYPE,yytext,0,yylloc.first_line,true);
@@ -112,7 +112,7 @@ return      {//printf("RETURN\n");
             yylval.node_type=add_node("FLOAT",FLOAT_TYPE,NULL,0,yylloc.first_line,true);
             yylval.node_type->type_float=atof(yytext);
             return FLOAT;}
-{wfloat1}   {printf("Error type A at Line %d: Illegal floating point number \'%s\'.\n",yylineno, yytext);
+{wfloat1}   {printf("Error type A at Line %d: Illegal floating point number \"%s\".\n",yylineno, yytext);
             yylval.node_type = NULL;
             eflag=true;
             return FLOAT;}
@@ -120,11 +120,11 @@ return      {//printf("RETURN\n");
             yylval.node_type=add_node("FLOAT",FLOAT_TYPE,NULL,0,yylloc.first_line,true);
             yylval.node_type->type_float=atof(yytext);
             return FLOAT;}
-{wfloat2}   {printf("Error type A at Line %d: Illegal floating point number \'%s\'.\n",yylineno, yytext);
+{wfloat2}   {printf("Error type A at Line %d: Illegal floating point number \"%s\".\n",yylineno, yytext);
             yylval.node_type = NULL;
             eflag=true;
             return FLOAT;}
-{wfloat3}   {printf("Error type A at Line %d: Illegal floating point number \'%s\'.\n",yylineno, yytext);
+{wfloat3}   {printf("Error type A at Line %d: Illegal floating point number \"%s\".\n",yylineno, yytext);
             yylval.node_type = NULL;
             eflag=true;
             return FLOAT;}
@@ -213,10 +213,14 @@ int char2int16(char* s){
         if(s[i]>='0'&&s[i]<='9'){
             temp=s[i]-'0';
         }   
-        else{
+        else if(s[i]>='a'&&s[i]<='f'){
             temp=s[i]-'a';
             temp+=10;
-        } 
+        }
+        else if(s[i]>='A'&&s[i]<='F'){
+            temp=s[i]-'A';
+            temp+=10;
+        }  
         res=res*16+temp;
         i++;
     }

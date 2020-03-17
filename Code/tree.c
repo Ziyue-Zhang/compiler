@@ -15,6 +15,44 @@ node* add_node(char *name, int type, const char* ytext, int num, int lineno, int
     return new_node;
 }
 
-void print_tree(){
-    
+void print_tree(node* p){
+    for(int i=0;i<space_num;i++){
+        printf(" ");
+    }
+    printf("%s (%d)\n",p->name,p->lineno);
+    for(int i=0;i<p->num;i++){
+        space_num+=2;
+        if(p->son[i]!=NULL){
+            if(p->son[i]->leaf==false){
+                print_tree(p->son[i]);
+            }
+            else{
+                if(p->son[i]->type==INT_TYPE){
+                    for(int j=0;j<space_num;j++){
+                        printf(" ");
+                    }
+                    printf("%s: %d\n", p->son[i]->name, p->son[i]->type_int);
+                }
+                else if(p->son[i]->type==FLOAT_TYPE){
+                    for(int j=0;j<space_num;j++){
+                        printf(" ");
+                    }
+                    printf("%s: %f\n", p->son[i]->name, p->son[i]->type_float);
+                }
+                else if(p->son[i]->type==ID_TYPE){
+                    for(int j=0;j<space_num;j++){
+                        printf(" ");
+                    }
+                    printf("%s: %s\n", p->son[i]->name, p->son[i]->type_char);
+                }
+                else{
+                    for(int j=0;j<space_num;j++){
+                        printf(" ");
+                    }
+                    printf("%s\n", p->son[i]->name);
+                }
+            }
+        }
+        space_num-=2;
+    }
 }

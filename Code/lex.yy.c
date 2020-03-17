@@ -889,7 +889,7 @@ case 1:
 YY_RULE_SETUP
 #line 42 "./lexical.l"
 {
-            int temp=yycolumn;
+            /*int temp=yycolumn;
             int flag=false;
             for(int i=0;i<strlen(yytext);i++){
                 temp++;
@@ -899,7 +899,7 @@ YY_RULE_SETUP
                 }
             }
             if(flag)
-                yycolumn=temp;
+                yycolumn=temp;*/
             /*printf("COMMENT\n");*/}
 	YY_BREAK
 case 2:
@@ -958,7 +958,7 @@ case 10:
 YY_RULE_SETUP
 #line 76 "./lexical.l"
 {//printf("TYPE: %s\n",yytext); 
-            yylval.node_type=add_node("TYPE",OTHER_TYPE,yytext,0,yylloc.first_line,true);
+            yylval.node_type=add_node("TYPE",ID_TYPE,yytext,0,yylloc.first_line,true);
             return TYPE;}
 	YY_BREAK
 case 11:
@@ -1034,7 +1034,7 @@ YY_RULE_SETUP
 case 20:
 YY_RULE_SETUP
 #line 115 "./lexical.l"
-{printf("Error type A at Line %d: Illegal floating point number \'%s\'.\n",yylineno, yytext);
+{printf("Error type A at Line %d: Illegal floating point number \"%s\".\n",yylineno, yytext);
             yylval.node_type = NULL;
             eflag=true;
             return FLOAT;}
@@ -1050,7 +1050,7 @@ YY_RULE_SETUP
 case 22:
 YY_RULE_SETUP
 #line 123 "./lexical.l"
-{printf("Error type A at Line %d: Illegal floating point number \'%s\'.\n",yylineno, yytext);
+{printf("Error type A at Line %d: Illegal floating point number \"%s\".\n",yylineno, yytext);
             yylval.node_type = NULL;
             eflag=true;
             return FLOAT;}
@@ -1058,7 +1058,7 @@ YY_RULE_SETUP
 case 23:
 YY_RULE_SETUP
 #line 127 "./lexical.l"
-{printf("Error type A at Line %d: Illegal floating point number \'%s\'.\n",yylineno, yytext);
+{printf("Error type A at Line %d: Illegal floating point number \"%s\".\n",yylineno, yytext);
             yylval.node_type = NULL;
             eflag=true;
             return FLOAT;}
@@ -2252,10 +2252,14 @@ int char2int16(char* s){
         if(s[i]>='0'&&s[i]<='9'){
             temp=s[i]-'0';
         }   
-        else{
+        else if(s[i]>='a'&&s[i]<='f'){
             temp=s[i]-'a';
             temp+=10;
-        } 
+        }
+        else if(s[i]>='A'&&s[i]<='F'){
+            temp=s[i]-'A';
+            temp+=10;
+        }  
         res=res*16+temp;
         i++;
     }

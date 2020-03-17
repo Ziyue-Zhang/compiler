@@ -11,6 +11,7 @@
 #define OTHER_TYPE 4
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 typedef struct node_t{
     char name[20];
@@ -27,7 +28,8 @@ typedef struct node_t{
 }node;
 
 node* root;
+int space_num;
 
 node* add_node(char *name, int type, const char* ytext, int num, int lineno, int leaf);
-void print_tree();
+void print_tree(node* p);
 #endif
