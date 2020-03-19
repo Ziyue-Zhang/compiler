@@ -60,7 +60,7 @@ ExtDefList : ExtDef ExtDefList{
   $$->son[1]=$2;
 }
 | {
-  $$=NULL;
+  $$=NULL;@$.first_line=yylineno;
 }
 ;
 ExtDef : Specifier ExtDecList SEMI{

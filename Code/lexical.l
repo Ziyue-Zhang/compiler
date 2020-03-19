@@ -29,8 +29,8 @@ wint        {digit}*|{digit}+({digit}|[a-zA-Z])+
 float1      {digit}+[\.]{digit}+
 wfloat1     {digit}+[\.]|[\.]{digit}+
 float2      ([0-9]*[\.][0-9]+|[0-9]+[\.])[eE][-+]?{digit}+
-wfloat2     \.[eE][-+]?{digit}*|([0-9]*\.[0-9]+|[0-9]+\.)[eE][-+]?
-wfloat3     [0-9]*\.[eE]({digit}|[a-zA-Z])*
+wfloat2     \.[eE][-+]?{digit}+|([0-9]*\.[0-9]+|[0-9]+\.)[eE][-+]
+wfloat3     [0-9]+\.[eE]({digit}|[a-zA-Z])+
 
 id          {letter}({letter}|{digit})*
 wid         {digit}+{letter}+({letter}|{digit})*
