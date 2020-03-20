@@ -388,7 +388,7 @@ static const flex_int16_t yy_accept[109] =
        24,   30,   44,   31,   42,   38,   39,    3,   20,    0,
         2,    4,   20,   14,   17,   17,   17,   17,   13,   13,
        18,   25,   24,   24,   24,    5,   24,   24,   24,   24,
-       40,    0,    0,   22,    0,    0,    4,   19,    0,   17,
+       40,   22,    0,   22,    0,    0,    4,   19,   22,   17,
        17,   17,   15,   15,   16,   16,   17,   18,   18,   25,
        25,   24,   24,   10,   24,   24,   24,   22,   21,    0,
         1,   21,   23,   16,   16,    6,   24,   24,   24,   24,
@@ -903,7 +903,7 @@ YY_RULE_SETUP
 case 2:
 YY_RULE_SETUP
 #line 55 "./lexical.l"
-{printf("Error type A at Line %d: Illegal comment \'%s\'.\n",yylineno, yytext);
+{printf("Error type A at Line %d: unterminated comment \'%s\'.\n",yylineno, yytext);
             eflag=true;}
 	YY_BREAK
 case 3:

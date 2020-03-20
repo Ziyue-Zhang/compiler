@@ -29,7 +29,7 @@ wint        {digit}*|{digit}+({digit}|[a-zA-Z])+
 float1      {digit}+[\.]{digit}+
 wfloat1     {digit}+[\.]|[\.]{digit}+
 float2      ([0-9]*[\.][0-9]+|[0-9]+[\.])[eE][-+]?{digit}+
-wfloat2     \.[eE][-+]?{digit}+|([0-9]*\.[0-9]+|[0-9]+\.)[eE][-+]
+wfloat2     \.[eE][-+]?{digit}+|([0-9]*\.[0-9]+|[0-9]+\.)[eE][-+]?
 wfloat3     [0-9]+\.[eE]({digit}|[a-zA-Z])+
 
 id          {letter}({letter}|{digit})*
@@ -52,7 +52,7 @@ type        "int"|"float"
             if(flag)
                 yycolumn=temp;*/
             /*printf("COMMENT\n");*/}
-"/*"        {printf("Error type A at Line %d: Illegal comment \'%s\'.\n",yylineno, yytext);
+"/*"        {printf("Error type A at Line %d: unterminated comment \'%s\'.\n",yylineno, yytext);
             eflag=true;}
 "*/"        {printf("Error type A at Line %d: Illegal comment \'%s\'.\n",yylineno, yytext);
             eflag=true;} 
