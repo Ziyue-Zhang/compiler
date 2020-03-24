@@ -31,7 +31,7 @@ void print_tree(node* p){
                     for(int j=0;j<space_num;j++){
                         printf(" ");
                     }
-                    printf("%s: %d\n", p->son[i]->name, p->son[i]->type_int);
+                    printf("%s: %u\n", p->son[i]->name, p->son[i]->type_int);
                 }
                 else if(p->son[i]->type==FLOAT_TYPE){
                     for(int j=0;j<space_num;j++){

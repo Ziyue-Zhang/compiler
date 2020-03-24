@@ -21,8 +21,8 @@ ws          {delim}+
 
 int         0|[1-9]+{digit}*
 int8        0[0-7]+
-wint8       0({digit}|{letter})+
 int16       0[xX][0-9a-fA-F]+
+wint8       0({digit}|{letter})+
 wint16      0[xX]({digit}|{letter})+
 wint        {digit}*|{digit}+({digit}|[a-zA-Z])+
 
@@ -54,7 +54,7 @@ type        "int"|"float"
             /*printf("COMMENT\n");*/}
 "/*"        {printf("Error type A at Line %d: unterminated comment \'%s\'.\n",yylineno, yytext);
             eflag=true;}
-"*/"        {printf("Error type A at Line %d: Illegal comment \'%s\'.\n",yylineno, yytext);
+"*/"        {printf("Error type B at Line %d: syntax error.\n",yylineno);
             eflag=true;} 
 "//".*      {/*printf("COMMENT\n");*/}
 
@@ -85,15 +85,21 @@ return      {//printf("RETURN\n");
 
 {int}       {//printf("INT: %s %d\n",yytext,atoi(yytext));
             yylval.node_type=add_node("INT",INT_TYPE,NULL,0,yylloc.first_line,true);
-            yylval.node_type->type_int=atoi(yytext);
+            //yylval.node_type->type_int=atoi(yytext);
+            sscanf(yytext, "%d", &(yylval.node_type->type_int));
             return INT;}
 {int8}      {//printf("INT8: %s %d\n",yytext,char2int8(yytext));
             yylval.node_type=add_node("INT",INT_TYPE,NULL,0,yylloc.first_line,true);
-            yylval.node_type->type_int=char2int8(yytext);
+            //yylval.node_type->type_int=char2int8(yytext);
+            sscanf(yytext, "0%o", &(yylval.node_type->type_int));
             return INT;}
 {int16}     {//printf("INT16: %s %d\n",yytext,char2int16(yytext));
             yylval.node_type=add_node("INT",INT_TYPE,NULL,0,yylloc.first_line,true);
-            yylval.node_type->type_int=char2int16(yytext);
+            //yylval.node_type->type_int=char2int16(yytext);
+            if (yytext[1] == 'x')
+                sscanf(yytext, "0x%x", &(yylval.node_type->type_int));
+            else
+                sscanf(yytext, "0X%x", &(yylval.node_type->type_int));
             return INT;}
 {wint16}    {printf("Error type A at Line %d: Illegal hexadecimal number \'%s\'.\n",yylineno, yytext);
             yylval.node_type = NULL;
