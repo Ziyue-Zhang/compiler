@@ -40,10 +40,10 @@ void free_struct(struct_list* struct_head){
 
 void free_symbol(symbol* entry){
     free(entry->name);
-    if(entry->func_flag==1){
+    if(entry->param_head!=NULL){
         free_param(entry->param_head);
     }
-    if(entry->array_flag==1){
+    if(entry->array_head!=NULL){
         free_array(entry->array_head);
     }
     /*if(entry->struct_flag==1){
@@ -160,7 +160,7 @@ int add_symbol(symbol* entry, int struct_entry){
                     }
                 }
             }
-            if(p->entry->struct_flag==1&&entry->struct_flag==1){
+            if(entry->struct_flag==1){
                 printf("Error type 16 at Line %d: Defined a struct with an existing id \"%s\".", entry->lineno, entry->name);
                 return -1;
             }
@@ -219,10 +219,8 @@ void check_func_def(){
     symbol_tbl* p=symbol_tbl_head;
     while(p){
         symbol *entry=p->entry;
-        if(entry->func_flag){
-            if(entry->func_def_flag==0){
-                printf("Error type 18 at Line %d: Undefined function \"%s\".", entry->lineno, entry->name);
-            }
+        if(entry->func_flag==1&&entry->func_def_flag==0){
+            printf("Error type 18 at Line %d: Undefined function \"%s\".", entry->lineno, entry->name);
         }        
         p=p->next;
     }

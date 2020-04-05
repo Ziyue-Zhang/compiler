@@ -12,8 +12,9 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+typedef struct node_t node;
 
-typedef struct node_t{
+struct node_t{
     char name[20];
     int type;
     union{
@@ -25,7 +26,7 @@ typedef struct node_t{
     int num;
     int lineno;
     int leaf;
-}node;
+};
 
 node* root;
 int space_num;

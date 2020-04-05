@@ -1,11 +1,8 @@
-int func(int a[1][2]){
+int a;
+int b;
+struct A func(int c){
     return 0;
 }
 int main(){
-    struct Position
- {
-float x, y;
-}a;
-    int b=A.c.s;
     return 0;
 }

@@ -44,10 +44,10 @@ struct struct_list_t{
 struct symbol_t{
     int type;
     char* name;
-    int array_flag;
-    int func_flag;
-    int struct_flag;
-    int func_def_flag;
+    int array_flag;             //是否是数组
+    int func_flag;              //是否是函数
+    int struct_flag;            //是否是结构体的定义
+    int func_def_flag;          //函数是否被定义过
     int lineno;
     param_list* param_head;
     array_list* array_head;

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "syntax.tab.h"
+#include "semantics.h"
 #include "tree.h"
 
 extern int yylex (void);
@@ -27,6 +28,7 @@ int main(int argc, char** argv) {
     yyparse();
     if(eflag==false){
         print_tree(root);
+        semantics_program(root);
     }
     return 0;
 }
