@@ -59,7 +59,7 @@ ExtDefList : ExtDef ExtDefList{
   $$->son[0]=$1;
   $$->son[1]=$2;
 }
-| {
+|{
   $$=NULL;@$.first_line=yylineno;
 }
 ;
@@ -75,6 +75,12 @@ ExtDef : Specifier ExtDecList SEMI{
   $$->son[1]=$2;
 }
 | Specifier FunDec CompSt{
+  $$=add_node("ExtDef",SYNTAX_TYPE,NULL,3,@1.first_line,false);
+  $$->son[0]=$1;
+  $$->son[1]=$2;
+  $$->son[2]=$3;
+}
+| Specifier FunDec SEMI{
   $$=add_node("ExtDef",SYNTAX_TYPE,NULL,3,@1.first_line,false);
   $$->son[0]=$1;
   $$->son[1]=$2;

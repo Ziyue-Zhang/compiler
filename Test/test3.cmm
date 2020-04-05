@@ -1,4 +1,11 @@
+int func(int a[1][2]){
+    return 0;
+}
 int main(){
-	float a=2.e+1;
-	//float b=3e2;
+    struct Position
+ {
+float x, y;
+}a;
+    int b=A.c.s;
+    return 0;
 }
