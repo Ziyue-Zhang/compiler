@@ -8,10 +8,11 @@ void symbol_init(){
 }
 
 void free_param(param_list* param_head){
-    param_list* p=param_head;
-    while(param_head){
-        p=param_head;
-        param_head=param_head->next;
+    symbol_list* list_head=param_head->list;
+    symbol_list*p = list_head;
+    while(list_head){
+        p=list_head;
+        list_head=list_head->next;
         free_symbol(p->entry);
         free(p);
     }
@@ -27,11 +28,13 @@ void free_array(array_list* array_head){
     }
 }
 
+
 void free_struct(struct_list* struct_head){
-    struct_list* p=struct_head;
-    while(struct_head){
-        p=struct_head;
-        struct_head=struct_head->next;
+    symbol_list* list_head=struct_head->list;
+    symbol_list*p = list_head;
+    while(list_head){
+        p=list_head;
+        list_head=list_head->next;
         free_symbol(p->entry);
         free(p);
     }
@@ -81,17 +84,19 @@ symbol* add_entry(int type,char* name,int array_flag,int func_flag,int struct_fl
 int same_param(param_list* p1, param_list*p2){
     if(!p1&&!p2)
         return 1;
-    while(p1 && p2){
-        if(p1->entry->type!=p2->entry->type){
+    symbol_list* q1=p1->list;
+    symbol_list* q2=p2->list;
+    while(q1 && q2){
+        if(q1->entry->type!=q2->entry->type){
             return 0;
         }
-        if(!same_struct(p1->entry->struct_head,p2->entry->struct_head)){
+        if(!same_struct(q1->entry->struct_head,q2->entry->struct_head)){
             return 0;
         }
-        p1=p1->next;
-        p2=p2->next;
+        q1=q1->next;
+        q2=q2->next;
     }
-    if(p1!=p2){
+    if(q1!=q2){
         return 0;
     }
     return 1;
@@ -116,22 +121,25 @@ int same_array(array_list* p1, array_list* p2){
     return 1;
 }
 
+
 int same_struct(struct_list* p1, struct_list* p2){
     if(!p1&&!p2)
         return 1;
-    while(p1 && p2){
-        if(p1->entry->type!=p2->entry->type){
+    symbol_list* q1=p1->list;
+    symbol_list* q2=p2->list;
+    while(q1 && q2){
+        if(q1->entry->type!=q2->entry->type){
             return 0;
         }
-        if(!same_struct(p1->entry->struct_head,p2->entry->struct_head)){
+        if(!same_struct(q1->entry->struct_head,q2->entry->struct_head)){
             return 0;
         }
-        if(!same_array(p1->entry->array_head,p2->entry->array_head)){
-            p1=p1->next;
-            p2=p2->next;
+        if(!same_array(q1->entry->array_head,q2->entry->array_head)){
+            q1=q1->next;
+            q2=q2->next;
         }
     }
-    if(p1!=p2){
+    if(q1!=q2){
         return 0;
     }
     return 1;
@@ -145,32 +153,32 @@ int add_symbol(symbol* entry, int struct_entry){
                 if(p->entry->func_flag==1&&entry->func_flag==1){
                     if(p->entry->type!=entry->type||!same_param(p->entry->param_head,entry->param_head)||(entry->type==SYMBOL_STRUCT&&!same_struct(p->entry->struct_head,entry->struct_head))){
                         printf("Error type 19 at Line %d: Inconsistent declaration of function \"%s\".", entry->lineno, entry->name);
-                        return -1;
+                        return 0;
                     }
                     if(p->entry->func_def_flag==1&&entry->func_def_flag==1){
                         printf("Error type 4 at Line %d: Redefined symbol \"%s\".", entry->lineno, entry->name);
-                        return -1;
+                        return 0;
                     }
                     if(p->entry->func_def_flag==1||(p->entry->func_def_flag==0&&entry->func_def_flag==0)){
-                        return 0;
+                        return 1;
                     }
                     if(entry->func_def_flag==1){
                         p->entry->func_def_flag=1;
-                        return 0;
+                        return 1;
                     }
                 }
             }
             if(entry->struct_flag==1){
                 printf("Error type 16 at Line %d: Defined a struct with an existing id \"%s\".", entry->lineno, entry->name);
-                return -1;
+                return 0;
             }
             if(struct_entry==1){
                 printf("Error type 15 at Line %d: Redefined field \"%s\".", entry->lineno, entry->name);
-                return -1;
+                return 0;
             }
             else{
                 printf("Error type 3 at Line %d: Redefined symbol \"%s\".", entry->lineno, entry->name);
-                return -1;
+                return 0;
             }
         }
         p=p->next;
@@ -179,7 +187,7 @@ int add_symbol(symbol* entry, int struct_entry){
     new_symbol_tbl->entry=entry;
     new_symbol_tbl->next=field_cur->symbol_tbl_head;
     field_cur->symbol_tbl_head=new_symbol_tbl;
-    return 0;
+    return 1;
 }
 symbol* find_symbol(char *name){
     field_list* p1=field_cur;
@@ -187,12 +195,22 @@ symbol* find_symbol(char *name){
     while(p1){
         p2=p1->symbol_tbl_head;
         while(p2){
-            if(strcmp(p2->entry->name,name)==1){
+            if(strcmp(p2->entry->name,name)==0){
                 return p2->entry;
             }
             p2=p2->next;
         }
         p1=p1->next;
+    }
+    return NULL;
+}
+symbol* find_symbol_curfield(char *name){
+    symbol_tbl* p=field_cur->symbol_tbl_head;
+    while(p){
+        if(strcmp(p->entry->name,name)==0){
+            return p->entry;
+        }
+        p=p->next;
     }
     return NULL;
 }
@@ -206,8 +224,7 @@ void field_push(){
 
 void field_pop(){
     field_list* old_field_list=field_cur;
-    if(!field_cur){
-        assert(field_cur);
+    if(field_cur){
         field_cur=field_cur->next;
     }
     free_field(old_field_list);

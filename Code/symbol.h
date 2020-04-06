@@ -13,6 +13,7 @@
 #define SYMBOL_OTHER 4
 
 typedef struct symbol_t symbol;
+typedef struct symbol_list_t symbol_list;
 typedef struct param_list_t param_list;
 typedef struct array_list_t array_list;
 typedef struct struct_list_t struct_list;
@@ -25,8 +26,7 @@ field_list* field_cur;
 
 struct param_list_t{
     int param_num;
-    symbol* entry;
-    param_list* next;
+    symbol_list* list;
 };
 
 struct array_list_t{
@@ -37,8 +37,12 @@ struct array_list_t{
 };
 
 struct struct_list_t{
+    symbol_list* list;
+};
+
+struct symbol_list_t{
     symbol* entry;
-    struct_list* next;
+    symbol_list* next;
 };
 
 struct symbol_t{
@@ -80,6 +84,7 @@ int same_struct(struct_list* p1, struct_list* p2);
 symbol* add_entry(int type,char* name,int array_flag,int func_flag,int struct_flag,int func_def_flag,int lineno);
 int add_symbol(symbol* entry,int struct_entry);
 symbol* find_symbol(char *name);
+symbol* find_symbol_curfield(char *name);
 void field_push();
 void field_pop();
 void check_func_def();

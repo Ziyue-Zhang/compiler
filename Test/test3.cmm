@@ -1,8 +1,8 @@
 int a;
 int b;
-struct A func(int c){
-    return 0;
-}
+struct A{}a;
+struct B{}b;
+struct {}c;
 int main(){
     return 0;
 }
