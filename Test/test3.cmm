@@ -1,6 +1,13 @@
 int a;
 int b;
-struct A{}a;
+struct A;
+struct A{
+    int d[1][2];
+    struct B{int d;}b;
+    int d;
+    int b;
+}a;
+struct A{};
 struct B{}b;
 struct {}c;
 int main(){

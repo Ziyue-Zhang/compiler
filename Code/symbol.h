@@ -53,6 +53,7 @@ struct symbol_t{
     int struct_flag;            //是否是结构体的定义
     int func_def_flag;          //函数是否被定义过
     int lineno;
+    int dim;                    //数组维度
     param_list* param_head;
     array_list* array_head;
     struct_list* struct_head;

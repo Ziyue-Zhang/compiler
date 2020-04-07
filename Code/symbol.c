@@ -152,11 +152,11 @@ int add_symbol(symbol* entry, int struct_entry){
             if(field_cur==field_head){
                 if(p->entry->func_flag==1&&entry->func_flag==1){
                     if(p->entry->type!=entry->type||!same_param(p->entry->param_head,entry->param_head)||(entry->type==SYMBOL_STRUCT&&!same_struct(p->entry->struct_head,entry->struct_head))){
-                        printf("Error type 19 at Line %d: Inconsistent declaration of function \"%s\".", entry->lineno, entry->name);
+                        printf("Error type 19 at Line %d: Inconsistent declaration of function \"%s\".\n", entry->lineno, entry->name);
                         return 0;
                     }
                     if(p->entry->func_def_flag==1&&entry->func_def_flag==1){
-                        printf("Error type 4 at Line %d: Redefined symbol \"%s\".", entry->lineno, entry->name);
+                        printf("Error type 4 at Line %d: Redefined symbol \"%s\".\n", entry->lineno, entry->name);
                         return 0;
                     }
                     if(p->entry->func_def_flag==1||(p->entry->func_def_flag==0&&entry->func_def_flag==0)){
@@ -169,15 +169,15 @@ int add_symbol(symbol* entry, int struct_entry){
                 }
             }
             if(entry->struct_flag==1){
-                printf("Error type 16 at Line %d: Defined a struct with an existing id \"%s\".", entry->lineno, entry->name);
+                printf("Error type 16 at Line %d: Defined a struct with an existing id \"%s\".\n", entry->lineno, entry->name);
                 return 0;
             }
             if(struct_entry==1){
-                printf("Error type 15 at Line %d: Redefined field \"%s\".", entry->lineno, entry->name);
+                printf("Error type 15 at Line %d: Redefined field \"%s\".\n", entry->lineno, entry->name);
                 return 0;
             }
             else{
-                printf("Error type 3 at Line %d: Redefined symbol \"%s\".", entry->lineno, entry->name);
+                printf("Error type 3 at Line %d: Redefined symbol \"%s\".\n", entry->lineno, entry->name);
                 return 0;
             }
         }
@@ -237,7 +237,7 @@ void check_func_def(){
     while(p){
         symbol *entry=p->entry;
         if(entry->func_flag==1&&entry->func_def_flag==0){
-            printf("Error type 18 at Line %d: Undefined function \"%s\".", entry->lineno, entry->name);
+            printf("Error type 18 at Line %d: Undefined function \"%s\".\n", entry->lineno, entry->name);
         }        
         p=p->next;
     }
