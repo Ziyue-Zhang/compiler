@@ -82,6 +82,7 @@ void add_struct();
 int same_param(param_list* p1, param_list*p2);
 int same_array(array_list* p1, array_list* p2);
 int same_struct(struct_list* p1, struct_list* p2);
+int same_type(symbol* entry1, symbol* entry2);
 symbol* add_entry(int type,char* name,int array_flag,int func_flag,int struct_flag,int func_def_flag,int lineno);
 int add_symbol(symbol* entry,int struct_entry);
 symbol* find_symbol(char *name);

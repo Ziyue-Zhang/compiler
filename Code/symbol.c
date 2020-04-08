@@ -59,7 +59,7 @@ void free_symbol_tbl(symbol_tbl* symbol_tbl_head){
     while(symbol_tbl_head){
         p=symbol_tbl_head;
         symbol_tbl_head=symbol_tbl_head->next;
-        free_symbol(p->entry);
+        //free_symbol(p->entry);
         free(p);
     }
 }
@@ -78,6 +78,7 @@ symbol* add_entry(int type,char* name,int array_flag,int func_flag,int struct_fl
     new_entry->struct_flag=struct_flag;
     new_entry->func_def_flag=func_def_flag;
     new_entry->lineno=lineno;
+    new_entry->dim=0;
     return new_entry;
 }
 
@@ -134,15 +135,34 @@ int same_struct(struct_list* p1, struct_list* p2){
         if(!same_struct(q1->entry->struct_head,q2->entry->struct_head)){
             return 0;
         }
-        if(!same_array(q1->entry->array_head,q2->entry->array_head)){
-            q1=q1->next;
-            q2=q2->next;
+        if(q1->entry->dim!=q2->entry->dim){
+            return 0;
         }
+        q1=q1->next;
+        q2=q2->next;
     }
     if(q1!=q2){
         return 0;
     }
     return 1;
+}
+
+int same_type(symbol* entry1, symbol* entry2){
+    if(!entry1||!entry2){
+        assert(0);
+    }
+    if(entry1->type==SYMBOL_VOID)
+        return 0;
+    if(entry2->type==SYMBOL_VOID)
+        return 0;
+    if(entry1->type!=entry2->type)
+        return 0;
+    if(entry1->dim!=entry2->dim)
+        return 0;
+    if(same_struct(entry1->struct_head,entry2->struct_head)==1)
+        return 1;
+    else
+        return 0;   
 }
 
 int add_symbol(symbol* entry, int struct_entry){
@@ -201,6 +221,16 @@ symbol* find_symbol(char *name){
             p2=p2->next;
         }
         p1=p1->next;
+    }
+    return NULL;
+}
+symbol* find_symbol_headfield(char *name){
+    symbol_tbl* p=field_head->symbol_tbl_head;
+    while(p){
+        if(strcmp(p->entry->name,name)==0){
+            return p->entry;
+        }
+        p=p->next;
     }
     return NULL;
 }

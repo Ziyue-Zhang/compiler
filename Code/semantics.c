@@ -3,6 +3,9 @@
 int semantics_program(node* root){
     symbol_init();
     anonymous_struct=0;
+    error_entry=add_entry(SYMBOL_VOID,"",0,0,0,0,0);
+    int_entry=add_entry(SYMBOL_INT,"",0,0,0,0,0);
+    float_entry=add_entry(SYMBOL_FLOAT,"",0,0,0,0,0);
 
     semantics_extdeflist(root->son[0]);
 
@@ -25,18 +28,40 @@ void semantics_extdef(node* root){
         return;         //wrong struct
     }
 
-    if(strcmp(root->son[1]->name,"ExtDecList")==0){
-        semantics_extdeclist(root->son[1],type, struct_head);
+    if(root->num==2){
+        //have defined a struct already
     }
-    else if(strcmp(root->son[1]->name,"SEMI")==0){
-        //do nothing
-    }
-    else if(strcmp(root->son[1]->name,"FunDec")==0){
-        if(strcmp(root->son[2]->name,"CompSt")==0){
-            //FUNCTION DEFINE
+    else if(root->num==3){
+        if(strcmp(root->son[1]->name,"ExtDecList")==0){
+            semantics_extdeclist(root->son[1],type,struct_head);
         }
-        else if(strcmp(root->son[2]->name,"SEMI")==0){
+        else if(strcmp(root->son[1]->name,"FunDec")==0){
+            if(strcmp(root->son[2]->name,"CompSt")==0){
+            //FUNCTION DEFINE
+                symbol* entry=semantics_fundec(root->son[1],type,struct_head,1);
+                int temp=add_symbol(entry,0);
+                if(temp==0){
+                    free_symbol(entry);
+                    return;
+                }
+                field_push();
+                symbol_list* params=entry->param_head->list;
+                while(params){
+                    add_symbol(params->entry,0);
+                    printf("%s\n",params->entry->name);
+                    params=params->next;
+                }
+                semantics_compst(root->son[2]);
+                field_pop();
+            }
+            else if(strcmp(root->son[2]->name,"SEMI")==0){
             //FUNCTION DECLEAR
+                symbol* entry=semantics_fundec(root->son[1],type,struct_head,0);
+                add_symbol(entry,0);
+            }
+            else{
+                assert(0);
+            }
         }
         else{
             assert(0);
@@ -45,11 +70,27 @@ void semantics_extdef(node* root){
     else{
         assert(0);
     }
-
 }
 
 void semantics_extdeclist(node* root, int type, struct_list* struct_head){
-    
+    if(root->num==1){
+        symbol* entry=semantics_vardec(root->son[0],type,struct_head);
+        int temp=add_symbol(entry,0);
+        if(temp==0){
+            free_symbol(entry);
+        }
+    }
+    else if(root->num==3){
+        symbol* entry=semantics_vardec(root->son[0],type,struct_head);
+        int temp=add_symbol(entry,0);
+        if(temp==0){
+            free_symbol(entry);
+        }
+        semantics_extdeclist(root->son[2],type,struct_head);
+    }
+    else{
+        assert(0);
+    }
 }
 
 int semantics_specifier(node* root,struct_list** struct_head){
@@ -77,7 +118,6 @@ int semantics_specifier(node* root,struct_list** struct_head){
 }
 
 struct_list* semantics_structspecifier(node* root){
-    struct_list* struct_head=malloc(sizeof(struct_list));
     if(root->num==5){
         char *name;
         if(root->son[1]){
@@ -89,6 +129,7 @@ struct_list* semantics_structspecifier(node* root){
             anonymous_struct++;
         }
         field_push();
+        struct_list* struct_head=malloc(sizeof(struct_list));
         struct_head->list=semantics_deflist(root->son[3],1);
         field_pop();
         symbol* new_entry=add_entry(SYMBOL_STRUCT,name,0,0,1,0,root->lineno);
@@ -108,8 +149,8 @@ struct_list* semantics_structspecifier(node* root){
     else if(root->num==2){
         char*name = semantics_tag(root->son[1]);
         symbol* entry=find_symbol(name);
-        if(!entry){
-            printf("Error type 17 at Line %d: Undefined structure \"%s\".\n",root->son[1]->lineno,name);
+        if(!entry||entry->type!=SYMBOL_STRUCT){
+            printf("Error type 17 at Line %d: Undefined structure \"%s\".\n",root->lineno,name);
             return NULL;
         }
         return entry->struct_head;
@@ -151,21 +192,75 @@ symbol* semantics_vardec(node* root,int type,struct_list* struct_head){
     }
 }
 
-void semantics_fundec(node* root){
-
+symbol* semantics_fundec(node* root,int type,struct_list* struct_head,int func_def){
+    symbol* entry=add_entry(type,root->son[0]->type_char,0,1,0,func_def,root->lineno);
+    param_list* param_head=malloc(sizeof(param_list));
+    param_head->param_num=0;
+    param_head->list=NULL;
+    entry->array_head=NULL;
+    entry->param_head=param_head;
+    entry->struct_head=struct_head;
+    if(root->num==4){
+        field_push();
+        semantics_varlist(root->son[2],&param_head);
+        field_pop();
+        entry->param_head=param_head;
+        return entry;
+    }
+    else if(root->num=3){
+        return entry;
+    }
+    else{
+        assert(0);
+    }
 }
 
-void semantics_varlist(node* root){
-
+void semantics_varlist(node* root, param_list** param_head){
+    if(root->num==3){
+        symbol* entry=semantics_paramdec(root->son[0]);
+        if(entry){
+            symbol_list * list_head=malloc(sizeof(symbol_list));
+            list_head->entry=entry;
+            list_head->next=(*param_head)->list;
+            (*param_head)->list=list_head;
+            (*param_head)->param_num=(*param_head)->param_num+1;
+        }
+        semantics_varlist(root->son[2],param_head);
+    }
+    else if(root->num==1){
+        symbol* entry=semantics_paramdec(root->son[0]);
+        if(entry){
+            symbol_list * list_head=malloc(sizeof(symbol_list));
+            list_head->entry=entry;
+            list_head->next=(*param_head)->list;
+            (*param_head)->list=list_head;
+            (*param_head)->param_num=(*param_head)->param_num+1;
+        }
+    }
+    else{
+        assert(0);
+    }
 }
 
-void semantics_paramdec(node* root){
-
+symbol* semantics_paramdec(node* root){
+    struct_list* struct_head=NULL;
+    int type=semantics_specifier(root->son[0],&struct_head);
+    if(type==SYMBOL_VOID)
+        return NULL;
+    symbol* entry=semantics_vardec(root->son[1],type,struct_head);
+    int temp=add_symbol(entry,0);
+    if(temp==0){
+        free_symbol(entry);
+        return NULL;
+    }
+    else{
+        return entry;
+    }    
 }
 
 void semantics_compst(node* root){
-    //semantics_deflist(root->son[1]);
-    //semantics_stmtlist(root->son[2]);
+    semantics_deflist(root->son[1],0);
+    semantics_stmtlist(root->son[2]);
 }
 
 void semantics_stmtlist(node* root){
@@ -257,11 +352,115 @@ symbol* semantics_dec(node* root,int type,struct_list* struct_head,int struct_en
             assert(0);
         }
     }
-    return NULL;
+    else if(struct_entry==0){
+        if(root->num==1){
+            symbol* entry=semantics_vardec(root->son[0],type,struct_head);
+            return entry;
+        }
+        else if(root->num==3){
+            symbol* entry=semantics_vardec(root->son[0],type,struct_head);
+            symbol* entry2=semantics_exp(root->son[2]);
+            int temp=same_type(entry,entry2);
+            if(temp==1){
+                return entry;
+            }
+            else{
+                printf("Error type 5 at Line %d: Type mismatched for assignment.\n", root->lineno);
+                return NULL;
+            }
+        }
+        else{
+            assert(0);
+        }
+    }
+    else{
+        assert(0);
+    }
 }
 
-void semantics_exp(node* root){
+symbol* semantics_exp(node* root){
+    return NULL;
+    if(root->num==3){
+        if(strcmp(root->son[1]->name,"ASSIGNOP")==0){
 
+        }
+        else if(strcmp(root->son[1]->name,"AND")==0){
+
+        }
+        else if(strcmp(root->son[1]->name,"OR")==0){
+
+        }
+        else if(strcmp(root->son[1]->name,"RELOP")==0){
+
+        }
+        else if(strcmp(root->son[1]->name,"PLUS")==0){
+
+        }
+        else if(strcmp(root->son[1]->name,"MINUS")==0){
+
+        }
+        else if(strcmp(root->son[1]->name,"STAR")==0){
+
+        }
+        else if(strcmp(root->son[1]->name,"DIV")==0){
+
+        }
+        else if(strcmp(root->son[1]->name,"Exp")==0){
+
+        }
+        else if(strcmp(root->son[1]->name,"LP")==0){
+
+        }
+        else if(strcmp(root->son[1]->name,"DOT")==0){
+
+        }
+        else{
+            assert(0);
+        }
+    }
+    else if(root->num==2){
+        if(strcmp(root->son[0]->name,"MINUS")==0){
+
+        }
+        else if(strcmp(root->son[0]->name,"NOT")==0){
+
+        }
+        else{
+            assert(0);
+        }
+    }
+    else if(root->num==4){
+        if(strcmp(root->son[0]->name,"ID")==0){
+
+        }
+        else if(strcmp(root->son[0]->name,"Exp")==0){
+
+        }
+        else{
+            assert(0);
+        }
+    }
+    else if(root->num==1){
+        if(strcmp(root->son[0]->name,"ID")==0){
+            symbol* entry=find_symbol(root->son[0]->type_char);
+            if(entry){
+                return entry;
+            }
+            else{
+                entry=error_entry;
+                return entry;
+            }
+        }
+        else if(strcmp(root->son[0]->name,"INT")==0){
+            return int_entry;
+        }
+        else if(strcmp(root->son[0]->name,"FLOAT")==0){
+            return float_entry;
+        }
+    }
+    else{
+        assert(0);
+    }
 }
 
 void semantics_args(node* root){

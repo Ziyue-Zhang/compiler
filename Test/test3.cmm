@@ -1,15 +1,18 @@
+int a[1][2][3];
 int a;
 int b;
-struct A;
+
+
+int nmsl(int a,int b);
+int nmsl(int a,int a);
+int nmsl(int a,int b){
+    int a;
+    int c[1][2];
+    return 0;
+}
 struct A{
-    int d[1][2];
-    struct B{int d;}b;
-    int d;
-    int b;
-}a;
-struct A{};
-struct B{}b;
-struct {}c;
+    struct A{} a;
+};
 int main(){
     return 0;
 }

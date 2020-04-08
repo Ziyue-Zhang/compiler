@@ -27,7 +27,7 @@ int main(int argc, char** argv) {
     space_num=0;
     yyparse();
     if(eflag==false){
-        print_tree(root);
+        //print_tree(root);
         semantics_program(root);
     }
     return 0;
