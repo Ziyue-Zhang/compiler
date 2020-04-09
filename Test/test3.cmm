@@ -2,16 +2,36 @@ int a[1][2][3];
 int a;
 int b;
 
-
-int nmsl(int a,int b);
-int nmsl(int a,int a);
-int nmsl(int a,int b){
-    int a;
-    int c[1][2];
+struct A {
+	int a;
+	struct A{
+        int a;
+    } c;
+};
+struct B {
+	int a;
+	struct B c;
+};
+int cnm(){
     return 0;
 }
-struct A{
-    struct A{} a;
+int func(int a,int b){
+    return 0;
+}
+int nmsl(int a[1],int b);
+int nmsl(int a,int a);
+int nmsl(int a[1],int b){
+    int c[1][2];
+    int b;
+    int d;
+    struct A k;
+    int e=k.c;
+    int sb=nmsl(0,0);
+    b=g;
+    return 0;
+}
+struct B{
+    struct B{} a;
 };
 int main(){
     return 0;

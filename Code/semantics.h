@@ -20,14 +20,14 @@ symbol* semantics_vardec(node* root,int type,struct_list* struct_head);
 symbol* semantics_fundec(node* root,int type,struct_list* struct_head,int func_def);
 void semantics_varlist(node* root, param_list** param_head);
 symbol* semantics_paramdec(node* root);
-void semantics_compst(node* root);
-void semantics_stmtlist(node* root);
-void semantics_stmt(node* root);
+void semantics_compst(node* root,int type,struct_list* struct_head);
+void semantics_stmtlist(node* root,int type,struct_list* struct_head);
+void semantics_stmt(node* root,int type,struct_list* struct_head);
 symbol_list* semantics_deflist(node* root,int struct_entry);
 symbol_list* semantics_def(node* root,int *flag,int struct_entry);
 symbol_list* semantics_declist(node* root,int type,struct_list* struct_head,int struct_entry);
 symbol* semantics_dec(node* root,int type,struct_list* struct_head,int struct_entry);
 symbol* semantics_exp(node* root);
-void semantics_args(node* root);
+void semantics_args(node* root,param_list** param_head);
 
 #endif

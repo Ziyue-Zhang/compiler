@@ -5,7 +5,9 @@ int semantics_program(node* root){
     anonymous_struct=0;
     error_entry=add_entry(SYMBOL_VOID,"",0,0,0,0,0);
     int_entry=add_entry(SYMBOL_INT,"",0,0,0,0,0);
+    int_entry->left_value_flag=1;
     float_entry=add_entry(SYMBOL_FLOAT,"",0,0,0,0,0);
+    float_entry->left_value_flag=1;
 
     semantics_extdeflist(root->son[0]);
 
@@ -27,7 +29,6 @@ void semantics_extdef(node* root){
     if(type==SYMBOL_VOID){
         return;         //wrong struct
     }
-
     if(root->num==2){
         //have defined a struct already
     }
@@ -46,12 +47,13 @@ void semantics_extdef(node* root){
                 }
                 field_push();
                 symbol_list* params=entry->param_head->list;
+                printf("%d\n",entry->param_head->param_num);
                 while(params){
                     add_symbol(params->entry,0);
                     printf("%s\n",params->entry->name);
                     params=params->next;
                 }
-                semantics_compst(root->son[2]);
+                semantics_compst(root->son[2],type,struct_head);
                 field_pop();
             }
             else if(strcmp(root->son[2]->name,"SEMI")==0){
@@ -106,8 +108,9 @@ int semantics_specifier(node* root,struct_list** struct_head){
     }
     else if(strcmp(root->son[0]->name,"StructSpecifier")==0){
         *struct_head=semantics_structspecifier(root->son[0]);
-        if(struct_head)
+        if(*struct_head){
             return SYMBOL_STRUCT;
+        }
         else
             return SYMBOL_VOID;        
     }
@@ -127,6 +130,11 @@ struct_list* semantics_structspecifier(node* root){
             name=malloc(80);
             snprintf(name,80,"%d_anonymous",anonymous_struct);
             anonymous_struct++;
+        }
+        symbol* entry=find_symbol(name);
+        if(entry){
+            printf("Error type 16 at Line %d: Defined a struct with an existing id \"%s\".\n", root->lineno, name);
+            return NULL;
         }
         field_push();
         struct_list* struct_head=malloc(sizeof(struct_list));
@@ -258,22 +266,73 @@ symbol* semantics_paramdec(node* root){
     }    
 }
 
-void semantics_compst(node* root){
+void semantics_compst(node* root,int type,struct_list* struct_head){
     semantics_deflist(root->son[1],0);
-    semantics_stmtlist(root->son[2]);
+    semantics_stmtlist(root->son[2],type,struct_head);
 }
 
-void semantics_stmtlist(node* root){
-
+void semantics_stmtlist(node* root,int type,struct_list* struct_head){
+    if(!root){
+        return;
+    }
+    semantics_stmt(root->son[0],type,struct_head);
+    semantics_stmtlist(root->son[1],type,struct_head);
 }
 
-void semantics_stmt(node* root){
-
+void semantics_stmt(node* root,int type,struct_list* struct_head){
+    if(root->num==1){
+        field_push();
+        semantics_compst(root->son[0],type,struct_head);
+        field_pop();
+    }
+    else if(root->num==2){
+        semantics_exp(root->son[0]);
+    }
+    else if(root->num==3){
+        symbol* entry=semantics_exp(root->son[1]);
+        if(type!=entry->type){
+            printf("Error type 8 at Line %d: Return type mismatched", root->lineno);
+        }
+        if(type==entry->type&&same_struct(struct_head,entry->struct_head)==0){
+            printf("Error type 8 at Line %d: Return type mismatched", root->lineno);
+        }
+    }
+    else if(root->num==5){
+        if(strcmp(root->son[0]->name,"IF")==0){
+            symbol* entry=semantics_exp(root->son[2]);
+            if(entry->type!=SYMBOL_INT||entry->dim!=0){
+                printf("Error type 7 at Line %d: INT required in IF statement", root->lineno);
+            }
+            semantics_stmt(root->son[4],type,struct_head);
+        }
+        else if(strcmp(root->son[0]->name,"WHILE")==0){
+            symbol* entry=semantics_exp(root->son[2]);
+            if(entry->type!=SYMBOL_INT||entry->dim!=0){
+                printf("Error type 7 at Line %d: INT required in IF statement", root->lineno);
+            }
+            semantics_stmt(root->son[4],type,struct_head);
+        }
+        else{
+            assert(0);
+        }
+    }
+    else if(root->num==7){
+        symbol* entry=semantics_exp(root->son[2]);
+        if(entry->type!=SYMBOL_INT||entry->dim!=0){
+            printf("Error type 7 at Line %d: INT required in IF statement", root->lineno);
+        }
+        semantics_stmt(root->son[4],type,struct_head);
+        semantics_stmt(root->son[6],type,struct_head);
+    }
+    else{
+        assert(0);
+    }
 }
 
 symbol_list* semantics_deflist(node* root,int struct_entry){
-    if(!root)
+    if(!root){
         return NULL;
+    }
     int flag=0;
     symbol_list*entry=semantics_def(root->son[0],&flag,struct_entry);
     symbol_list*entry_next=semantics_deflist(root->son[1],struct_entry);
@@ -290,9 +349,10 @@ symbol_list* semantics_def(node* root,int *flag,int struct_entry){
     struct_list* struct_head=NULL;
     int type=semantics_specifier(root->son[0],&struct_head);
     if(type==SYMBOL_VOID){
-        flag=0;
+        *flag=0;
         return NULL;
     }
+    *flag=1;
     symbol_list* list=semantics_declist(root->son[1],type,struct_head,struct_entry);
     return list;
 }
@@ -379,40 +439,165 @@ symbol* semantics_dec(node* root,int type,struct_list* struct_head,int struct_en
 }
 
 symbol* semantics_exp(node* root){
-    return NULL;
     if(root->num==3){
         if(strcmp(root->son[1]->name,"ASSIGNOP")==0){
-
+            symbol* entry1=semantics_exp(root->son[0]);
+            if(entry1->left_value_flag||entry1->func_flag){
+                printf("Error type 6 at Line %d: The left-hand side of an assignment must be a variable.\n", root->lineno);
+                return error_entry;
+            }
+            symbol* entry2=semantics_exp(root->son[2]);
+            int temp=same_type(entry1,entry2);
+            if(temp==1){
+                return entry1;
+            }
+            else{
+                printf("Error type 5 at Line %d: Type mismatched for assignment.\n", root->lineno);
+                return error_entry;
+            }
         }
         else if(strcmp(root->son[1]->name,"AND")==0){
-
+            symbol* entry1=semantics_exp(root->son[0]);
+            symbol* entry2=semantics_exp(root->son[2]);
+            int temp=same_type(entry1,entry2);
+            if(temp==1&&entry1->dim==0&&entry1->type==SYMBOL_INT){
+                return int_entry;
+            }
+            else{
+                printf("Error type 7 at Line %d: Type mismatched between operator and assignment.\n", root->lineno);
+                return error_entry;
+            }
         }
         else if(strcmp(root->son[1]->name,"OR")==0){
-
+            symbol* entry1=semantics_exp(root->son[0]);
+            symbol* entry2=semantics_exp(root->son[2]);
+            int temp=same_type(entry1,entry2);
+            if(temp==1&&entry1->dim==0&&entry1->type==SYMBOL_INT){
+                return int_entry;
+            }
+            else{
+                printf("Error type 7 at Line %d: Type mismatched between operator and assignment.\n", root->lineno);
+                return error_entry;
+            }
         }
         else if(strcmp(root->son[1]->name,"RELOP")==0){
-
+            symbol* entry1=semantics_exp(root->son[0]);
+            symbol* entry2=semantics_exp(root->son[2]);
+            int temp=same_type(entry1,entry2);
+            if(temp==1&&entry1->dim==0&&entry1->type==SYMBOL_INT){
+                return int_entry;
+            }
+            else{
+                printf("Error type 7 at Line %d: Type mismatched for operator and assignment.\n", root->lineno);
+                return error_entry;
+            }
         }
         else if(strcmp(root->son[1]->name,"PLUS")==0){
-
+            symbol* entry1=semantics_exp(root->son[0]);
+            symbol* entry2=semantics_exp(root->son[2]);
+            int temp=same_type(entry1,entry2);
+            if(temp==1&&entry1->dim==0&&entry1->type==SYMBOL_INT){
+                return int_entry;
+            }
+            else if(temp==1&&entry1->dim==0&&entry1->type==SYMBOL_FLOAT){
+                return float_entry;
+            }
+            else{
+                printf("Error type 7 at Line %d: Type mismatched for operator and assignment.\n", root->lineno);
+                return error_entry;
+            }
         }
         else if(strcmp(root->son[1]->name,"MINUS")==0){
-
+            symbol* entry1=semantics_exp(root->son[0]);
+            symbol* entry2=semantics_exp(root->son[2]);
+            int temp=same_type(entry1,entry2);
+            if(temp==1&&entry1->dim==0&&entry1->type==SYMBOL_INT){
+                return int_entry;
+            }
+            else if(temp==1&&entry1->dim==0&&entry1->type==SYMBOL_FLOAT){
+                return float_entry;
+            }
+            else{
+                printf("Error type 7 at Line %d: Type mismatched for operator and assignment.\n", root->lineno);
+                return error_entry;
+            }
         }
         else if(strcmp(root->son[1]->name,"STAR")==0){
-
+            symbol* entry1=semantics_exp(root->son[0]);
+            symbol* entry2=semantics_exp(root->son[2]);
+            int temp=same_type(entry1,entry2);
+            if(temp==1&&entry1->dim==0&&entry1->type==SYMBOL_INT){
+                return int_entry;
+            }
+            else if(temp==1&&entry1->dim==0&&entry1->type==SYMBOL_FLOAT){
+                return float_entry;
+            }
+            else{
+                printf("Error type 7 at Line %d: Type mismatched for operator and assignment.\n", root->lineno);
+                return error_entry;
+            }
         }
         else if(strcmp(root->son[1]->name,"DIV")==0){
-
+            symbol* entry1=semantics_exp(root->son[0]);
+            symbol* entry2=semantics_exp(root->son[2]);
+            int temp=same_type(entry1,entry2);
+            if(temp==1&&entry1->dim==0&&entry1->type==SYMBOL_INT){
+                return int_entry;
+            }
+            else if(temp==1&&entry1->dim==0&&entry1->type==SYMBOL_FLOAT){
+                return float_entry;
+            }
+            else{
+                printf("Error type 7 at Line %d: Type mismatched for operator and assignment.\n", root->lineno);
+                return error_entry;
+            }
         }
         else if(strcmp(root->son[1]->name,"Exp")==0){
-
+            return semantics_exp(root->son[1]);
         }
         else if(strcmp(root->son[1]->name,"LP")==0){
-
+            symbol* entry=find_symbol(root->son[0]->type_char);
+            if(!entry){
+                printf("Error type 2 at Line %d: Undefined function \"%s\".\n", root->lineno,root->son[0]->type_char);
+                return error_entry;
+            }
+            if(entry->func_flag==0){
+                printf("Error type 11 at Line %d: Not a function.\n", root->lineno);
+                return error_entry;
+            }
+            if(entry->param_head->param_num!=0){
+                printf("Error type 9 at Line %d: Function \"%s\"\'s parameters mismatch.\n", root->lineno,root->son[0]->type_char);
+                return error_entry;
+            }
+            if(entry->type==SYMBOL_INT){
+                return int_entry;
+            }
+            else if(entry->type==SYMBOL_FLOAT){
+                return float_entry;
+            }
+            else if(entry->type==SYMBOL_STRUCT){
+                symbol* struct_entry=add_entry(SYMBOL_STRUCT,"",0,0,0,0,0);
+                struct_entry->struct_head=entry->struct_head;
+                return struct_entry;
+            }
+            else{
+                assert(0);
+            }
         }
         else if(strcmp(root->son[1]->name,"DOT")==0){
-
+            symbol* entry1=semantics_exp(root->son[0]);
+            if(entry1->type!=SYMBOL_STRUCT||(entry1->type==SYMBOL_STRUCT&&entry1->dim!=0)||entry1->func_flag==1){
+                printf("Error type 13 at Line %d: Illegal use of \".\".\n", root->lineno);
+                return error_entry;
+            }
+            symbol_list *p=entry1->struct_head->list;
+            while(p){
+                if(strcmp(root->son[2]->type_char,p->entry->name)==0)
+                    return p->entry;
+                p=p->next;
+            }
+            printf("Error type 14 at Line %d: can\'t find \"%s\".\n", root->lineno,root->son[2]->type_char);
+            return error_entry;
         }
         else{
             assert(0);
@@ -420,10 +605,28 @@ symbol* semantics_exp(node* root){
     }
     else if(root->num==2){
         if(strcmp(root->son[0]->name,"MINUS")==0){
+            symbol* entry1=semantics_exp(root->son[1]);
+            if(entry1->dim==0&&entry1->type==SYMBOL_INT){
+                return int_entry;
+            }
+            else if(entry1->dim==0&&entry1->type==SYMBOL_FLOAT){
+                return float_entry;
+            }
+            else{
+                printf("Error type 7 at Line %d: Type mismatched between operator and assignment.\n", root->lineno);
+                return error_entry;
+            }
 
         }
         else if(strcmp(root->son[0]->name,"NOT")==0){
-
+            symbol* entry1=semantics_exp(root->son[1]);
+            if(entry1->dim==0&&entry1->type==SYMBOL_INT){
+                return int_entry;
+            }
+            else{
+                printf("Error type 7 at Line %d: Type mismatched between operator and assignment.\n", root->lineno);
+                return error_entry;
+            }
         }
         else{
             assert(0);
@@ -431,10 +634,50 @@ symbol* semantics_exp(node* root){
     }
     else if(root->num==4){
         if(strcmp(root->son[0]->name,"ID")==0){
-
+            symbol* entry=find_symbol(root->son[0]->type_char);
+            if(!entry){
+                printf("Error type 2 at Line %d: Undefined function \"%s\".\n", root->lineno,root->son[0]->type_char);
+                return error_entry;
+            }
+            if(entry->func_flag==0){
+                printf("Error type 11 at Line %d: Not a function.\n", root->lineno);
+                return error_entry;
+            }
+            param_list* params=malloc(sizeof(param_list));
+            params->list=NULL;
+            params->param_num=0;
+            semantics_args(root->son[2],&params);
+            if(entry->param_head->param_num!=params->param_num||same_param(entry->param_head,params)==0){
+                printf("Error type 9 at Line %d: Function \"%s\"\'s parameters mismatch.\n", root->lineno,root->son[0]->type_char);
+                return error_entry;
+            }
+            if(entry->type==SYMBOL_INT){
+                return int_entry;
+            }
+            else if(entry->type==SYMBOL_FLOAT){
+                return float_entry;
+            }
+            else if(entry->type==SYMBOL_STRUCT){
+                symbol* struct_entry=add_entry(SYMBOL_STRUCT,"",0,0,0,0,0);
+                struct_entry->struct_head=entry->struct_head;
+                return struct_entry;
+            }
+            else{
+                assert(0);
+            }
         }
         else if(strcmp(root->son[0]->name,"Exp")==0){
-
+            symbol* entry1=semantics_exp(root->son[0]);
+            symbol* entry2=semantics_exp(root->son[2]);
+            if(entry2->type!=SYMBOL_INT||entry2->dim!=0){
+                printf("Error type 12 at Line %d: Not an integer for the subscription of an array.\n", root->lineno);
+                return error_entry;
+            }
+            if(entry1->dim==0){
+                printf("Error type 10 at Line %d: Not an array.\n", root->lineno);
+                return error_entry;
+            }
+            return entry1;
         }
         else{
             assert(0);
@@ -443,13 +686,15 @@ symbol* semantics_exp(node* root){
     else if(root->num==1){
         if(strcmp(root->son[0]->name,"ID")==0){
             symbol* entry=find_symbol(root->son[0]->type_char);
-            if(entry){
-                return entry;
+            if(!entry){
+                printf("Error type 1 at Line %d: Undefined \"%s\".\n", root->lineno,root->son[0]->type_char);
+                return error_entry;
             }
-            else{
-                entry=error_entry;
-                return entry;
+            if(entry->func_flag){
+                printf("Error type 7 at Line %d: Type mismatched between operator and assignment.\n", root->lineno);
+                return error_entry;
             }
+            return entry;
         }
         else if(strcmp(root->son[0]->name,"INT")==0){
             return int_entry;
@@ -463,6 +708,29 @@ symbol* semantics_exp(node* root){
     }
 }
 
-void semantics_args(node* root){
-
+void semantics_args(node* root,param_list** param_head){
+    if(root->num==3){
+        semantics_args(root->son[2],param_head);
+        symbol* entry=semantics_exp(root->son[0]);
+        if(entry){
+            symbol_list * list_head=malloc(sizeof(symbol_list));
+            list_head->entry=entry;
+            list_head->next=(*param_head)->list;
+            (*param_head)->list=list_head;
+            (*param_head)->param_num=(*param_head)->param_num+1;
+        }
+    }
+    else if(root->num==1){
+        symbol* entry=semantics_exp(root->son[0]);
+        if(entry){
+            symbol_list * list_head=malloc(sizeof(symbol_list));
+            list_head->entry=entry;
+            list_head->next=(*param_head)->list;
+            (*param_head)->list=list_head;
+            (*param_head)->param_num=(*param_head)->param_num+1;
+        }
+    }
+    else{
+        assert(0);
+    }
 }

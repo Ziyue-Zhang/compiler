@@ -79,6 +79,7 @@ symbol* add_entry(int type,char* name,int array_flag,int func_flag,int struct_fl
     new_entry->func_def_flag=func_def_flag;
     new_entry->lineno=lineno;
     new_entry->dim=0;
+    new_entry->left_value_flag=0;
     return new_entry;
 }
 
@@ -89,6 +90,9 @@ int same_param(param_list* p1, param_list*p2){
     symbol_list* q2=p2->list;
     while(q1 && q2){
         if(q1->entry->type!=q2->entry->type){
+            return 0;
+        }
+        if(q1->entry->dim!=q2->entry->dim){
             return 0;
         }
         if(!same_struct(q1->entry->struct_head,q2->entry->struct_head)){
