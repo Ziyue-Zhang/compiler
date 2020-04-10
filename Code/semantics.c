@@ -46,13 +46,13 @@ void semantics_extdef(node* root){
                     return;
                 }
                 field_push();
-                symbol_list* params=entry->param_head->list;
+                /*symbol_list* params=entry->param_head->list;
                 printf("%d\n",entry->param_head->param_num);
                 while(params){
                     add_symbol(params->entry,0);
                     printf("%s\n",params->entry->name);
                     params=params->next;
-                }
+                }*/
                 semantics_compst(root->son[2],type,struct_head);
                 field_pop();
             }
