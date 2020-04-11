@@ -88,6 +88,7 @@ symbol* add_entry(int type,char* name,int array_flag,int func_flag,int struct_fl
 int add_symbol(symbol* entry,int struct_entry);
 symbol* find_symbol(char *name);
 symbol* find_symbol_curfield(char *name);
+symbol* find_symbol_struct(char *name);
 void field_push();
 void field_pop();
 void check_func_def();

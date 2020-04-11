@@ -4,9 +4,8 @@ int b;
 
 struct A {
 	int a;
-	struct A{
-        int a;
-    } c;
+	struct SB{} k;
+    struct SB c;
 };
 struct B {
 	int a;

@@ -159,6 +159,10 @@ int same_type(symbol* entry1, symbol* entry2){
         return 0;
     if(entry2->type==SYMBOL_VOID)
         return 0;
+    if(entry1->struct_flag==1)
+        return 0;
+    if(entry2->struct_flag==1)
+        return 0;
     if(entry1->type!=entry2->type)
         return 0;
     if(entry1->dim!=entry2->dim)
@@ -175,12 +179,12 @@ int add_symbol(symbol* entry, int struct_entry){
         if(strcmp(p->entry->name,entry->name)==0){
             if(field_cur==field_head){
                 if(p->entry->func_flag==1&&entry->func_flag==1){
-                    if(p->entry->type!=entry->type||!same_param(p->entry->param_head,entry->param_head)||(entry->type==SYMBOL_STRUCT&&!same_struct(p->entry->struct_head,entry->struct_head))){
-                        printf("Error type 19 at Line %d: Inconsistent declaration of function \"%s\".\n", entry->lineno, entry->name);
-                        return 0;
-                    }
                     if(p->entry->func_def_flag==1&&entry->func_def_flag==1){
                         printf("Error type 4 at Line %d: Redefined symbol \"%s\".\n", entry->lineno, entry->name);
+                        return 0;
+                    }
+                    if(p->entry->type!=entry->type||!same_param(p->entry->param_head,entry->param_head)||(entry->type==SYMBOL_STRUCT&&!same_struct(p->entry->struct_head,entry->struct_head))){
+                        printf("Error type 19 at Line %d: Inconsistent declaration of function \"%s\".\n", entry->lineno, entry->name);
                         return 0;
                     }
                     if(p->entry->func_def_flag==1||(p->entry->func_def_flag==0&&entry->func_def_flag==0)){
@@ -245,6 +249,21 @@ symbol* find_symbol_curfield(char *name){
             return p->entry;
         }
         p=p->next;
+    }
+    return NULL;
+}
+symbol* find_symbol_struct(char *name){
+    field_list* p1=field_cur;
+    symbol_tbl* p2=p1->symbol_tbl_head;
+    while(p1){
+        p2=p1->symbol_tbl_head;
+        while(p2){
+            if(strcmp(p2->entry->name,name)==0&&p2->entry->type==SYMBOL_STRUCT&&p2->entry->struct_flag==1){
+                return p2->entry;
+            }
+            p2=p2->next;
+        }
+        p1=p1->next;
     }
     return NULL;
 }
