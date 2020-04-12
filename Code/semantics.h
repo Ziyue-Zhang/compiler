@@ -27,6 +27,7 @@ symbol_list* semantics_deflist(node* root,int struct_entry);
 symbol_list* semantics_def(node* root,int *flag,int struct_entry);
 symbol_list* semantics_declist(node* root,int type,struct_list* struct_head,int struct_entry);
 symbol* semantics_dec(node* root,int type,struct_list* struct_head,int struct_entry);
+int semantics_assignop(node* root);
 symbol* semantics_exp(node* root);
 void semantics_args(node* root,param_list** param_head);
 

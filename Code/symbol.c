@@ -180,7 +180,7 @@ int add_symbol(symbol* entry, int struct_entry){
             if(field_cur==field_head){
                 if(p->entry->func_flag==1&&entry->func_flag==1){
                     if(p->entry->func_def_flag==1&&entry->func_def_flag==1){
-                        printf("Error type 4 at Line %d: Redefined symbol \"%s\".\n", entry->lineno, entry->name);
+                        printf("Error type 4 at Line %d: Redefined function \"%s\".\n", entry->lineno, entry->name);
                         return 0;
                     }
                     if(p->entry->type!=entry->type||!same_param(p->entry->param_head,entry->param_head)||(entry->type==SYMBOL_STRUCT&&!same_struct(p->entry->struct_head,entry->struct_head))){
@@ -197,7 +197,7 @@ int add_symbol(symbol* entry, int struct_entry){
                 }
             }
             if(entry->struct_flag==1){
-                printf("Error type 16 at Line %d: Defined a struct with an existing id \"%s\".\n", entry->lineno, entry->name);
+                printf("Error type 16 at Line %d: Duplicated name \"%s\".\n", entry->lineno, entry->name);
                 return 0;
             }
             if(struct_entry==1){
@@ -205,7 +205,7 @@ int add_symbol(symbol* entry, int struct_entry){
                 return 0;
             }
             else{
-                printf("Error type 3 at Line %d: Redefined symbol \"%s\".\n", entry->lineno, entry->name);
+                printf("Error type 3 at Line %d: Redefined variable \"%s\".\n", entry->lineno, entry->name);
                 return 0;
             }
         }
