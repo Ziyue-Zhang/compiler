@@ -319,7 +319,7 @@ void semantics_stmt(node* root,int type,struct_list* struct_head){
         else if(strcmp(root->son[0]->name,"WHILE")==0){
             symbol* entry=semantics_exp(root->son[2]);
             if(entry->type!=SYMBOL_INT||entry->dim!=0){
-                printf("Error type 7 at Line %d: INT required in IF statement.\n", root->lineno);
+                printf("Error type 7 at Line %d: INT required in WHILE statement.\n", root->lineno);
             }
             semantics_stmt(root->son[4],type,struct_head);
         }
