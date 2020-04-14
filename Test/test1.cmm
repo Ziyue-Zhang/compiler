@@ -1,17 +1,22 @@
-struct Temp1
-{
-int i;
-float j;
-};
+struct Burger{
+  int meat;
+  float saurce;
+  int bread;
+}king;
 
-struct Temp2
-{
-int x;
-};
+int addMeat(int addedAmount);
+int addMeat(int addedAmount, struct Burger addedBurger);
 
-int main()
-{
-struct Temp1 t1;
-struct Temp2 t2;
-t1 = t2;
+int addMeat(int addedAmount){
+  king.meat = king.meat + addedAmount;
+  return 0;
 }
+
+float addSaurce(float addedSaurce);
+
+int addSaurce(float addedSaurce) {
+  king.saurce = addedSaurce;
+  return 0;
+}
+
+int addBread(int breads, struct Burger bb);

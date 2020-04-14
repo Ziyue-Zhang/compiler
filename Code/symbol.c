@@ -130,6 +130,13 @@ int same_array(array_list* p1, array_list* p2){
 int same_struct(struct_list* p1, struct_list* p2){
     if(!p1&&!p2)
         return 1;
+    if(!p1){
+        return 0;
+    }
+    if(!p2){
+        return 0;
+    }
+    //printf("%s\n",p1->list->entry->name);
     symbol_list* q1=p1->list;
     symbol_list* q2=p2->list;
     while(q1 && q2){
@@ -167,7 +174,7 @@ int same_type(symbol* entry1, symbol* entry2){
         return 0;
     if(entry1->dim!=entry2->dim)
         return 0;
-    if(same_struct(entry1->struct_head,entry2->struct_head)==1)
+    if(entry1->struct_head==entry2->struct_head||same_struct(entry1->struct_head,entry2->struct_head)==1)
         return 1;
     else
         return 0;   
@@ -215,6 +222,31 @@ int add_symbol(symbol* entry, int struct_entry){
     new_symbol_tbl->entry=entry;
     new_symbol_tbl->next=field_cur->symbol_tbl_head;
     field_cur->symbol_tbl_head=new_symbol_tbl;
+    return 1;
+}
+int add_struct_symbol(symbol* entry, int struct_entry){
+    symbol_tbl* p=field_head->symbol_tbl_head;
+    while(p){
+        if(strcmp(p->entry->name,entry->name)==0){
+            if(entry->struct_flag==1){
+                printf("Error type 16 at Line %d: Duplicated name \"%s\".\n", entry->lineno, entry->name);
+                return 0;
+            }
+            if(struct_entry==1){
+                printf("Error type 15 at Line %d: Redefined field \"%s\".\n", entry->lineno, entry->name);
+                return 0;
+            }
+            else{
+                printf("Error type 3 at Line %d: Redefined variable \"%s\".\n", entry->lineno, entry->name);
+                return 0;
+            }
+        }
+        p=p->next;
+    }
+    symbol_tbl* new_symbol_tbl=malloc(sizeof(symbol_tbl));
+    new_symbol_tbl->entry=entry;
+    new_symbol_tbl->next=field_head->symbol_tbl_head;
+    field_head->symbol_tbl_head=new_symbol_tbl;
     return 1;
 }
 symbol* find_symbol(char *name){

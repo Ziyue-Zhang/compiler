@@ -136,25 +136,23 @@ struct_list* semantics_structspecifier(node* root){
             printf("Error type 16 at Line %d: Duplicated name \"%s\".\n", root->lineno, name);
             return NULL;
         }
-        symbol* new_entry=add_entry(SYMBOL_STRUCT,name,0,0,1,0,root->lineno);
-        new_entry->dim=0;
-        new_entry->array_head=NULL;
-        new_entry->param_head=NULL;
-        new_entry->struct_head=NULL;
-        int temp=add_symbol(new_entry,0);
-        if(temp==0){
-            free_symbol(new_entry);
-            return NULL;
-        }
-
         field_push();
         struct_list* struct_head=malloc(sizeof(struct_list));
         struct_head->list=semantics_deflist(root->son[3],1);
         field_pop();
-
+        symbol* new_entry=add_entry(SYMBOL_STRUCT,name,0,0,1,0,root->lineno);
+        new_entry->dim=0;
+        new_entry->array_head=NULL;
+        new_entry->param_head=NULL;
         new_entry->struct_head=struct_head;
-        
-        return struct_head;
+        int temp=add_struct_symbol(new_entry,0);
+        if(temp==0){
+            free_symbol(new_entry);
+            return NULL;
+        }
+        else{
+            return struct_head;
+        }
     }
     else if(root->num==2){
         char*name = semantics_tag(root->son[1]);
@@ -312,14 +310,14 @@ void semantics_stmt(node* root,int type,struct_list* struct_head){
         if(strcmp(root->son[0]->name,"IF")==0){
             symbol* entry=semantics_exp(root->son[2]);
             if(entry->type!=SYMBOL_INT||entry->dim!=0){
-                printf("Error type 7 at Line %d: INT required in IF statement.\n", root->lineno);
+                printf("Error type 7 at Line %d: INT required in IF.\n", root->lineno);
             }
             semantics_stmt(root->son[4],type,struct_head);
         }
         else if(strcmp(root->son[0]->name,"WHILE")==0){
             symbol* entry=semantics_exp(root->son[2]);
             if(entry->type!=SYMBOL_INT||entry->dim!=0){
-                printf("Error type 7 at Line %d: INT required in WHILE statement.\n", root->lineno);
+                printf("Error type 7 at Line %d: INT required in WHILE.\n", root->lineno);
             }
             semantics_stmt(root->son[4],type,struct_head);
         }
@@ -442,6 +440,7 @@ symbol* semantics_dec(node* root,int type,struct_list* struct_head,int struct_en
         }
         else if(root->num==3){
             symbol* entry=semantics_vardec(root->son[0],type,struct_head);
+            //printf("%s\n",entry->name);
             symbol* entry2=semantics_exp(root->son[2]);
             int temp=same_type(entry,entry2);
             if(temp==1){
@@ -770,7 +769,7 @@ symbol* semantics_exp(node* root){
                 return error_entry;
             }
             if(entry->func_flag){
-                printf("Error type 7 at Line %d: Type mismatched between operands.\n", root->lineno);
+                printf("Error type 1 at Line %d: Undefined variable \"%s\".\n", root->lineno,root->son[0]->type_char);
                 return error_entry;
             }
             symbol* new_entry=malloc(sizeof(symbol));

@@ -86,6 +86,7 @@ int same_struct(struct_list* p1, struct_list* p2);
 int same_type(symbol* entry1, symbol* entry2);
 symbol* add_entry(int type,char* name,int array_flag,int func_flag,int struct_flag,int func_def_flag,int lineno);
 int add_symbol(symbol* entry,int struct_entry);
+int add_struct_symbol(symbol* entry,int struct_entry);
 symbol* find_symbol(char *name);
 symbol* find_symbol_curfield(char *name);
 symbol* find_symbol_struct(char *name);
