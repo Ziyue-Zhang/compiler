@@ -42,8 +42,10 @@ void semantics_extdef(node* root){
                 symbol* entry=semantics_fundec(root->son[1],type,struct_head,1);
                 int temp=add_symbol(entry,0);
                 if(temp==0){
-                    free_symbol(entry);
-                    return;
+                    //free_symbol(entry);
+                    //return;
+                    entry=find_symbol_headfield(entry->name);
+                    entry->func_def_flag=1;
                 }
                 field_push();
                 symbol_list* params=entry->param_head->list;
@@ -376,17 +378,6 @@ symbol_list* semantics_declist(node* root,int type,struct_list* struct_head,int 
         if(!entry){
             return NULL;
         }
-        symbol* temp1=find_symbol_struct(entry->name);
-        if(temp1){
-            printf("Error type 3 at Line %d: Redefined variable \"%s\".\n", entry->lineno, entry->name);
-            free_symbol(entry);
-            return NULL;
-        }
-        int temp=add_symbol(entry,struct_entry);
-        if(temp==0){
-            free_symbol(entry);
-            return NULL;
-        }
         else{
             symbol_list* symbol_list_head=malloc(sizeof(symbol_list));
             symbol_list_head->next=NULL;
@@ -397,11 +388,6 @@ symbol_list* semantics_declist(node* root,int type,struct_list* struct_head,int 
     else if(root->num==3){
         symbol* entry=semantics_dec(root->son[0],type,struct_head,struct_entry);
         if(!entry){
-            return semantics_declist(root->son[2],type,struct_head,struct_entry);
-        }
-        int temp=add_symbol(entry,struct_entry);
-        if(temp==0){
-            free_symbol(entry);
             return semantics_declist(root->son[2],type,struct_head,struct_entry);
         }
         else{
@@ -423,6 +409,17 @@ symbol* semantics_dec(node* root,int type,struct_list* struct_head,int struct_en
     if(struct_entry==1){
         if(root->num==1){
             symbol* entry=semantics_vardec(root->son[0],type,struct_head);
+            symbol* temp1=find_symbol_struct(entry->name);
+            if(temp1){
+                printf("Error type 3 at Line %d: Redefined variable \"%s\".\n", entry->lineno, entry->name);
+                free_symbol(entry);
+                return NULL;
+            }
+            int temp2=add_symbol(entry,struct_entry);
+            if(temp2==0){
+                free_symbol(entry);
+                return NULL;
+            }
             return entry;
         }
         else if(root->num==3){
@@ -436,10 +433,32 @@ symbol* semantics_dec(node* root,int type,struct_list* struct_head,int struct_en
     else if(struct_entry==0){
         if(root->num==1){
             symbol* entry=semantics_vardec(root->son[0],type,struct_head);
+            symbol* temp1=find_symbol_struct(entry->name);
+            if(temp1){
+                printf("Error type 3 at Line %d: Redefined variable \"%s\".\n", entry->lineno, entry->name);
+                free_symbol(entry);
+                return NULL;
+            }
+            int temp2=add_symbol(entry,struct_entry);
+            if(temp2==0){
+                free_symbol(entry);
+                return NULL;
+            }
             return entry;
         }
         else if(root->num==3){
             symbol* entry=semantics_vardec(root->son[0],type,struct_head);
+            symbol* temp1=find_symbol_struct(entry->name);
+            if(temp1){
+                printf("Error type 3 at Line %d: Redefined variable \"%s\".\n", entry->lineno, entry->name);
+                free_symbol(entry);
+                return NULL;
+            }
+            int temp2=add_symbol(entry,struct_entry);
+            if(temp2==0){
+                free_symbol(entry);
+                return NULL;
+            }
             //printf("%s\n",entry->name);
             symbol* entry2=semantics_exp(root->son[2]);
             int temp=same_type(entry,entry2);
@@ -620,7 +639,7 @@ symbol* semantics_exp(node* root){
             }
             if(entry->param_head->param_num!=0){
                 printf("Error type 9 at Line %d: Function \"%s\"\'s parameters mismatched.\n", root->lineno,root->son[0]->type_char);
-                return error_entry;
+                //return error_entry;
             }
             if(entry->type==SYMBOL_INT){
                 return int_entry;
@@ -726,7 +745,7 @@ symbol* semantics_exp(node* root){
             }*/
             if(entry->param_head->param_num!=params->param_num||same_param(entry->param_head,params)==0){
                 printf("Error type 9 at Line %d: Function \"%s\"\'s parameters mismatched.\n", root->lineno,root->son[0]->type_char);
-                return error_entry;
+                //return error_entry;
             }
             if(entry->type==SYMBOL_INT){
                 return int_entry;
@@ -747,8 +766,8 @@ symbol* semantics_exp(node* root){
             symbol* entry1=semantics_exp(root->son[0]);
             symbol* entry2=semantics_exp(root->son[2]);
             if(entry2->type!=SYMBOL_INT||entry2->dim!=0){
-                printf("Error type 12 at Line %d: Not an integer.\n", root->lineno);
-                return error_entry;
+                printf("Error type 12 at Line %d: Array index is not integer.\n", root->lineno);
+                //return error_entry;
             }
             if(entry1->dim==0){
                 printf("Error type 10 at Line %d: \"%s\" is not an array.\n",root->lineno,entry1->name);

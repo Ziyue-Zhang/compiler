@@ -1,22 +1,45 @@
-struct Burger{
-  int meat;
-  float saurce;
-  int bread;
-}king;
+struct Defined{
+  int name;
+  float ty;
+};
 
-int addMeat(int addedAmount);
-int addMeat(int addedAmount, struct Burger addedBurger);
-
-int addMeat(int addedAmount){
-  king.meat = king.meat + addedAmount;
-  return 0;
+int sequence[1000];
+int quickSort(int start, int end) {
+  int i,j, x;
+  i = start;
+  j = end;
+  x = sequence[i];
+  if(i < j) {
+    while(i < j) {
+      while(i < j && sequence[j] > x)
+        j = j - 1;
+      if(i < j)
+        sequence[i] = sequence[j];
+      while(i < j && sequence[i] <= x)
+        i = i + 1;
+      if(i < j)
+        sequence[j] = sequence[i];
+    }
+    sequence[i] = x;
+    quickSort(start, i, -1);
+    quickSort(i+1, end);
+  }
+  return 1;
 }
 
-float addSaurce(float addedSaurce);
-
-int addSaurce(float addedSaurce) {
-  king.saurce = addedSaurce;
-  return 0;
+int main() {
+  struct NotDefined test;
+  struct Defined ttt;
+  int q,p;
+  q = 0;
+  p = 3;
+  ttt.nme = q;
+  while(q < 1000) {
+    sequence[q] = p * 3;
+    p = p - q;
+    q = q + 1;
+  }
+  quickSort(0,999);
+  q(0,999);
+  return q;
 }
-
-int addBread(int breads, struct Burger bb);
