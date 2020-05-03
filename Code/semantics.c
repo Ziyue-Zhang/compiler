@@ -27,7 +27,7 @@ void semantics_extdef(node* root){
     struct_list* struct_head=NULL;
     int type=semantics_specifier(root->son[0],&struct_head);
     if(type==SYMBOL_VOID){
-        return;         //wrong struct
+        return;         
     }
     if(root->num==2){
         //have defined a struct already
@@ -424,7 +424,19 @@ symbol* semantics_dec(node* root,int type,struct_list* struct_head,int struct_en
         }
         else if(root->num==3){
             printf("Error type 15 at Line %d: assign in struct.\n", root->lineno);
-            return NULL;
+            symbol* entry=semantics_vardec(root->son[0],type,struct_head);
+            symbol* temp1=find_symbol_struct(entry->name);
+            if(temp1){
+                printf("Error type 3 at Line %d: Redefined variable \"%s\".\n", entry->lineno, entry->name);
+                free_symbol(entry);
+                return NULL;
+            }
+            int temp2=add_symbol(entry,struct_entry);
+            if(temp2==0){
+                free_symbol(entry);
+                return NULL;
+            }
+            return entry;
         }
         else{
             assert(0);
