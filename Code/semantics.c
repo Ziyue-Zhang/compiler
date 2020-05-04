@@ -193,8 +193,10 @@ symbol* semantics_vardec(node* root,int type,struct_list* struct_head){
         entry->param_head=NULL;
         entry->struct_head=struct_head;
         symbol* pre_entry=semantics_vardec(root->son[0],type,struct_head);
+        pre_entry->array_flag=1;
         entry->name=pre_entry->name;
         entry->dim=pre_entry->dim+1;
+        entry->array_size=pre_entry->array_size*root->son[2]->type_int;
         return entry;        
     }
     else{
@@ -227,6 +229,7 @@ symbol* semantics_fundec(node* root,int type,struct_list* struct_head,int func_d
 
 void semantics_varlist(node* root, param_list** param_head){
     if(root->num==3){
+        semantics_varlist(root->son[2],param_head);
         symbol* entry=semantics_paramdec(root->son[0]);
         if(entry){
             symbol_list * list_head=malloc(sizeof(symbol_list));
@@ -235,7 +238,6 @@ void semantics_varlist(node* root, param_list** param_head){
             (*param_head)->list=list_head;
             (*param_head)->param_num=(*param_head)->param_num+1;
         }
-        semantics_varlist(root->son[2],param_head);
     }
     else if(root->num==1){
         symbol* entry=semantics_paramdec(root->son[0]);
@@ -832,6 +834,7 @@ symbol* semantics_exp(node* root){
 
 void semantics_args(node* root,param_list** param_head){
     if(root->num==3){
+        semantics_args(root->son[2],param_head);
         symbol* entry=semantics_exp(root->son[0]);
         if(entry){
             symbol_list * list_head=malloc(sizeof(symbol_list));
@@ -840,7 +843,6 @@ void semantics_args(node* root,param_list** param_head){
             (*param_head)->list=list_head;
             (*param_head)->param_num=(*param_head)->param_num+1;
         }
-        semantics_args(root->son[2],param_head);
     }
     else if(root->num==1){
         symbol* entry=semantics_exp(root->son[0]);

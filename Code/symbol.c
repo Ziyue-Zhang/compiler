@@ -5,6 +5,7 @@ void symbol_init(){
      field_head->next=NULL;
      field_head->symbol_tbl_head=NULL;
      field_cur=field_head;
+     symbol_num=1;
 }
 
 void free_param(param_list* param_head){
@@ -79,7 +80,9 @@ symbol* add_entry(int type,char* name,int array_flag,int func_flag,int struct_fl
     new_entry->func_def_flag=func_def_flag;
     new_entry->lineno=lineno;
     new_entry->dim=0;
+    new_entry->array_size=1;
     new_entry->left_value_flag=0;
+    new_entry->entry_name="";
     return new_entry;
 }
 
@@ -219,6 +222,20 @@ int add_symbol(symbol* entry, int struct_entry){
         p=p->next;
     }
     symbol_tbl* new_symbol_tbl=malloc(sizeof(symbol_tbl));
+    if(entry->func_flag==0){
+        /*entry->entry_name=malloc(40);
+        snprintf(entry->entry_name,40,"v%d",symbol_num);
+        //printf("%s\n",entry->entry_name);
+        symbol_num++;*/
+        if(entry->name!=NULL&&entry->name[0]=='t'){
+            entry->entry_name=malloc(40);
+            snprintf(entry->entry_name,40,"1%s",entry->name);
+        }
+        else{
+            entry->entry_name=entry->name;
+        }
+        //printf("%s\n",entry->entry_name);
+    }
     new_symbol_tbl->entry=entry;
     new_symbol_tbl->next=field_cur->symbol_tbl_head;
     field_cur->symbol_tbl_head=new_symbol_tbl;

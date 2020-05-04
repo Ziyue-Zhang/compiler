@@ -55,9 +55,12 @@ struct symbol_t{
     int left_value_flag;
     int lineno;
     int dim;                    //数组维度
+    int array_size;                    
     array_list* array_head;
     param_list* param_head;
     struct_list* struct_head;
+
+    char* entry_name;
 };
 
 struct symbol_tbl_t{
@@ -69,6 +72,8 @@ struct field_list_t{
     symbol_tbl* symbol_tbl_head; 
     field_list* next;
 };
+
+int symbol_num;
 
 void symbol_init();
 void free_param();
