@@ -13,6 +13,7 @@ int semantics_program(node* root){
 
     //symbol_print();
     check_func_def();
+
     return 0;
 }
 

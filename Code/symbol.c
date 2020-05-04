@@ -1,11 +1,27 @@
 #include "symbol.h"
 
 void symbol_init(){
-     field_head=malloc(sizeof(field_list));
-     field_head->next=NULL;
-     field_head->symbol_tbl_head=NULL;
-     field_cur=field_head;
-     symbol_num=1;
+    field_head=malloc(sizeof(field_list));
+    field_head->next=NULL;
+    field_head->symbol_tbl_head=NULL;
+    field_cur=field_head;
+    symbol_num=1;
+    symbol* read_func=add_entry(SYMBOL_INT,"read",0,1,0,1,0);
+    param_list* param_head1=malloc(sizeof(param_list));
+    param_head1->param_num=0;
+    param_head1->list=NULL;
+    read_func->param_head=param_head1;
+    add_symbol(read_func,0);
+    symbol* write_func=add_entry(SYMBOL_INT,"write",0,1,0,1,0);
+    param_list* param_head2=malloc(sizeof(param_list));
+    param_head2->param_num=1;
+    symbol_list* list=malloc(sizeof(symbol_list));
+    list->next=NULL;
+    symbol* write_param=add_entry(SYMBOL_INT,"write_param",0,0,0,0,0);
+    list->entry=write_param;
+    param_head2->list=list;
+    write_func->param_head=param_head2;
+    add_symbol(write_func,0);
 }
 
 void free_param(param_list* param_head){

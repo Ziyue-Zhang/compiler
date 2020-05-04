@@ -2,6 +2,7 @@
 #include "syntax.tab.h"
 #include "semantics.h"
 #include "tree.h"
+#include "intercode.h"
 
 extern int yylex (void);
 extern void yyrestart (FILE *input_file);
