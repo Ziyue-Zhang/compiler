@@ -1,3 +1,6 @@
+#ifndef INTERCODEH
+#define INTERCODEH 
+
 #include<string.h>
 #include<stdlib.h>
 #include<assert.h>
@@ -8,6 +11,8 @@ enum {IR_VARIABLE, IR_CONSTANT, IR_ADDRESS, IR_POINTER, IR_VOID};
 enum {IR_LABEL,IR_FUNCTION,IR_ASSIGN,IR_ADD,IR_SUB,IR_MUL,IR_DIV,
     IR_GOTO,IR_IF,IR_RETURN,IR_DEC,IR_ARG,IR_CALL,IR_PARAM,IR_READ,IR_WRITE};
 
+enum {IR_GT,IR_LT,IR_GE,IR_LE,IR_EQ,IR_NEQ};
+
 typedef struct operand_t operand;
 typedef struct intercode_t intercode;
 typedef struct intercode_list_t intercode_list;
@@ -15,8 +20,7 @@ typedef struct intercodes_t intercodes;
 int temp_num;
 int label_num;
 
-FILE *output1;
-char output2[10000];
+FILE* output;
 
 struct operand_t{
     int kind;
@@ -26,13 +30,15 @@ struct operand_t{
         int value;
     } u;
     char* var_name;
-    char* func_name;
 };
 
 struct intercode_t {
     int kind;
     operand result, op1, op2;
+    char* func_name;
     int label;
+    int relop;
+    int size;
 };
 
 struct intercode_list_t {
@@ -46,6 +52,9 @@ struct intercodes_t {
 };
 
 void intercode_init();
+intercode* intercode_new(int kind);
+void intercode_op_left(operand op);
+void intercode_op_right(operand op);
 void intercodes_add(intercodes* irs,intercode *ir);
 void intercodes_merge(intercodes* ir1,intercodes* ir2);
 void intercodes_print(intercodes* irs);
@@ -68,3 +77,5 @@ void intercode_read(intercode* ir);
 void intercode_write(intercode* ir);
 int new_temp();
 int new_label();
+
+#endif

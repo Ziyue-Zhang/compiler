@@ -3,6 +3,7 @@
 #include "semantics.h"
 #include "tree.h"
 #include "intercode.h"
+#include "translate.h"
 
 extern int yylex (void);
 extern void yyrestart (FILE *input_file);
@@ -17,6 +18,7 @@ int main(int argc, char** argv) {
     if (argc <= 1) 
         return 1;
     FILE* f = fopen(argv[1], "r");
+    output = fopen("1.out", "w+");
     if (!f){
         perror(argv[1]);
         return 1;
@@ -30,6 +32,8 @@ int main(int argc, char** argv) {
     if(eflag==false){
         //print_tree(root);
         semantics_program(root);
+        translate_program(root);
+        fclose(output);
     }
     return 0;
 }
