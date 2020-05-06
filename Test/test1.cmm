@@ -1,4 +1,4 @@
-int nmsl(){
+int nmsl(int m,int n){
   int x=9;
   int z;
   int t;
@@ -8,8 +8,8 @@ int nmsl(){
 
 int main(){
   int y=8;
-  int a;
-  int b=nmsl();
-  a=nmsl();
+  int a=2;
+  int b=nmsl(y,a);
+
   return 0;
 }

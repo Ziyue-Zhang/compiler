@@ -537,7 +537,7 @@ intercodes* translate_exp(node* root,operand* op,intercodes* icodes){
 
             arg_list*p =args->head;
             while(p){
-                intercode* code1=intercode_new(IR_WRITE);
+                intercode* code1=intercode_new(IR_PARAM);
                 code1->result.kind=p->op->kind;
                 code1->result.temp_flag=p->op->temp_flag;
                 code1->result.u=p->op->u;

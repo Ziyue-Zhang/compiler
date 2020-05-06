@@ -249,7 +249,9 @@ void intercode_call(intercode* ir){
     fprintf(output, " := CALL %s\n", ir->func_name);
 }
 void intercode_param(intercode* ir){
-    fprintf(output, "PARAM %s\n",ir->result.var_name); 
+    fprintf(output, "PARAM "); 
+    intercode_op_right(ir->result);
+    fprintf(output, "\n");
 }
 void intercode_read(intercode* ir){
     fprintf(output, "READ "); 
