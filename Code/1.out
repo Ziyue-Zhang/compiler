@@ -1,1 +1,15 @@
+FUNCTION nmsl :
+x := #9
+READ t1
+1t := t1
+t2 := #28
+RETURN t2
+
 FUNCTION main :
+y := #8
+b := CALL nmsl
+t3 := CALL nmsl
+a := t3
+t4 := #0
+RETURN t4
+

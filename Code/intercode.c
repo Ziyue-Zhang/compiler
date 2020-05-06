@@ -35,6 +35,7 @@ void intercodes_merge(intercodes* ir1,intercodes* ir2){
         ir1->head=ir2->head;
         ir1->tail=ir2->tail;
     }
+    free(ir2);
 }
 void intercodes_print(intercodes* irs){
     intercode_list* irl=irs->head;
@@ -92,6 +93,9 @@ void intercode_print(intercode* ir){
     else if(ir->kind==IR_WRITE){
         intercode_write(ir);
     }
+    else if(ir->kind==IR_VOID){
+        fprintf(output,"\n");
+    }
     else {
         assert(0);
     }
@@ -141,12 +145,7 @@ void intercode_op_right(operand op){
     }
     else if(op.kind==IR_CONSTANT){
         fprintf(output, "#%d",op.u.value);
-        if(op.temp_flag==1){
-            fprintf(output, "t%d",op.u.var_no);
-        }
-        else{
-            fprintf(output, "%s",op.var_name);
-        }
+
     }
     else if(op.kind==IR_VARIABLE){
         if(op.temp_flag==1){

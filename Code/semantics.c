@@ -48,7 +48,7 @@ void semantics_extdef(node* root){
                     entry=find_symbol_headfield(entry->name);
                     entry->func_def_flag=1;
                 }
-                field_push();
+                //field_push();
                 symbol_list* params=entry->param_head->list;
                 //printf("%d\n",entry->param_head->param_num);
                 while(params){
@@ -57,7 +57,7 @@ void semantics_extdef(node* root){
                     params=params->next;
                 }
                 semantics_compst(root->son[2],type,struct_head);
-                field_pop();
+                //field_pop();
             }
             else if(strcmp(root->son[2]->name,"SEMI")==0){
             //FUNCTION DECLEAR

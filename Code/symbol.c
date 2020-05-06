@@ -246,6 +246,7 @@ int add_symbol(symbol* entry, int struct_entry){
         if(entry->name!=NULL&&entry->name[0]=='t'){
             entry->entry_name=malloc(40);
             snprintf(entry->entry_name,40,"1%s",entry->name);
+            //printf("%s\n",entry->entry_name);
         }
         else{
             entry->entry_name=entry->name;

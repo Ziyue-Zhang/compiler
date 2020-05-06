@@ -1,11 +1,15 @@
-int a[6];
-int b;
-int func(int x,float y){
-  return x;
+int nmsl(){
+  int x=9;
+  int z;
+  int t;
+  t=read();
+  return 28;
 }
+
 int main(){
-  int c;
-  float d;
-  func(c,d);
+  int y=8;
+  int a;
+  int b=nmsl();
+  a=nmsl();
   return 0;
 }

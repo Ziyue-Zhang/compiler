@@ -303,6 +303,11 @@ Exp : Exp ASSIGNOP Exp{
   $$->son[1]=$2;
   $$->son[2]=$3;
 }
+| NOT Exp{
+  $$=add_node("Exp",SYNTAX_TYPE,NULL,2,@1.first_line,false);
+  $$->son[0]=$1;
+  $$->son[1]=$2;
+}
 | Exp AND Exp{
   $$=add_node("Exp",SYNTAX_TYPE,NULL,3,@1.first_line,false);
   $$->son[0]=$1;
@@ -352,11 +357,6 @@ Exp : Exp ASSIGNOP Exp{
   $$->son[2]=$3;
 }
 | MINUS Exp %prec UMINUS{
-  $$=add_node("Exp",SYNTAX_TYPE,NULL,2,@1.first_line,false);
-  $$->son[0]=$1;
-  $$->son[1]=$2;
-}
-| NOT Exp{
   $$=add_node("Exp",SYNTAX_TYPE,NULL,2,@1.first_line,false);
   $$->son[0]=$1;
   $$->son[1]=$2;
