@@ -81,6 +81,9 @@ void semantics_extdeclist(node* root, int type, struct_list* struct_head){
     if(root->num==1){
         symbol* entry=semantics_vardec(root->son[0],type,struct_head);
         int temp=add_symbol(entry,0);
+        if(type==SYMBOL_STRUCT){
+            entry->size=struct_head->struct_size;
+        }
         if(temp==0){
             free_symbol(entry);
         }
@@ -88,6 +91,9 @@ void semantics_extdeclist(node* root, int type, struct_list* struct_head){
     else if(root->num==3){
         symbol* entry=semantics_vardec(root->son[0],type,struct_head);
         int temp=add_symbol(entry,0);
+        if(type==SYMBOL_STRUCT){
+            entry->size=struct_head->struct_size;
+        }
         if(temp==0){
             free_symbol(entry);
         }
@@ -142,6 +148,7 @@ struct_list* semantics_structspecifier(node* root){
         field_push();
         struct_list* struct_head=malloc(sizeof(struct_list));
         struct_head->list=semantics_deflist(root->son[3],1);
+        struct_head->struct_size=0;
         field_pop();
         symbol* new_entry=add_entry(SYMBOL_STRUCT,name,0,0,1,0,root->lineno);
         new_entry->dim=0;
@@ -154,6 +161,11 @@ struct_list* semantics_structspecifier(node* root){
             return NULL;
         }
         else{
+            symbol_list* p=struct_head->list;
+            while(p){
+                struct_head->struct_size=struct_head->struct_size+p->entry->size;
+                p=p->next;
+            }
             return struct_head;
         }
     }
@@ -197,7 +209,8 @@ symbol* semantics_vardec(node* root,int type,struct_list* struct_head){
         pre_entry->array_flag=1;
         entry->name=pre_entry->name;
         entry->dim=pre_entry->dim+1;
-        entry->array_size=pre_entry->array_size*root->son[2]->type_int;
+        entry->size=pre_entry->size*root->son[2]->type_int;
+        printf("%d\n",entry->size);
         return entry;        
     }
     else{
@@ -261,6 +274,9 @@ symbol* semantics_paramdec(node* root){
     if(type==SYMBOL_VOID)
         return NULL;
     symbol* entry=semantics_vardec(root->son[1],type,struct_head);
+    if(type==SYMBOL_STRUCT){
+        entry->size=struct_head->struct_size;
+    }
     symbol* temp1=find_symbol_struct(entry->name);
     if(temp1){
         printf("Error type 3 at Line %d: Redefined variable \"%s\".\n", entry->lineno, entry->name);
@@ -378,6 +394,9 @@ symbol_list* semantics_def(node* root,int *flag,int struct_entry){
 symbol_list* semantics_declist(node* root,int type,struct_list* struct_head,int struct_entry){
     if(root->num==1){
         symbol* entry=semantics_dec(root->son[0],type,struct_head,struct_entry);
+        if(type==SYMBOL_STRUCT){
+            entry->size=struct_head->struct_size;
+        }
         if(!entry){
             return NULL;
         }
@@ -390,6 +409,9 @@ symbol_list* semantics_declist(node* root,int type,struct_list* struct_head,int 
     }
     else if(root->num==3){
         symbol* entry=semantics_dec(root->son[0],type,struct_head,struct_entry);
+        if(type==SYMBOL_STRUCT){
+            entry->size=struct_head->struct_size;
+        }
         if(!entry){
             return semantics_declist(root->son[2],type,struct_head,struct_entry);
         }

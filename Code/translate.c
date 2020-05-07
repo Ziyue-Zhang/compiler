@@ -21,7 +21,7 @@ void translate_extdeflist(node* root, intercodes* codes){
     intercodes_merge(codes,codes1);
 }
 void translate_extdef(node* root, intercodes* codes){
-    if(strcmp(root->son[2]->name,"CompSt")==0){
+    if(root->num==3&&strcmp(root->son[2]->name,"CompSt")==0){
         symbol* func_entry=find_symbol(root->son[1]->son[0]->type_char);
         intercode* code1=intercode_new(IR_FUNCTION);
         code1->func_name=func_entry->name;
@@ -517,6 +517,8 @@ intercodes* translate_exp(node* root,operand* op,intercodes* icodes){
         }
         else if(strcmp(root->son[1]->name,"DOT")==0){
             printf("struct\n");
+            symbol* entry=find_symbol(root->son[0]->son[0]->type_char);
+            printf("%d\n",entry->size);
             return codes;
         }
     }

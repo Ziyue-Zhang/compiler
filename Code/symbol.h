@@ -32,12 +32,12 @@ struct param_list_t{
 struct array_list_t{
     int array_dim;
     int array_size;
-    symbol* entry;
     array_list* next;
 };
 
 struct struct_list_t{
     symbol_list* list;
+    int struct_size;
 };
 
 struct symbol_list_t{
@@ -55,7 +55,7 @@ struct symbol_t{
     int left_value_flag;
     int lineno;
     int dim;                    //数组维度
-    int array_size;                    
+    int size;                    
     array_list* array_head;
     param_list* param_head;
     struct_list* struct_head;

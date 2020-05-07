@@ -96,7 +96,9 @@ symbol* add_entry(int type,char* name,int array_flag,int func_flag,int struct_fl
     new_entry->func_def_flag=func_def_flag;
     new_entry->lineno=lineno;
     new_entry->dim=0;
-    new_entry->array_size=1;
+    if(type!=SYMBOL_STRUCT&&func_flag==0&&struct_flag==0){
+        new_entry->size=4;
+    }
     new_entry->left_value_flag=0;
     new_entry->entry_name="";
     return new_entry;
