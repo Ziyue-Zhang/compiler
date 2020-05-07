@@ -193,38 +193,40 @@ intercodes* translate_exp(node* root,operand* op,intercodes* icodes){
     }
     else if(root->num==3){
         if(strcmp(root->son[1]->name,"ASSIGNOP")==0){
-            char* name=root->son[0]->son[0]->type_char;
-            symbol* entry=find_symbol(name);
-            int t1=new_temp();
-            operand* op1=malloc(sizeof(operand));
-            op1->kind=IR_VARIABLE;
-            op1->temp_flag=1;
-            op1->u.var_no=t1;
-            intercodes* codes1=translate_exp(root->son[2],op1,icodes);
-            intercodes_merge(codes,codes1);
+            if(root->son[0]->num==1){
+                char* name=root->son[0]->son[0]->type_char;
+                symbol* entry=find_symbol(name);
+                int t1=new_temp();
+                operand* op1=malloc(sizeof(operand));
+                op1->kind=IR_VARIABLE;
+                op1->temp_flag=1;
+                op1->u.var_no=t1;
+                intercodes* codes1=translate_exp(root->son[2],op1,icodes);
+                intercodes_merge(codes,codes1);
 
-            intercode* code1=intercode_new(IR_ASSIGN);
-            code1->result.kind=IR_VARIABLE;
-            code1->result.var_name=entry->entry_name;
-            code1->result.temp_flag=0;
-            code1->op1.kind=IR_VARIABLE;
-            code1->op1.temp_flag=1;
-            code1->op1.u.var_no=t1;
-            intercodes_add(codes,code1);
+                intercode* code1=intercode_new(IR_ASSIGN);
+                code1->result.kind=IR_VARIABLE;
+                code1->result.var_name=entry->entry_name;
+                code1->result.temp_flag=0;
+                code1->op1.kind=IR_VARIABLE;
+                code1->op1.temp_flag=1;
+                code1->op1.u.var_no=t1;
+                intercodes_add(codes,code1);
 
-            if(op){
-                intercode* code2=intercode_new(IR_ASSIGN);
-                code2->result.kind=op->kind;
-                code2->result.temp_flag=op->temp_flag;
-                code2->result.var_name=op->var_name;
-                code2->result.u=op->u;
-                code2->op1.kind=IR_VARIABLE;
-                code2->op1.var_name=entry->entry_name;
-                code2->op1.temp_flag=0;
-                intercodes_add(codes,code2);
+                if(op){
+                    intercode* code2=intercode_new(IR_ASSIGN);
+                    code2->result.kind=op->kind;
+                    code2->result.temp_flag=op->temp_flag;
+                    code2->result.var_name=op->var_name;
+                    code2->result.u=op->u;
+                    code2->op1.kind=IR_VARIABLE;
+                    code2->op1.var_name=entry->entry_name;
+                    code2->op1.temp_flag=0;
+                    intercodes_add(codes,code2);
+                }
+
+                return codes;
             }
-
-            return codes;
         }
         else if(strcmp(root->son[1]->name,"PLUS")==0){
             if(!op){
@@ -513,6 +515,10 @@ intercodes* translate_exp(node* root,operand* op,intercodes* icodes){
                 return codes;
             }
         }
+        else if(strcmp(root->son[1]->name,"DOT")==0){
+            printf("struct\n");
+            return codes;
+        }
     }
     else if(root->num==4){
         if(strcmp(root->son[1]->name,"LP")==0){
@@ -556,6 +562,10 @@ intercodes* translate_exp(node* root,operand* op,intercodes* icodes){
 
             return codes;
 
+        }
+        else if(strcmp(root->son[1]->name,"LB")==0){
+            printf("array\n");
+            return codes;
         }
     }
     return codes;

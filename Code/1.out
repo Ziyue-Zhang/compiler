@@ -1,20 +1,5 @@
-FUNCTION nmsl :
-PARAM m
-PARAM n
-x := #9
-READ t1
-1t := t1
-t2 := #28
-RETURN t2
-
 FUNCTION main :
-y := #8
-a := #2
-t3 := y
-t4 := a
-PARAM t4
-PARAM t3
-b := CALL nmsl
-t5 := #0
-RETURN t5
+y := t1
+t2 := #0
+RETURN t2
 
