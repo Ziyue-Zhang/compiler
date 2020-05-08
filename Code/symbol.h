@@ -54,7 +54,8 @@ struct symbol_t{
     int left_value_flag;
     int lineno;
     int dim;                    //数组维度
-    int size;                    
+    int size;
+    int struct_offset;                    
     array_list* array_head;
     param_list* param_head;
     struct_list* struct_head;

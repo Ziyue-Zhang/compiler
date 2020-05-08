@@ -1,4 +1,23 @@
+struct nmsl{
+  int sb[20][10];
+};
 struct Operands
+{
+int o1;
+int o2;
+struct nmsl o3[2];
+};
+
+int main()
+{
+struct Operands op;
+int y;
+op.o3[1].sb[10][9]=1;
+y=op.o3[1].sb[10][9]+op.o3[1].sb[10][8];
+return 0;
+}
+
+/*struct Operands
 {
 int o1;
 int o2;
@@ -7,15 +26,15 @@ int o2;
 int add(struct Operands temp)
 {
 return (temp.o1 + temp.o2);
-}
+ }
 
-int main()
-{
-int n;
-struct Operands op;
-op.o1 = 1;
-op.o2 = 2;
-n = add(op);
-write(n);
-return 0;
-}
+ int main()
+ {
+ int n;
+ struct Operands op;
+ op.o1 = 1;
+ op.o2 = 2;
+ n = add(op);
+ write(n);
+ return 0;
+ }*/

@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "tree.h": "c",
-        "syntax.tab.h": "c"
+        "syntax.tab.h": "c",
+        "typeinfo": "c"
     }
 }

@@ -144,11 +144,11 @@ struct_list* semantics_structspecifier(node* root){
             printf("Error type 16 at Line %d: Duplicated name \"%s\".\n", root->lineno, name);
             return NULL;
         }
-        field_push();
+        //field_push();
         struct_list* struct_head=malloc(sizeof(struct_list));
         struct_head->list=semantics_deflist(root->son[3],1);
         struct_head->struct_size=0;
-        field_pop();
+        //field_pop();
         symbol* new_entry=add_entry(SYMBOL_STRUCT,name,0,0,1,0,root->lineno);
         new_entry->dim=0;
         new_entry->array_head=NULL;
@@ -161,7 +161,9 @@ struct_list* semantics_structspecifier(node* root){
         }
         else{
             symbol_list* p=struct_head->list;
+            struct_head->struct_size=0;
             while(p){
+                p->entry->struct_offset=struct_head->struct_size;
                 struct_head->struct_size=struct_head->struct_size+p->entry->size;
                 p=p->next;
             }
@@ -211,6 +213,9 @@ symbol* semantics_vardec(node* root,int type,struct_list* struct_head,array_list
             (*array_head)=malloc(sizeof(array_list));
             (*array_head)->next=NULL;
             (*array_head)->array_size=4;
+            if(type==SYMBOL_STRUCT){
+                (*array_head)->array_size=struct_head->struct_size;
+            }
         }
         if(root->son[0]->num==4){
             array_list* new_array=malloc(sizeof(array_list));
@@ -320,9 +325,9 @@ void semantics_stmtlist(node* root,int type,struct_list* struct_head){
 
 void semantics_stmt(node* root,int type,struct_list* struct_head){
     if(root->num==1){
-        field_push();
+        //field_push();
         semantics_compst(root->son[0],type,struct_head);
-        field_pop();
+        //field_pop();
     }
     else if(root->num==2){
         semantics_exp(root->son[0]);
