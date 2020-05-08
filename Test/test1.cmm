@@ -1,9 +1,21 @@
-int main(){
-  int a[10][8][5];
-  int y=0;
-  a[0]=y;
-  y=a[0];
-  
+struct Operands
+{
+int o1;
+int o2;
+};
 
-  return 0;
+int add(struct Operands temp)
+{
+return (temp.o1 + temp.o2);
+}
+
+int main()
+{
+int n;
+struct Operands op;
+op.o1 = 1;
+op.o2 = 2;
+n = add(op);
+write(n);
+return 0;
 }

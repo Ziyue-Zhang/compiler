@@ -60,6 +60,7 @@ struct symbol_t{
     struct_list* struct_head;
 
     char* entry_name;
+    int param_flag;
 };
 
 struct symbol_tbl_t{

@@ -53,6 +53,7 @@ void semantics_extdef(node* root){
                 //printf("%d\n",entry->param_head->param_num);
                 while(params){
                     add_symbol(params->entry,0);
+                    params->entry->param_flag=1;
                     //printf("%s\n",params->entry->name);
                     params=params->next;
                 }
