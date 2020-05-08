@@ -16,7 +16,7 @@ int semantics_specifier(node* root,struct_list** struct_head);
 struct_list* semantics_structspecifier(node* root);
 char* semantics_opttag(node* root);
 char* semantics_tag(node* root);
-symbol* semantics_vardec(node* root,int type,struct_list* struct_head);
+symbol* semantics_vardec(node* root,int type,struct_list* struct_head,array_list** array_head);
 symbol* semantics_fundec(node* root,int type,struct_list* struct_head,int func_def);
 void semantics_varlist(node* root, param_list** param_head);
 symbol* semantics_paramdec(node* root);

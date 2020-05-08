@@ -40,7 +40,6 @@ void free_array(array_list* array_head){
     while(array_head){
         p=array_head;
         array_head=array_head->next;
-        free_symbol(p->entry);
         free(p);
     }
 }
@@ -96,6 +95,7 @@ symbol* add_entry(int type,char* name,int array_flag,int func_flag,int struct_fl
     new_entry->func_def_flag=func_def_flag;
     new_entry->lineno=lineno;
     new_entry->dim=0;
+    new_entry->array_head=NULL;
     if(type!=SYMBOL_STRUCT&&func_flag==0&&struct_flag==0){
         new_entry->size=4;
     }
@@ -132,9 +132,6 @@ int same_array(array_list* p1, array_list* p2){
     if(!p1&&!p2)
         return 1;
     while(p1 && p2){
-        if(p1->array_dim!=p2->array_dim){
-            return 0;
-        }
         if(p1->array_size!=p2->array_size){
             return 0;
         }

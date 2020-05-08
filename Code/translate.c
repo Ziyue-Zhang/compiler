@@ -567,6 +567,12 @@ intercodes* translate_exp(node* root,operand* op,intercodes* icodes){
         }
         else if(strcmp(root->son[1]->name,"LB")==0){
             printf("array\n");
+            symbol* entry=find_symbol(root->son[0]->son[0]->type_char);
+            array_list*p=entry->array_head;
+            while(p){
+                printf("%d\n",p->array_size);
+                p=p->next;
+            }
             return codes;
         }
     }

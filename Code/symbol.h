@@ -30,7 +30,6 @@ struct param_list_t{
 };
 
 struct array_list_t{
-    int array_dim;
     int array_size;
     array_list* next;
 };
