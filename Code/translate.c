@@ -894,6 +894,20 @@ intercodes* translate_array_struct1(node* root,operand* op){
     int temp=0;
     array_list* array_head=NULL;
     symbol* entry=struct_array_offset(root->son[0],&offset,&array_head,codes,&temp);
+    if(temp!=0&&offset!=0){
+        intercode* code=intercode_new(IR_ADD);
+        code->result.kind=IR_VARIABLE;
+        code->result.temp_flag=1;
+        code->result.u.var_no=temp;
+        code->op1.kind=IR_VARIABLE;
+        code->op1.temp_flag=1;
+        code->op1.u.var_no=temp;
+        code->op2.kind=IR_CONSTANT;
+        code->op2.temp_flag=0;
+        code->op2.u.value=offset;
+        intercodes_add(codes,code);
+    }
+
     if(entry->param_flag==0){
                   
         int t1=new_temp();
@@ -907,28 +921,58 @@ intercodes* translate_array_struct1(node* root,operand* op){
         int size=offset;
         int t2=new_temp();
         if(size==0){
-            intercode* code1=intercode_new(IR_ASSIGN);
-            code1->result.kind=IR_VARIABLE;
-            code1->result.temp_flag=1;
-            code1->result.u.var_no=t2;
-            code1->op1.kind=IR_ADDRESS;
-            code1->op1.temp_flag=0;
-            code1->op1.var_name=entry->entry_name;
-            intercodes_add(codes,code1);
+            if(temp==0){
+                intercode* code1=intercode_new(IR_ASSIGN);
+                code1->result.kind=IR_VARIABLE;
+                code1->result.temp_flag=1;
+                code1->result.u.var_no=t2;
+                code1->op1.kind=IR_ADDRESS;
+                code1->op1.temp_flag=0;
+                code1->op1.var_name=entry->entry_name;
+                intercodes_add(codes,code1);
+            }
+            else{
+                intercode* code1=intercode_new(IR_ADD);
+                code1->result.kind=IR_VARIABLE;
+                code1->result.temp_flag=1;
+                code1->result.u.var_no=t2;
+                code1->op1.kind=IR_ADDRESS;
+                code1->op1.temp_flag=0;
+                code1->op1.var_name=entry->entry_name;
+                code1->op2.kind=IR_VARIABLE;
+                code1->op2.temp_flag=1;
+                code1->op2.u.var_no=temp;
+                intercodes_add(codes,code1);
+            }
 
         }
         else{
-            intercode* code1=intercode_new(IR_ADD);
-            code1->result.kind=IR_VARIABLE;
-            code1->result.temp_flag=1;
-            code1->result.u.var_no=t2;
-            code1->op1.kind=IR_ADDRESS;
-            code1->op1.temp_flag=0;
-            code1->op1.var_name=entry->entry_name;
-            code1->op2.kind=IR_CONSTANT;
-            code1->op2.temp_flag=0;
-            code1->op2.u.value=size;
-            intercodes_add(codes,code1);
+            if(temp==0){
+                intercode* code1=intercode_new(IR_ADD);
+                code1->result.kind=IR_VARIABLE;
+                code1->result.temp_flag=1;
+                code1->result.u.var_no=t2;
+                code1->op1.kind=IR_ADDRESS;
+                code1->op1.temp_flag=0;
+                code1->op1.var_name=entry->entry_name;
+                code1->op2.kind=IR_CONSTANT;
+                code1->op2.temp_flag=0;
+                code1->op2.u.value=size;
+                intercodes_add(codes,code1);
+            }
+            else{
+                intercode* code1=intercode_new(IR_ADD);
+                code1->result.kind=IR_VARIABLE;
+                code1->result.temp_flag=1;
+                code1->result.u.var_no=t2;
+                code1->op1.kind=IR_ADDRESS;
+                code1->op1.temp_flag=0;
+                code1->op1.var_name=entry->entry_name;
+                code1->op2.kind=IR_VARIABLE;
+                code1->op2.temp_flag=1;
+                code1->op2.u.var_no=temp;
+                intercodes_add(codes,code1);
+            }
         }
 
         intercode* code2=intercode_new(IR_ASSIGN);
@@ -966,28 +1010,57 @@ intercodes* translate_array_struct1(node* root,operand* op){
         int size=offset;
         int t2=new_temp();
         if(size==0){
-            intercode* code1=intercode_new(IR_ASSIGN);
-            code1->result.kind=IR_VARIABLE;
-            code1->result.temp_flag=1;
-            code1->result.u.var_no=t2;
-            code1->op1.kind=IR_VARIABLE;
-            code1->op1.temp_flag=0;
-            code1->op1.var_name=entry->entry_name;
-            intercodes_add(codes,code1);
-
+            if(temp==0){
+                intercode* code1=intercode_new(IR_ASSIGN);
+                code1->result.kind=IR_VARIABLE;
+                code1->result.temp_flag=1;
+                code1->result.u.var_no=t2;
+                code1->op1.kind=IR_VARIABLE;
+                code1->op1.temp_flag=0;
+                code1->op1.var_name=entry->entry_name;
+                intercodes_add(codes,code1);
+            }
+            else{
+                intercode* code1=intercode_new(IR_ADD);
+                code1->result.kind=IR_VARIABLE;
+                code1->result.temp_flag=1;
+                code1->result.u.var_no=t2;
+                code1->op1.kind=IR_VARIABLE;
+                code1->op1.temp_flag=0;
+                code1->op1.var_name=entry->entry_name;
+                code1->op2.kind=IR_VARIABLE;
+                code1->op2.temp_flag=1;
+                code1->op2.u.var_no=temp;
+                intercodes_add(codes,code1);
+            }
         }
         else{
-            intercode* code1=intercode_new(IR_ADD);
-            code1->result.kind=IR_VARIABLE;
-            code1->result.temp_flag=1;
-            code1->result.u.var_no=t2;
-            code1->op1.kind=IR_VARIABLE;
-            code1->op1.temp_flag=0;
-            code1->op1.var_name=entry->entry_name;
-            code1->op2.kind=IR_CONSTANT;
-            code1->op2.temp_flag=0;
-            code1->op2.u.value=size;
-            intercodes_add(codes,code1);
+            if(temp==0){
+                intercode* code1=intercode_new(IR_ADD);
+                code1->result.kind=IR_VARIABLE;
+                code1->result.temp_flag=1;
+                code1->result.u.var_no=t2;
+                code1->op1.kind=IR_VARIABLE;
+                code1->op1.temp_flag=0;
+                code1->op1.var_name=entry->entry_name;
+                code1->op2.kind=IR_CONSTANT;
+                code1->op2.temp_flag=0;
+                code1->op2.u.value=size;
+                intercodes_add(codes,code1);
+            }
+            else{
+                intercode* code1=intercode_new(IR_ADD);
+                code1->result.kind=IR_VARIABLE;
+                code1->result.temp_flag=1;
+                code1->result.u.var_no=t2;
+                code1->op1.kind=IR_VARIABLE;
+                code1->op1.temp_flag=0;
+                code1->op1.var_name=entry->entry_name;
+                code1->op2.kind=IR_VARIABLE;
+                code1->op2.temp_flag=1;
+                code1->op2.u.var_no=temp;
+                intercodes_add(codes,code1);
+            }
         }
 
         intercode* code2=intercode_new(IR_ASSIGN);
@@ -1159,7 +1232,7 @@ intercodes* translate_array_struct2(node* root,operand* op){
         }
         else{
             int t1=new_temp();
-            
+
             if(temp==0){
                 intercode* code1=intercode_new(IR_ADD);
                 code1->result.kind=IR_VARIABLE;
