@@ -2,9 +2,8 @@
  {
  int op[2];
  int i = 0, j = 0;
- op[1]=1;
- j=op[i];
- op[j]=1;
+i<j;
+op[1];
  return 0;
 }
 

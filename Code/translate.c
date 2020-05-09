@@ -175,6 +175,9 @@ intercodes* translate_exp(node* root,operand* op){
             return codes;
         }
         else if(strcmp(root->son[0]->name,"NOT")==0){
+            if(!op){
+                return codes;
+            }
             int label1=new_label();
             int label2=new_label();
 
@@ -409,6 +412,9 @@ intercodes* translate_exp(node* root,operand* op){
             return codes;
         }
         else if(strcmp(root->son[1]->name,"RELOP")==0){
+            if(!op){
+                return codes;
+            }
             int label1=new_label();
             int label2=new_label();
 
@@ -446,6 +452,9 @@ intercodes* translate_exp(node* root,operand* op){
             return codes;
         }
         else if(strcmp(root->son[1]->name,"AND")==0){
+            if(!op){
+                return codes;
+            }
             int label1=new_label();
             int label2=new_label();
 
@@ -483,6 +492,9 @@ intercodes* translate_exp(node* root,operand* op){
             return codes;
         }
         else if(strcmp(root->son[1]->name,"OR")==0){
+            if(!op){
+                return codes;
+            }
             int label1=new_label();
             int label2=new_label();
 
@@ -520,9 +532,15 @@ intercodes* translate_exp(node* root,operand* op){
             return codes;
         }
         else if(strcmp(root->son[0]->name,"LP")==0){
+            if(!op){
+                return codes;
+            }
             return translate_exp(root->son[1],op);
         }
         else if(strcmp(root->son[1]->name,"LP")==0){
+            if(!op){
+                return codes;
+            }
             symbol* func_entry=find_symbol(root->son[0]->type_char);
             //printf("%s\n",func_entry->name);
             if(strcmp(func_entry->name,"read")==0){
@@ -548,6 +566,9 @@ intercodes* translate_exp(node* root,operand* op){
             }
         }
         else if(strcmp(root->son[1]->name,"DOT")==0){
+            if(!op){
+                return codes;
+            }
             intercodes* codes1=translate_array_struct2(root,op);
             intercodes_merge(codes,codes1);
             return codes;
@@ -574,6 +595,10 @@ intercodes* translate_exp(node* root,operand* op){
                 return codes;
             }
 
+            if(!op){
+                return codes;
+            }
+
             arg_list*p =args->head;
             while(p){
                 intercode* code1=intercode_new(IR_ARG);
@@ -597,6 +622,9 @@ intercodes* translate_exp(node* root,operand* op){
 
         }
         else if(strcmp(root->son[1]->name,"LB")==0){
+            if(!op){
+                return codes;
+            }
             intercodes* codes1=translate_array_struct2(root,op);
             intercodes_merge(codes,codes1);
             return codes;
