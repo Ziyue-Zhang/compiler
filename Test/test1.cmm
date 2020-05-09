@@ -1,20 +1,10 @@
-struct nmsl{
-  int sb[20][10];
-};
-struct Operands
-{
-int o1;
-int o2;
-struct nmsl o3[2];
-};
-
-int main()
-{
-struct Operands op;
-int y;
-op.o3[1].sb[10][9]=1;
-y=op.o3[1].sb[10][9]+op.o3[1].sb[10][8];
-return 0;
+ int main()
+ {
+ int op[2];
+ int i = 0, j = 0;
+ op[1]=1;
+ j=op[i];
+ return 0;
 }
 
 /*struct Operands

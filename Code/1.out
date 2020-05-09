@@ -1,14 +1,17 @@
 FUNCTION main :
-DEC op 1608
+DEC op 8
+i := #0
+j := #0
 t1 := #1
-t2 := &op + #1244
+t2 := &op + #4
 *t2 := t1
-t6 := &op + #1244
-t4 := *t6
-t7 := &op + #1240
-t5 := *t7
-t3 := t4 + t5
-y := t3
-t8 := #0
-RETURN t8
+t4 := #0
+t5 := i * #4
+t4 := t4 + #0
+t4 := t4 + t5
+t6 := &op + t4
+t3 := *t6
+j := t3
+t7 := #0
+RETURN t7
 

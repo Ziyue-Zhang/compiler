@@ -28,13 +28,13 @@ void translate_declist(node* root, intercodes* codes);
 void translate_dec(node* root, intercodes* codes);
 void translate_vardec(node* root, intercodes* codes);
 
-symbol* struct_array_offset(node* root,int *offset,array_list** array_head);
-void translate_array_struct1(node* root,operand* op,intercodes* icodes);
-void translate_array_struct2(node* root,operand* op,intercodes* icodes);
+symbol* struct_array_offset(node* root,int *offset,array_list** array_head,intercodes* codes,int *temp);
+intercodes* translate_array_struct1(node* root,operand* op);
+intercodes* translate_array_struct2(node* root,operand* op);
 
-intercodes* translate_exp(node* root,operand* op,intercodes* icodes);
-intercodes* translate_stmt(node* root,intercodes* icodes);
-intercodes* translate_cond(node* root,int label1,int label2,intercodes* icodes);
-intercodes* translate_args(node* root,arglist** arg_head,intercodes* icodes);
+intercodes* translate_exp(node* root,operand* op);
+intercodes* translate_stmt(node* root);
+intercodes* translate_cond(node* root,int label1,int label2);
+intercodes* translate_args(node* root,arglist** arg_head);
 
 #endif
