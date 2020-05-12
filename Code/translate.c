@@ -538,12 +538,12 @@ intercodes* translate_exp(node* root,operand* op){
             return translate_exp(root->son[1],op);
         }
         else if(strcmp(root->son[1]->name,"LP")==0){
-            if(!op){
-                return codes;
-            }
             symbol* func_entry=find_symbol(root->son[0]->type_char);
             //printf("%s\n",func_entry->name);
             if(strcmp(func_entry->name,"read")==0){
+                if(!op){
+                    return codes;
+                }
                 intercode* code1=intercode_new(IR_READ);
                 code1->result.kind=op->kind;
                 code1->result.temp_flag=op->temp_flag;
@@ -554,13 +554,24 @@ intercodes* translate_exp(node* root,operand* op){
                 return codes;
             }
             else{
-                intercode* code1=intercode_new(IR_CALL);
-                code1->result.kind=op->kind;
-                code1->result.temp_flag=op->temp_flag;
-                code1->result.u=op->u;
-                code1->result.var_name=op->var_name;
-                code1->func_name=func_entry->name;
-                intercodes_add(codes,code1);
+                if(!op){
+                    int t1=new_temp();
+                    intercode* code1=intercode_new(IR_CALL);
+                    code1->result.kind=IR_VARIABLE;
+                    code1->result.temp_flag=1;
+                    code1->result.u.var_no=t1;
+                    code1->func_name=func_entry->name;
+                    intercodes_add(codes,code1);
+                }
+                else{
+                    intercode* code1=intercode_new(IR_CALL);
+                    code1->result.kind=op->kind;
+                    code1->result.temp_flag=op->temp_flag;
+                    code1->result.u=op->u;
+                    code1->result.var_name=op->var_name;
+                    code1->func_name=func_entry->name;
+                    intercodes_add(codes,code1);
+                }
 
                 return codes;
             }
@@ -595,10 +606,6 @@ intercodes* translate_exp(node* root,operand* op){
                 return codes;
             }
 
-            if(!op){
-                return codes;
-            }
-
             arg_list*p =args->head;
             while(p){
                 intercode* code1=intercode_new(IR_ARG);
@@ -610,13 +617,24 @@ intercodes* translate_exp(node* root,operand* op){
                 p=p->next;
             }
             
-            intercode* code2=intercode_new(IR_CALL);
-            code2->result.kind=op->kind;
-            code2->result.temp_flag=op->temp_flag;
-            code2->result.u=op->u;
-            code2->result.var_name=op->var_name;
-            code2->func_name=func_entry->name;
-            intercodes_add(codes,code2);
+            if(!op){
+                int t1=new_temp();
+                intercode* code2=intercode_new(IR_CALL);
+                code2->result.kind=IR_VARIABLE;
+                code2->result.temp_flag=1;
+                code2->result.u.var_no=t1;
+                code2->func_name=func_entry->name;
+                intercodes_add(codes,code2);
+            }
+            else{
+                intercode* code2=intercode_new(IR_CALL);
+                code2->result.kind=op->kind;
+                code2->result.temp_flag=op->temp_flag;
+                code2->result.u=op->u;
+                code2->result.var_name=op->var_name;
+                code2->func_name=func_entry->name;
+                intercodes_add(codes,code2);
+            }
 
             return codes;
 
