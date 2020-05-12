@@ -1,0 +1,379 @@
+FUNCTION display :
+PARAM chess2
+DEC chessplate 64
+i2 := #0
+j2 := #0
+LABEL label1 :
+t1 := i2
+t2 := #4
+IF t1 < t2 GOTO label2
+GOTO label3
+LABEL label2 :
+t3 := #0
+j2 := t3
+LABEL label4 :
+t4 := j2
+t5 := #4
+IF t4 < t5 GOTO label5
+GOTO label6
+LABEL label5 :
+t6 := #0
+t7 := i2
+t7 := t7 * #16
+t6 := t6 + #0
+t6 := t6 + t7
+t8 := j2
+t8 := t8 * #4
+t6 := t6 + #0
+t6 := t6 + t8
+t10 := #0
+t14 := i2
+t15 := #4
+t12 := t14 * t15
+t13 := j2
+t11 := t12 + t13
+t11 := t11 * #4
+t10 := t10 + #0
+t10 := t10 + t11
+t16 := chess2 + t10
+t9 := *t16
+t17 := &chessplate + t6
+*t17 := t9
+t19 := j2
+t20 := #1
+t18 := t19 + t20
+j2 := t18
+GOTO label4
+LABEL label6 :
+t22 := i2
+t23 := #1
+t21 := t22 + t23
+i2 := t21
+GOTO label1
+LABEL label3 :
+t24 := #0
+i2 := t24
+t25 := #0
+j2 := t25
+LABEL label7 :
+t26 := i2
+t27 := #4
+IF t26 < t27 GOTO label8
+GOTO label9
+LABEL label8 :
+t28 := #0
+j2 := t28
+LABEL label10 :
+t29 := j2
+t30 := #4
+IF t29 < t30 GOTO label11
+GOTO label12
+LABEL label11 :
+t33 := #0
+t34 := i2
+t34 := t34 * #16
+t33 := t33 + #0
+t33 := t33 + t34
+t35 := j2
+t35 := t35 * #4
+t33 := t33 + #0
+t33 := t33 + t35
+t36 := &chessplate + t33
+t31 := *t36
+t32 := #1
+IF t31 == t32 GOTO label13
+GOTO label14
+LABEL label13 :
+t37 := j2
+WRITE t37
+LABEL label14 :
+t39 := j2
+t40 := #1
+t38 := t39 + t40
+j2 := t38
+GOTO label10
+LABEL label12 :
+t42 := i2
+t43 := #1
+t41 := t42 + t43
+i2 := t41
+GOTO label7
+LABEL label9 :
+t44 := #0
+RETURN t44
+
+FUNCTION PutQueen :
+PARAM chess
+PARAM a
+PARAM b
+PARAM c
+PARAM n
+PARAM sum
+t45 := #0
+col := t45
+LABEL label15 :
+t46 := col
+t47 := #4
+IF t46 < t47 GOTO label16
+GOTO label17
+LABEL label16 :
+t49 := #0
+t50 := col
+t50 := t50 * #4
+t49 := t49 + #0
+t49 := t49 + t50
+t51 := a + t49
+t48 := *t51
+IF t48 != #0 GOTO label21
+GOTO label19
+LABEL label21 :
+t53 := #0
+t55 := n
+t56 := col
+t54 := t55 + t56
+t54 := t54 * #4
+t53 := t53 + #0
+t53 := t53 + t54
+t57 := b + t53
+t52 := *t57
+IF t52 != #0 GOTO label20
+GOTO label19
+LABEL label20 :
+t59 := #0
+t63 := n
+t64 := col
+t61 := t63 - t64
+t62 := #3
+t60 := t61 + t62
+t60 := t60 * #4
+t59 := t59 + #0
+t59 := t59 + t60
+t65 := c + t59
+t58 := *t65
+IF t58 != #0 GOTO label18
+GOTO label19
+LABEL label18 :
+t66 := #0
+t70 := n
+t71 := #4
+t68 := t70 * t71
+t69 := col
+t67 := t68 + t69
+t67 := t67 * #4
+t66 := t66 + #0
+t66 := t66 + t67
+t72 := #1
+t73 := chess + t66
+*t73 := t72
+t74 := #0
+t75 := col
+t75 := t75 * #4
+t74 := t74 + #0
+t74 := t74 + t75
+t76 := #0
+t77 := a + t74
+*t77 := t76
+t78 := #0
+t80 := n
+t81 := col
+t79 := t80 + t81
+t79 := t79 * #4
+t78 := t78 + #0
+t78 := t78 + t79
+t82 := #0
+t83 := b + t78
+*t83 := t82
+t84 := #0
+t88 := n
+t89 := col
+t86 := t88 - t89
+t87 := #3
+t85 := t86 + t87
+t85 := t85 * #4
+t84 := t84 + #0
+t84 := t84 + t85
+t90 := #0
+t91 := c + t84
+*t91 := t90
+t92 := n
+t93 := #3
+IF t92 == t93 GOTO label22
+GOTO label23
+LABEL label22 :
+t95 := sum
+t96 := #1
+t94 := t95 + t96
+sum := t94
+t97 := chess
+ARG t97
+t98 := CALL display
+GOTO label24
+LABEL label23 :
+t100 := chess
+t101 := a
+t102 := b
+t103 := c
+t105 := n
+t106 := #1
+t104 := t105 + t106
+t107 := sum
+ARG t107
+ARG t104
+ARG t103
+ARG t102
+ARG t101
+ARG t100
+t99 := CALL PutQueen
+sum := t99
+LABEL label24 :
+t108 := #0
+t112 := n
+t113 := #4
+t110 := t112 * t113
+t111 := col
+t109 := t110 + t111
+t109 := t109 * #4
+t108 := t108 + #0
+t108 := t108 + t109
+t114 := #0
+t115 := chess + t108
+*t115 := t114
+t116 := #0
+t118 := n
+t119 := col
+t117 := t118 + t119
+t117 := t117 * #4
+t116 := t116 + #0
+t116 := t116 + t117
+t120 := #1
+t121 := b + t116
+*t121 := t120
+t122 := #0
+t126 := n
+t127 := col
+t124 := t126 - t127
+t125 := #3
+t123 := t124 + t125
+t123 := t123 * #4
+t122 := t122 + #0
+t122 := t122 + t123
+t128 := #1
+t129 := c + t122
+*t129 := t128
+t130 := #0
+t131 := col
+t131 := t131 * #4
+t130 := t130 + #0
+t130 := t130 + t131
+t132 := #1
+t133 := a + t130
+*t133 := t132
+LABEL label19 :
+t135 := col
+t136 := #1
+t134 := t135 + t136
+col := t134
+GOTO label15
+LABEL label17 :
+t137 := sum
+RETURN t137
+
+FUNCTION main :
+DEC chess1 64
+DEC a1 16
+DEC b1 28
+DEC c1 28
+sum1 := #0
+t138 := #0
+i1 := t138
+LABEL label25 :
+t139 := i1
+t140 := #16
+IF t139 < t140 GOTO label26
+GOTO label27
+LABEL label26 :
+t141 := #0
+t142 := i1
+t142 := t142 * #4
+t141 := t141 + #0
+t141 := t141 + t142
+t143 := #0
+t144 := &chess1 + t141
+*t144 := t143
+t146 := i1
+t147 := #1
+t145 := t146 + t147
+i1 := t145
+GOTO label25
+LABEL label27 :
+t148 := #0
+i1 := t148
+LABEL label28 :
+t149 := i1
+t150 := #4
+IF t149 < t150 GOTO label29
+GOTO label30
+LABEL label29 :
+t151 := #0
+t152 := i1
+t152 := t152 * #4
+t151 := t151 + #0
+t151 := t151 + t152
+t153 := #1
+t154 := &a1 + t151
+*t154 := t153
+t156 := i1
+t157 := #1
+t155 := t156 + t157
+i1 := t155
+GOTO label28
+LABEL label30 :
+t158 := #0
+i1 := t158
+LABEL label31 :
+t159 := i1
+t160 := #7
+IF t159 < t160 GOTO label32
+GOTO label33
+LABEL label32 :
+t161 := #0
+t162 := i1
+t162 := t162 * #4
+t161 := t161 + #0
+t161 := t161 + t162
+t163 := #1
+t164 := &b1 + t161
+*t164 := t163
+t165 := #0
+t166 := i1
+t166 := t166 * #4
+t165 := t165 + #0
+t165 := t165 + t166
+t167 := #1
+t168 := &c1 + t165
+*t168 := t167
+t170 := i1
+t171 := #1
+t169 := t170 + t171
+i1 := t169
+GOTO label31
+LABEL label33 :
+t173 := &chess1
+t174 := &a1
+t175 := &b1
+t176 := &c1
+t177 := #0
+t178 := sum1
+ARG t178
+ARG t177
+ARG t176
+ARG t175
+ARG t174
+ARG t173
+t172 := CALL PutQueen
+sum1 := t172
+t179 := sum1
+WRITE t179
+t180 := #0
+RETURN t180
+

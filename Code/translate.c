@@ -138,7 +138,7 @@ intercodes* translate_exp(node* root,operand* op){
             code->op1.kind=IR_VARIABLE;
             code->op1.var_name=entry->entry_name;
             code->op1.temp_flag=0;
-            if(entry->type==SYMBOL_STRUCT||entry->array_flag==1){
+            if((entry->type==SYMBOL_STRUCT||entry->array_flag==1)&&entry->param_flag==0){
                 code->op1.kind=IR_ADDRESS;
             }
             intercodes_add(codes,code);
