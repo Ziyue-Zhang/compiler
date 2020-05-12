@@ -1,17 +1,16 @@
 FUNCTION main :
-DEC op 8
-t1 := #1
-t2 := &op
-*t2 := t1
-t4 := &op
-t3 := *t4
-IF t3 != #0 GOTO label1
-GOTO label2
-LABEL label1 :
-t5 := #1
-x := t5
-LABEL label2 :
-t7 := &op
-t6 := *t7
-RETURN t6
+DEC x 20
+i := #0
+t1 := #0
+t3 := i
+t4 := #1
+t2 := t3 + t4
+t2 := t2 * #4
+t1 := t1 + #0
+t1 := t1 + t2
+t5 := #2
+t6 := &x + t1
+*t6 := t5
+t7 := #0
+RETURN t7
 

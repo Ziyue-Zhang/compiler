@@ -1333,13 +1333,21 @@ symbol* struct_array_offset(node* root,int *offset,array_list** array_head,inter
                 intercodes_add(codes,code);
             }
             int temp1=new_temp();
+
+            operand* op1=malloc(sizeof(operand));
+            op1->kind=IR_VARIABLE;
+            op1->temp_flag=1;
+            op1->u.var_no=temp1;
+            intercodes* codes1=translate_exp(root->son[2],op1);
+            intercodes_merge(codes,codes1);
+
             intercode* code1=intercode_new(IR_MUL);
             code1->result.kind=IR_VARIABLE;
             code1->result.temp_flag=1;
             code1->result.u.var_no=temp1;
             code1->op1.kind=IR_VARIABLE;
-            code1->op1.temp_flag=0;
-            code1->op1.var_name=find_symbol(root->son[2]->son[0]->type_char)->entry_name;
+            code1->op1.temp_flag=1;
+            code1->op1.u.var_no=temp1;
             code1->op2.kind=IR_CONSTANT;
             code1->op2.temp_flag=0;
             code1->op2.u.value=(*array_head)->array_size;
