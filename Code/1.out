@@ -1,7 +1,17 @@
 FUNCTION main :
 DEC op 8
-i := #0
-j := #0
-t1 := #0
-RETURN t1
+t1 := #1
+t2 := &op
+*t2 := t1
+t4 := &op
+t3 := *t4
+IF t3 != #0 GOTO label1
+GOTO label2
+LABEL label1 :
+t5 := #1
+x := t5
+LABEL label2 :
+t7 := &op
+t6 := *t7
+RETURN t6
 

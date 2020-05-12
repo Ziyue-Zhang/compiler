@@ -244,7 +244,7 @@ int add_symbol(symbol* entry, int struct_entry){
         symbol_num++;*/
         if(entry->name!=NULL&&entry->name[0]=='t'){
             entry->entry_name=malloc(40);
-            snprintf(entry->entry_name,40,"1%s",entry->name);
+            snprintf(entry->entry_name,40,"t%s",entry->name);
             //printf("%s\n",entry->entry_name);
         }
         else{
