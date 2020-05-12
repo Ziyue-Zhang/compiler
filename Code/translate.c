@@ -591,6 +591,7 @@ intercodes* translate_exp(node* root,operand* op){
 
             arglist* args=malloc(sizeof(arglist));
             args->head=NULL;
+            call_flag=1;
             
             intercodes* codes1=translate_args(root->son[2],&args);
             intercodes_merge(codes,codes1);
@@ -602,6 +603,8 @@ intercodes* translate_exp(node* root,operand* op){
                 code1->result.u=args->head->op->u;
                 code1->result.var_name=args->head->op->var_name;
                 intercodes_add(codes,code1);
+
+                call_flag=0;
 
                 return codes;
             }
@@ -635,6 +638,8 @@ intercodes* translate_exp(node* root,operand* op){
                 code2->func_name=func_entry->name;
                 intercodes_add(codes,code2);
             }
+
+            call_flag=0;
 
             return codes;
 
@@ -1183,17 +1188,29 @@ intercodes* translate_array_struct2(node* root,operand* op){
                 code1->op2.u.var_no=temp;
                 intercodes_add(codes,code1);
             }
-
-            intercode* code2=intercode_new(IR_ASSIGN);
-            code2->result.kind=op->kind;
-            code2->result.temp_flag=op->temp_flag;
-            code2->result.var_name=op->var_name;
-            code2->result.u=op->u;
-            code2->op1.kind=IR_POINTER;
-            code2->op1.temp_flag=1;
-            code2->op1.u.var_no=t1;
-            intercodes_add(codes,code2);
-            return codes;;
+            if(call_flag==0){
+                intercode* code2=intercode_new(IR_ASSIGN);
+                code2->result.kind=op->kind;
+                code2->result.temp_flag=op->temp_flag;
+                code2->result.var_name=op->var_name;
+                code2->result.u=op->u;
+                code2->op1.kind=IR_POINTER;
+                code2->op1.temp_flag=1;
+                code2->op1.u.var_no=t1;
+                intercodes_add(codes,code2);
+            }
+            else{
+                intercode* code2=intercode_new(IR_ASSIGN);
+                code2->result.kind=op->kind;
+                code2->result.temp_flag=op->temp_flag;
+                code2->result.var_name=op->var_name;
+                code2->result.u=op->u;
+                code2->op1.kind=IR_VARIABLE;
+                code2->op1.temp_flag=1;
+                code2->op1.u.var_no=t1;
+                intercodes_add(codes,code2);
+            }
+            return codes;
         }
         else{
             int t1=new_temp();
@@ -1224,15 +1241,28 @@ intercodes* translate_array_struct2(node* root,operand* op){
                 intercodes_add(codes,code1);
             }
 
-            intercode* code2=intercode_new(IR_ASSIGN);
-            code2->result.kind=op->kind;
-            code2->result.temp_flag=op->temp_flag;
-            code2->result.var_name=op->var_name;
-            code2->result.u=op->u;
-            code2->op1.kind=IR_POINTER;
-            code2->op1.temp_flag=1;
-            code2->op1.u.var_no=t1;
-            intercodes_add(codes,code2);
+            if(call_flag==0){
+                intercode* code2=intercode_new(IR_ASSIGN);
+                code2->result.kind=op->kind;
+                code2->result.temp_flag=op->temp_flag;
+                code2->result.var_name=op->var_name;
+                code2->result.u=op->u;
+                code2->op1.kind=IR_POINTER;
+                code2->op1.temp_flag=1;
+                code2->op1.u.var_no=t1;
+                intercodes_add(codes,code2);
+            }
+            else{
+                intercode* code2=intercode_new(IR_ASSIGN);
+                code2->result.kind=op->kind;
+                code2->result.temp_flag=op->temp_flag;
+                code2->result.var_name=op->var_name;
+                code2->result.u=op->u;
+                code2->op1.kind=IR_VARIABLE;
+                code2->op1.temp_flag=1;
+                code2->op1.u.var_no=t1;
+                intercodes_add(codes,code2);
+            }
             return codes;
         }
     }
@@ -1248,6 +1278,11 @@ intercodes* translate_array_struct2(node* root,operand* op){
                 code1->op1.kind=IR_POINTER;
                 code1->op1.temp_flag=0;
                 code1->op1.var_name=entry->entry_name;
+                if(call_flag==1){
+                    code1->op1.kind=IR_VARIABLE;
+                    code1->op1.temp_flag=0;
+                    code1->op1.var_name=entry->entry_name;
+                }
                 intercodes_add(codes,code1);
             }
             else{
@@ -1272,6 +1307,11 @@ intercodes* translate_array_struct2(node* root,operand* op){
                 code2->op1.kind=IR_POINTER;
                 code2->op1.temp_flag=1;
                 code2->op1.u.var_no=t1;
+                if(call_flag==1){
+                    code2->op1.kind=IR_VARIABLE;
+                    code2->op1.temp_flag=1;
+                    code2->op1.u.var_no=t1;
+                }
                 intercodes_add(codes,code2);
             }
             return codes;
@@ -1314,6 +1354,11 @@ intercodes* translate_array_struct2(node* root,operand* op){
             code2->op1.kind=IR_POINTER;
             code2->op1.temp_flag=1;
             code2->op1.u.var_no=t1;
+            if(call_flag==1){
+                code2->op1.kind=IR_VARIABLE;
+                code2->op1.temp_flag=1;
+                code2->op1.u.var_no=t1;
+            }
             intercodes_add(codes,code2);
             return codes;
         }

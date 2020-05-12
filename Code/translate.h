@@ -17,6 +17,8 @@ struct arglist_t{
     arg_list* head;
 };
 
+int call_flag=0;
+
 void translate_program(node* root);
 void translate_extdeflist(node* root, intercodes* codes);
 void translate_extdef(node* root, intercodes* codes);
