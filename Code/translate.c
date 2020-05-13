@@ -1307,7 +1307,7 @@ intercodes* translate_array_struct2(node* root,operand* op){
                 code1->op1.kind=IR_POINTER;
                 code1->op1.temp_flag=0;
                 code1->op1.var_name=entry->entry_name;
-                if(call_flag==1&&entry->type==SYMBOL_STRUCT){
+                if(call_flag==1&&entry->type==SYMBOL_STRUCT&&root->num!=3){
                     code1->op1.kind=IR_VARIABLE;
                     code1->op1.temp_flag=0;
                     code1->op1.var_name=entry->entry_name;
