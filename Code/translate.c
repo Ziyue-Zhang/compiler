@@ -1,7 +1,10 @@
 #include "translate.h"
 
+int call_flag;
+
 void translate_program(node* root){
     intercode_init();
+    call_flag=0;
     intercodes *codes = malloc(sizeof(intercodes));
     codes->head = NULL;
     codes->tail = NULL;
@@ -603,6 +606,18 @@ intercodes* translate_exp(node* root,operand* op){
                 code1->result.u=args->head->op->u;
                 code1->result.var_name=args->head->op->var_name;
                 intercodes_add(codes,code1);
+                
+                if(op){
+                    intercode* code2=intercode_new(IR_ASSIGN);
+                    code2->result.kind=op->kind;
+                    code2->result.temp_flag=op->temp_flag;
+                    code2->result.u=op->u;
+                    code2->result.var_name=op->var_name;
+                    code2->op1.kind=IR_CONSTANT;
+                    code2->op1.temp_flag=0;
+                    code2->op1.u.value=0;
+                    intercodes_add(codes,code2);
+                }
 
                 call_flag=0;
 
