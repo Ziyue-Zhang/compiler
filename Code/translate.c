@@ -599,7 +599,6 @@ intercodes* translate_exp(node* root,operand* op){
 
             arglist* args=malloc(sizeof(arglist));
             args->head=NULL;
-            call_flag=1;
             
             intercodes* codes1=translate_args(root->son[2],&args);
             intercodes_merge(codes,codes1);
@@ -624,11 +623,10 @@ intercodes* translate_exp(node* root,operand* op){
                     intercodes_add(codes,code2);
                 }
 
-                call_flag=0;
-
                 return codes;
             }
-
+            
+            call_flag=1;
             arg_list*p =args->head;
             while(p){
                 intercode* code1=intercode_new(IR_ARG);

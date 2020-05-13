@@ -1,21 +1,15 @@
-struct Operands
-{
-    int o1;
-    int o2;
+struct Counter {
+    int cnt;
 };
-
-int add(struct Operands temp)
-{
-    return (temp.o1 + temp.o2);
+int inc_and_print(struct Counter cout) {
+    cout.cnt = cout.cnt + 1;
+    write(cout.cnt);
+    return cout.cnt;
 }
-
-int main()
-{
-    int n;
-    struct Operands op;
-    op.o1 = 1;
-    op.o2 = 2;
-    n = add(op);
-    write(n);
+int main() {
+    struct Counter c;
+    c.cnt = 0;
+    c.cnt = 1 + inc_and_print(c);
+    3 * 2 + inc_and_print(c);
     return 0;
 }
