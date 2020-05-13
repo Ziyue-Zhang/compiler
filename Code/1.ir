@@ -1,120 +1,25 @@
-FUNCTION calculate :
-PARAM class
-sum := #0
-i := #0
-N := #50
-LABEL label1 :
-t1 := i
-t2 := N
-IF t1 < t2 GOTO label2
-GOTO label3
-LABEL label2 :
-t4 := sum
-t6 := #0
-t7 := i
-t7 := t7 * #8
-t6 := t6 + #0
-t6 := t6 + t7
-t6 := t6 + #4
-t8 := class + t6
-t5 := *t8
-t3 := t4 + t5
-sum := t3
-t10 := i
-t11 := #1
-t9 := t10 + t11
-i := t9
-GOTO label1
-LABEL label3 :
-t13 := sum
-t14 := N
-t12 := t13 / t14
-t15 := class + #400
-*t15 := t12
-t17 := sum
-t18 := N
-t16 := t17 / t18
-RETURN t16
+FUNCTION add :
+PARAM ttemp
+t2 := *ttemp
+t4 := ttemp + #4
+t3 := *t4
+t1 := t2 + t3
+RETURN t1
 
 FUNCTION main :
-DEC school 4040
-i1 := #0
-j1 := #0
-N1 := #50
-N2 := #10
-LABEL label4 :
-t19 := i1
-t20 := N2
-IF t19 < t20 GOTO label5
-GOTO label6
-LABEL label5 :
-t21 := #0
-j1 := t21
-LABEL label7 :
-t22 := j1
-t23 := N1
-IF t22 < t23 GOTO label8
-GOTO label9
-LABEL label8 :
-t24 := #0
-t25 := i1
-t25 := t25 * #404
-t24 := t24 + #0
-t24 := t24 + t25
-t26 := j1
-t26 := t26 * #8
-t24 := t24 + #0
-t24 := t24 + t26
-t24 := t24 + #4
-t28 := i1
-t30 := j1
-t31 := #5
-t29 := t30 * t31
-t27 := t28 + t29
-t32 := &school + t24
-*t32 := t27
-t34 := j1
-t35 := #1
-t33 := t34 + t35
-j1 := t33
-GOTO label7
-LABEL label9 :
-t37 := i1
-t38 := #1
-t36 := t37 + t38
-i1 := t36
-GOTO label4
-LABEL label6 :
-t39 := #0
-j1 := t39
-t40 := #0
-i1 := t40
-LABEL label10 :
-t41 := i1
-t42 := N2
-IF t41 < t42 GOTO label11
-GOTO label12
-LABEL label11 :
-t44 := j1
-t47 := #0
-t48 := i1
-t48 := t48 * #404
-t47 := t47 + #0
-t47 := t47 + t48
-t49 := &school + t47
-t46 := t49
-ARG t46
-t45 := CALL calculate
-t43 := t44 + t45
-j1 := t43
-t51 := i1
-t52 := #1
-t50 := t51 + t52
-i1 := t50
-GOTO label10
-LABEL label12 :
-t53 := j1
-WRITE t53
-t54 := #0
-RETURN t54
+DEC op 8
+t5 := #1
+t6 := &op
+*t6 := t5
+t7 := #2
+t8 := &op + #4
+*t8 := t7
+t10 := &op
+ARG t10
+t9 := CALL add
+n := t9
+t11 := n
+WRITE t11
+t12 := #0
+RETURN t12
 

@@ -242,7 +242,7 @@ int add_symbol(symbol* entry, int struct_entry){
         snprintf(entry->entry_name,40,"v%d",symbol_num);
         //printf("%s\n",entry->entry_name);
         symbol_num++;*/
-        if(entry->name!=NULL&&entry->name[0]=='t'){
+        if(entry->name!=NULL&&(entry->name[0]=='t'||entry->name[0]=='_')){
             entry->entry_name=malloc(40);
             snprintf(entry->entry_name,40,"t%s",entry->name);
             //printf("%s\n",entry->entry_name);
