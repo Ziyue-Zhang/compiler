@@ -599,6 +599,10 @@ intercodes* translate_exp(node* root,operand* op){
 
             arglist* args=malloc(sizeof(arglist));
             args->head=NULL;
+            int call_flag2=1;
+            if(call_flag==1){
+                call_flag2=0;
+            }
             call_flag=1;
             
             intercodes* codes1=translate_args(root->son[2],&args);
@@ -624,7 +628,9 @@ intercodes* translate_exp(node* root,operand* op){
                     intercodes_add(codes,code2);
                 }
 
-                call_flag=0;
+                if(call_flag2==1){
+                    call_flag=0;
+                }
 
                 return codes;
             }
@@ -659,7 +665,9 @@ intercodes* translate_exp(node* root,operand* op){
                 intercodes_add(codes,code2);
             }
 
-            call_flag=0;
+            if(call_flag2==1){
+                call_flag=0;
+            }
 
             return codes;
 
@@ -1165,8 +1173,10 @@ intercodes* translate_array_struct2(node* root,operand* op){
 
     int offset=0;
     int temp=0;
+    int dim=0;
     array_list* array_head=NULL;
     symbol* entry=struct_array_offset(root,&offset,&array_head,codes,&temp);
+    symbol* entry2=struct_array_type(root,&dim);
     if(temp!=0&&offset!=0){
         intercode* code=intercode_new(IR_ADD);
         code->result.kind=IR_VARIABLE;
@@ -1211,7 +1221,7 @@ intercodes* translate_array_struct2(node* root,operand* op){
             if(!op){
                 return codes;
             }
-            if(call_flag==1&&entry->type==SYMBOL_STRUCT&&root->num!=3){
+            if(call_flag==1&&(entry2->type==SYMBOL_STRUCT||dim>0)){
                 intercode* code2=intercode_new(IR_ASSIGN);
                 code2->result.kind=op->kind;
                 code2->result.temp_flag=op->temp_flag;
@@ -1267,7 +1277,7 @@ intercodes* translate_array_struct2(node* root,operand* op){
                 return codes;
             }
 
-            if(call_flag==1&&entry->type==SYMBOL_STRUCT&&root->num!=3){
+            if(call_flag==1&&(entry2->type==SYMBOL_STRUCT||dim>0)){
                 intercode* code2=intercode_new(IR_ASSIGN);
                 code2->result.kind=op->kind;
                 code2->result.temp_flag=op->temp_flag;
@@ -1307,7 +1317,7 @@ intercodes* translate_array_struct2(node* root,operand* op){
                 code1->op1.kind=IR_POINTER;
                 code1->op1.temp_flag=0;
                 code1->op1.var_name=entry->entry_name;
-                if(call_flag==1&&entry->type==SYMBOL_STRUCT&&root->num!=3){
+                if(call_flag==1&&(entry2->type==SYMBOL_STRUCT||dim>0)){
                     code1->op1.kind=IR_VARIABLE;
                     code1->op1.temp_flag=0;
                     code1->op1.var_name=entry->entry_name;
@@ -1340,7 +1350,7 @@ intercodes* translate_array_struct2(node* root,operand* op){
                 code2->op1.kind=IR_POINTER;
                 code2->op1.temp_flag=1;
                 code2->op1.u.var_no=t1;
-                if(call_flag==1&&entry->type==SYMBOL_STRUCT&&root->num!=3){
+                if(call_flag==1&&(entry2->type==SYMBOL_STRUCT||dim>0)){
                     code2->op1.kind=IR_VARIABLE;
                     code2->op1.temp_flag=1;
                     code2->op1.u.var_no=t1;
@@ -1391,7 +1401,7 @@ intercodes* translate_array_struct2(node* root,operand* op){
             code2->op1.kind=IR_POINTER;
             code2->op1.temp_flag=1;
             code2->op1.u.var_no=t1;
-            if(call_flag==1&&entry->type==SYMBOL_STRUCT&&root->num!=3){
+            if(call_flag==1&&(entry2->type==SYMBOL_STRUCT||dim>0)){
                 code2->op1.kind=IR_VARIABLE;
                 code2->op1.temp_flag=1;
                 code2->op1.u.var_no=t1;
@@ -1480,6 +1490,24 @@ symbol* struct_array_offset(node* root,int *offset,array_list** array_head,inter
             *offset=0;
         }
         *array_head=(*array_head)->next;
+        return entry;
+    }
+}
+symbol* struct_array_type(node* root, int *dim){
+     if(root->num==1){
+        symbol*entry=find_symbol(root->son[0]->type_char);
+        *dim=entry->dim;
+        return entry;
+    }
+    else if(root->num==3){
+        symbol*entry=struct_array_type(root->son[0],dim);
+        symbol*entry2=find_symbol(root->son[2]->type_char);
+        *dim=entry2->dim;
+        return entry2;
+    }
+    else if(root->num==4){
+        symbol*entry=struct_array_type(root->son[0],dim);
+        *dim=*dim-1;
         return entry;
     }
 }

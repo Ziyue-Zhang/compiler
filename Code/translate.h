@@ -29,6 +29,7 @@ void translate_dec(node* root, intercodes* codes);
 void translate_vardec(node* root, intercodes* codes);
 
 symbol* struct_array_offset(node* root,int *offset,array_list** array_head,intercodes* codes,int *temp);
+symbol* struct_array_type(node* root, int *dim);
 intercodes* translate_array_struct1(node* root,operand* op);
 intercodes* translate_array_struct2(node* root,operand* op);
 
