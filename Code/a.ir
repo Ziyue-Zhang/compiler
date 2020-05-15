@@ -2,7 +2,7 @@ FUNCTION main :
 DEC a 24
 DEC b 24
 t1 := &a
-t1 := &b
+t2 := &b
 *t1 := *t2
 t1 := t1 + #4
 t2 := t2 + #4

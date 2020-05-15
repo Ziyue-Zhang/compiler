@@ -1589,7 +1589,7 @@ intercodes* array_assignop(node* root){
         intercode* code2=intercode_new(IR_ASSIGN);
         code2->result.kind=IR_VARIABLE;
         code2->result.temp_flag=1;
-        code2->result.u.var_no=t1;
+        code2->result.u.var_no=t2;
         code2->op1.kind=IR_ADDRESS;
         if(entry1->param_flag==1){
             code1->op1.kind=IR_VARIABLE;
@@ -1644,5 +1644,122 @@ intercodes* array_assignop(node* root){
 
         return codes;
     }
-    return codes;
+    else{
+        int offset1=0;
+        int temp1=0;
+        array_list* array_head1=NULL;
+        symbol* entry3=struct_array_offset(root->son[0],&offset1,&array_head1,codes,&temp1);
+        int offset2=0;
+        int temp2=0;
+        array_list* array_head2=NULL;
+        symbol* entry4=struct_array_offset(root->son[2],&offset2,&array_head2,codes,&temp2);
+
+        int size=0;
+        if(array_head1->array_size>array_head2->array_size){
+            size=array_head1->array_size;
+        }
+        else{
+            size=array_head2->array_size;
+        }
+
+        intercode* code1=intercode_new(IR_ADD);
+        code1->result.kind=IR_VARIABLE;
+        code1->result.temp_flag=1;
+        code1->result.u.var_no=temp1;
+        code1->op1.kind=IR_VARIABLE;
+        code1->op1.temp_flag=1;
+        code1->op1.u.var_no=temp1;
+        code1->op2.kind=IR_CONSTANT;
+        code1->op2.temp_flag=0;
+        code1->op2.u.value=offset1;
+        intercodes_add(codes,code1);
+
+        intercode* code2=intercode_new(IR_ADD);
+        code2->result.kind=IR_VARIABLE;
+        code2->result.temp_flag=1;
+        code2->result.u.var_no=temp2;
+        code2->op1.kind=IR_VARIABLE;
+        code2->op1.temp_flag=1;
+        code2->op1.u.var_no=temp2;
+        code2->op2.kind=IR_CONSTANT;
+        code2->op2.temp_flag=0;
+        code2->op2.u.value=offset2;
+        intercodes_add(codes,code2);
+
+        int t1=new_temp();
+        intercode* code3=intercode_new(IR_ADD);
+        code3->result.kind=IR_VARIABLE;
+        code3->result.temp_flag=1;
+        code3->result.u.var_no=t1;
+        code3->op1.kind=IR_ADDRESS;
+        if(entry1->param_flag==1){
+            code3->op1.kind=IR_VARIABLE;
+        }
+        code3->op1.temp_flag=0;
+        code3->op1.var_name=entry3->entry_name;
+        code3->op2.kind=IR_VARIABLE;
+        code3->op2.temp_flag=1;
+        code3->op2.u.var_no=temp1;
+        intercodes_add(codes,code3);
+
+        int t2=new_temp();
+        intercode* code4=intercode_new(IR_ADD);
+        code4->result.kind=IR_VARIABLE;
+        code4->result.temp_flag=1;
+        code4->result.u.var_no=t2;
+        code4->op1.kind=IR_ADDRESS;
+        if(entry1->param_flag==1){
+            code4->op1.kind=IR_VARIABLE;
+        }
+        code4->op1.temp_flag=0;
+        code4->op1.var_name=entry4->entry_name;
+        code4->op2.kind=IR_VARIABLE;
+        code4->op2.temp_flag=1;
+        code4->op2.u.var_no=temp2;
+        intercodes_add(codes,code4);
+
+        intercode* code5=intercode_new(IR_ASSIGN);
+        code5->result.kind=IR_POINTER;
+        code5->result.temp_flag=1;
+        code5->result.u.var_no=t1;
+        code5->op1.kind=IR_POINTER;
+        code5->op1.temp_flag=1;
+        code5->op1.u.var_no=t2;
+        intercodes_add(codes,code5);
+
+        for(int i=4;i<size;i+=4){
+            intercode* code6=intercode_new(IR_ADD);
+            code6->result.kind=IR_VARIABLE;
+            code6->result.temp_flag=1;
+            code6->result.u.var_no=t1;
+            code6->op1.kind=IR_VARIABLE;
+            code6->op1.temp_flag=1;
+            code6->op1.u.var_no=t1;
+            code6->op2.kind=IR_CONSTANT;
+            code6->op2.temp_flag=0;
+            code6->op2.u.value=4;
+            intercodes_add(codes,code6);
+
+            intercode* code7=intercode_new(IR_ADD);
+            code7->result.kind=IR_VARIABLE;
+            code7->result.temp_flag=1;
+            code7->result.u.var_no=t2;
+            code7->op1.kind=IR_VARIABLE;
+            code7->op1.temp_flag=1;
+            code7->op1.u.var_no=t2;
+            code7->op2.kind=IR_CONSTANT;
+            code7->op2.temp_flag=0;
+            code7->op2.u.value=4;
+            intercodes_add(codes,code7);
+
+            intercode* code8=intercode_new(IR_ASSIGN);
+            code8->result.kind=IR_POINTER;
+            code8->result.temp_flag=1;
+            code8->result.u.var_no=t1;
+            code8->op1.kind=IR_POINTER;
+            code8->op1.temp_flag=1;
+            code8->op1.u.var_no=t2;
+            intercodes_add(codes,code8);
+        }
+    }
 }
