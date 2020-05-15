@@ -240,17 +240,39 @@ intercodes* translate_exp(node* root,operand* op){
                 op1->kind=IR_VARIABLE;
                 op1->temp_flag=1;
                 op1->u.var_no=t1;
-                intercodes* codes1=translate_exp(root->son[2],op1);
-                intercodes_merge(codes,codes1);
+                if(exp_int(root->son[2])==1){                  
+                    intercode* code1=intercode_new(IR_ASSIGN);
+                    code1->result.kind=IR_VARIABLE;
+                    code1->result.var_name=entry->entry_name;
+                    code1->result.temp_flag=0;
+                    code1->op1.kind=IR_CONSTANT;
+                    code1->op1.temp_flag=0;
+                    code1->op1.u.value=root->son[2]->son[0]->type_int;
+                    intercodes_add(codes,code1);
+                }
+                else if(exp_id(root->son[2])==1){
+                    intercode* code1=intercode_new(IR_ASSIGN);
+                    code1->result.kind=IR_VARIABLE;
+                    code1->result.var_name=entry->entry_name;
+                    code1->result.temp_flag=0;
+                    code1->op1.kind=IR_VARIABLE;
+                    code1->op1.temp_flag=0;
+                    code1->op1.var_name=find_symbol(root->son[2]->son[0]->type_char)->entry_name;
+                    intercodes_add(codes,code1);
+                }
+                else{
+                    intercodes* codes1=translate_exp(root->son[2],op1);
+                    intercodes_merge(codes,codes1);
 
-                intercode* code1=intercode_new(IR_ASSIGN);
-                code1->result.kind=IR_VARIABLE;
-                code1->result.var_name=entry->entry_name;
-                code1->result.temp_flag=0;
-                code1->op1.kind=IR_VARIABLE;
-                code1->op1.temp_flag=1;
-                code1->op1.u.var_no=t1;
-                intercodes_add(codes,code1);
+                    intercode* code1=intercode_new(IR_ASSIGN);
+                    code1->result.kind=IR_VARIABLE;
+                    code1->result.var_name=entry->entry_name;
+                    code1->result.temp_flag=0;
+                    code1->op1.kind=IR_VARIABLE;
+                    code1->op1.temp_flag=1;
+                    code1->op1.u.var_no=t1;
+                    intercodes_add(codes,code1);
+                }
 
                 if(op){
                     intercode* code2=intercode_new(IR_ASSIGN);
@@ -292,11 +314,15 @@ intercodes* translate_exp(node* root,operand* op){
             op2->temp_flag=1;
             op2->u.var_no=t2;
 
-            intercodes* codes1=translate_exp(root->son[0],op1);
-            intercodes_merge(codes,codes1);
+            if(exp_int(root->son[0])==0&&exp_id(root->son[0])==0){
+                intercodes* codes1=translate_exp(root->son[0],op1);
+                intercodes_merge(codes,codes1);
+            }
 
-            intercodes* codes2=translate_exp(root->son[2],op2);
-            intercodes_merge(codes,codes2);
+            if(exp_int(root->son[2])==0&&exp_id(root->son[2])==0){
+                intercodes* codes2=translate_exp(root->son[2],op2);
+                intercodes_merge(codes,codes2);
+            }
 
             if(!op){
                 return codes;
@@ -310,9 +336,29 @@ intercodes* translate_exp(node* root,operand* op){
             code->op1.kind=IR_VARIABLE;
             code->op1.temp_flag=1;
             code->op1.u.var_no=t1;
+            if(exp_int(root->son[0])==1){
+                code->op1.kind=IR_CONSTANT;
+                code->op1.temp_flag=0;
+                code->op1.u.value=root->son[0]->son[0]->type_int;
+            }
+            else if(exp_id(root->son[0])==1){
+                code->op1.kind=IR_VARIABLE;
+                code->op1.temp_flag=0;
+                code->op1.var_name=find_symbol(root->son[0]->son[0]->type_char)->entry_name;
+            }
             code->op2.kind=IR_VARIABLE;
             code->op2.temp_flag=1;
             code->op2.u.var_no=t2;
+            if(exp_int(root->son[2])==1){
+                code->op2.kind=IR_CONSTANT;
+                code->op2.temp_flag=0;
+                code->op2.u.value=root->son[2]->son[0]->type_int;
+            }
+            else if(exp_id(root->son[2])==1){
+                code->op2.kind=IR_VARIABLE;
+                code->op2.temp_flag=0;
+                code->op2.var_name=find_symbol(root->son[2]->son[0]->type_char)->entry_name;
+            }
             intercodes_add(codes,code);
 
             return codes;
@@ -331,11 +377,15 @@ intercodes* translate_exp(node* root,operand* op){
             op2->temp_flag=1;
             op2->u.var_no=t2;
 
-            intercodes* codes1=translate_exp(root->son[0],op1);
-            intercodes_merge(codes,codes1);
+            if(exp_int(root->son[0])==0&&exp_id(root->son[0])==0){
+                intercodes* codes1=translate_exp(root->son[0],op1);
+                intercodes_merge(codes,codes1);
+            }
 
-            intercodes* codes2=translate_exp(root->son[2],op2);
-            intercodes_merge(codes,codes2);
+            if(exp_int(root->son[2])==0&&exp_id(root->son[2])==0){
+                intercodes* codes2=translate_exp(root->son[2],op2);
+                intercodes_merge(codes,codes2);
+            }
 
             if(!op){
                 return codes;
@@ -349,11 +399,31 @@ intercodes* translate_exp(node* root,operand* op){
             code->op1.kind=IR_VARIABLE;
             code->op1.temp_flag=1;
             code->op1.u.var_no=t1;
+            if(exp_int(root->son[0])==1){
+                code->op1.kind=IR_CONSTANT;
+                code->op1.temp_flag=0;
+                code->op1.u.value=root->son[0]->son[0]->type_int;
+            }
+            else if(exp_id(root->son[0])==1){
+                code->op1.kind=IR_VARIABLE;
+                code->op1.temp_flag=0;
+                code->op1.var_name=find_symbol(root->son[0]->son[0]->type_char)->entry_name;
+            }
             code->op2.kind=IR_VARIABLE;
             code->op2.temp_flag=1;
             code->op2.u.var_no=t2;
+            if(exp_int(root->son[2])==1){
+                code->op2.kind=IR_CONSTANT;
+                code->op2.temp_flag=0;
+                code->op2.u.value=root->son[2]->son[0]->type_int;
+            }
+            else if(exp_id(root->son[2])==1){
+                code->op2.kind=IR_VARIABLE;
+                code->op2.temp_flag=0;
+                code->op2.var_name=find_symbol(root->son[2]->son[0]->type_char)->entry_name;
+            }
             intercodes_add(codes,code);
-            
+
             return codes;
         }
         else if(strcmp(root->son[1]->name,"STAR")==0){
@@ -369,11 +439,15 @@ intercodes* translate_exp(node* root,operand* op){
             op2->temp_flag=1;
             op2->u.var_no=t2;
 
-            intercodes* codes1=translate_exp(root->son[0],op1);
-            intercodes_merge(codes,codes1);
+            if(exp_int(root->son[0])==0&&exp_id(root->son[0])==0){
+                intercodes* codes1=translate_exp(root->son[0],op1);
+                intercodes_merge(codes,codes1);
+            }
 
-            intercodes* codes2=translate_exp(root->son[2],op2);
-            intercodes_merge(codes,codes2);
+            if(exp_int(root->son[2])==0&&exp_id(root->son[2])==0){
+                intercodes* codes2=translate_exp(root->son[2],op2);
+                intercodes_merge(codes,codes2);
+            }
 
             if(!op){
                 return codes;
@@ -387,11 +461,31 @@ intercodes* translate_exp(node* root,operand* op){
             code->op1.kind=IR_VARIABLE;
             code->op1.temp_flag=1;
             code->op1.u.var_no=t1;
+            if(exp_int(root->son[0])==1){
+                code->op1.kind=IR_CONSTANT;
+                code->op1.temp_flag=0;
+                code->op1.u.value=root->son[0]->son[0]->type_int;
+            }
+            else if(exp_id(root->son[0])==1){
+                code->op1.kind=IR_VARIABLE;
+                code->op1.temp_flag=0;
+                code->op1.var_name=find_symbol(root->son[0]->son[0]->type_char)->entry_name;
+            }
             code->op2.kind=IR_VARIABLE;
             code->op2.temp_flag=1;
             code->op2.u.var_no=t2;
+            if(exp_int(root->son[2])==1){
+                code->op2.kind=IR_CONSTANT;
+                code->op2.temp_flag=0;
+                code->op2.u.value=root->son[2]->son[0]->type_int;
+            }
+            else if(exp_id(root->son[2])==1){
+                code->op2.kind=IR_VARIABLE;
+                code->op2.temp_flag=0;
+                code->op2.var_name=find_symbol(root->son[2]->son[0]->type_char)->entry_name;
+            }
             intercodes_add(codes,code);
-            
+
             return codes;
         }
         else if(strcmp(root->son[1]->name,"DIV")==0){
@@ -408,11 +502,15 @@ intercodes* translate_exp(node* root,operand* op){
             op2->temp_flag=1;
             op2->u.var_no=t2;
 
-            intercodes* codes1=translate_exp(root->son[0],op1);
-            intercodes_merge(codes,codes1);
+            if(exp_int(root->son[0])==0&&exp_id(root->son[0])==0){
+                intercodes* codes1=translate_exp(root->son[0],op1);
+                intercodes_merge(codes,codes1);
+            }
 
-            intercodes* codes2=translate_exp(root->son[2],op2);
-            intercodes_merge(codes,codes2);
+            if(exp_int(root->son[2])==0&&exp_id(root->son[2])==0){
+                intercodes* codes2=translate_exp(root->son[2],op2);
+                intercodes_merge(codes,codes2);
+            }
 
             if(!op){
                 return codes;
@@ -426,11 +524,31 @@ intercodes* translate_exp(node* root,operand* op){
             code->op1.kind=IR_VARIABLE;
             code->op1.temp_flag=1;
             code->op1.u.var_no=t1;
+            if(exp_int(root->son[0])==1){
+                code->op1.kind=IR_CONSTANT;
+                code->op1.temp_flag=0;
+                code->op1.u.value=root->son[0]->son[0]->type_int;
+            }
+            else if(exp_id(root->son[0])==1){
+                code->op1.kind=IR_VARIABLE;
+                code->op1.temp_flag=0;
+                code->op1.var_name=find_symbol(root->son[0]->son[0]->type_char)->entry_name;
+            }
             code->op2.kind=IR_VARIABLE;
             code->op2.temp_flag=1;
             code->op2.u.var_no=t2;
+            if(exp_int(root->son[2])==1){
+                code->op2.kind=IR_CONSTANT;
+                code->op2.temp_flag=0;
+                code->op2.u.value=root->son[2]->son[0]->type_int;
+            }
+            else if(exp_id(root->son[2])==1){
+                code->op2.kind=IR_VARIABLE;
+                code->op2.temp_flag=0;
+                code->op2.var_name=find_symbol(root->son[2]->son[0]->type_char)->entry_name;
+            }
             intercodes_add(codes,code);
-            
+
             return codes;
         }
         else if(strcmp(root->son[1]->name,"RELOP")==0){
@@ -742,13 +860,25 @@ intercodes* translate_stmt(node* root){
         op1->temp_flag=1;
         op1->u.var_no=t1;
 
-        intercodes* code1=translate_exp(root->son[1],op1);
-        intercodes_merge(codes,code1);
+        if(exp_int(root->son[1])==0&&exp_id(root->son[1])==0){
+            intercodes* code1=translate_exp(root->son[1],op1);
+            intercodes_merge(codes,code1);
+        }
 
         intercode* code2=intercode_new(IR_RETURN);
         code2->result.kind=IR_VARIABLE;
         code2->result.temp_flag=1;
-        code2->result.u.var_no=t1;        
+        code2->result.u.var_no=t1;
+        if(exp_int(root->son[1])==1){
+            code2->result.kind=IR_CONSTANT;
+            code2->result.temp_flag=0;
+            code2->result.u.value=root->son[1]->son[0]->type_int;
+        }
+        else if(exp_id(root->son[1])==1){
+            code2->result.kind=IR_VARIABLE;
+            code2->result.temp_flag=0;
+            code2->result.var_name=find_symbol(root->son[1]->son[0]->type_char)->entry_name;
+        }        
         intercodes_add(codes,code2);
 
         return codes;
@@ -1761,5 +1891,22 @@ intercodes* array_assignop(node* root){
             code8->op1.u.var_no=t2;
             intercodes_add(codes,code8);
         }
+    }
+}
+int exp_int(node* root){
+    if(root->num==1&&strcmp(root->son[0]->name,"INT")==0){
+        return 1;
+    }
+    else{
+        return 0;
+    }
+}
+
+int exp_id(node* root){
+    if(root->num==1&&strcmp(root->son[0]->name,"ID")==0){
+        return 1;
+    }
+    else{
+        return 0;
     }
 }

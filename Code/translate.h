@@ -39,5 +39,7 @@ intercodes* translate_cond(node* root,int label1,int label2);
 intercodes* translate_args(node* root,arglist** arg_head);
 
 intercodes* array_assignop(node* root);
+int exp_int(node* root);
+int exp_id(node* root);
 
 #endif
