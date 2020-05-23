@@ -1,4 +1,76 @@
 FUNCTION main :
-t1 := #3 + #2
-x := t1
-
+DEC a 24
+DEC b 24
+i := #0
+LABEL label1 :
+t1 := i
+t2 := #6
+IF t1 < t2 GOTO label2
+GOTO label3
+LABEL label2 :
+t3 := #0
+t4 := i
+t4 := t4 * #4
+t3 := t3 + #0
+t3 := t3 + t4
+t5 := i
+t6 := &b + t3
+*t6 := t5
+t7 := i + #1
+i := t7
+GOTO label1
+LABEL label3 :
+t10 := &a
+t11 := &b
+*t10 := *t11
+t10 := t10 + #4
+t11 := t11 + #4
+*t10 := *t11
+t10 := t10 + #4
+t11 := t11 + #4
+*t10 := *t11
+t10 := t10 + #4
+t11 := t11 + #4
+*t10 := *t11
+t10 := t10 + #4
+t11 := t11 + #4
+*t10 := *t11
+t10 := t10 + #4
+t11 := t11 + #4
+*t10 := *t11
+t13 := &a
+t12 := *t13
+WRITE t12
+t14 := #0
+t16 := &a + #4
+t15 := *t16
+WRITE t15
+t17 := #0
+t19 := &a + #8
+t18 := *t19
+WRITE t18
+t20 := #0
+t22 := &a + #12
+t21 := *t22
+WRITE t21
+t23 := #0
+t25 := &a + #16
+t24 := *t25
+WRITE t24
+t26 := #0
+t28 := &a + #20
+t27 := *t28
+WRITE t27
+t29 := #0
+t31 := #1
+t30 := #0 - t31
+t32 := &a + #4
+*t32 := t30
+t36 := &a + #4
+t34 := *t36
+t37 := &b + #4
+t35 := *t37
+t33 := t34 + t35
+WRITE t33
+t38 := #0
+RETURN #0

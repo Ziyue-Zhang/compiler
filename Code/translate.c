@@ -41,8 +41,8 @@ void translate_extdef(node* root, intercodes* codes){
 
         translate_compst(root->son[2],codes);
 
-        intercode* code3=intercode_new(IR_VOID);
-        intercodes_add(codes,code3);
+        //intercode* code3=intercode_new(IR_VOID);
+        //intercodes_add(codes,code3);
     }
 }
 void translate_compst(node* root, intercodes* codes){
