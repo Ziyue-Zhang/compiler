@@ -1,7 +1,7 @@
 #include "intercode.h"
 
 void intercode_init(){
-    temp_num=1;
+    reset_temp();
     label_num=1;
 }
 
@@ -108,7 +108,7 @@ void intercode_op_left(operand op){
             fprintf(output, "t%d",op.u.var_no);
         }
         else{
-            fprintf(output, "%s",op.var_name);
+            fprintf(output, "v%d",op.var_name);
         }
     }
     else if(op.kind==IR_VARIABLE){
@@ -116,7 +116,7 @@ void intercode_op_left(operand op){
             fprintf(output, "t%d",op.u.var_no);
         }
         else{
-            fprintf(output, "%s",op.var_name);
+            fprintf(output, "v%d",op.var_name);
         }
     }
     else{
@@ -131,7 +131,7 @@ void intercode_op_right(operand op){
             fprintf(output, "t%d",op.u.var_no);
         }
         else{
-            fprintf(output, "%s",op.var_name);
+            fprintf(output, "v%d",op.var_name);
         }
     }
     else if(op.kind==IR_POINTER){
@@ -140,7 +140,7 @@ void intercode_op_right(operand op){
             fprintf(output, "t%d",op.u.var_no);
         }
         else{
-            fprintf(output, "%s",op.var_name);
+            fprintf(output, "v%d",op.var_name);
         }
     }
     else if(op.kind==IR_CONSTANT){
@@ -152,7 +152,7 @@ void intercode_op_right(operand op){
             fprintf(output, "t%d",op.u.var_no);
         }
         else{
-            fprintf(output, "%s",op.var_name);
+            fprintf(output, "v%d",op.var_name);
         }
     }
     else{
@@ -237,7 +237,7 @@ void intercode_return(intercode* ir){
     fprintf(output, "\n");
 }
 void intercode_dec(intercode* ir){
-    fprintf(output, "DEC %s %d\n",ir->result.var_name,ir->size); 
+    fprintf(output, "DEC v%d %d\n",ir->result.var_name,ir->size); 
 }
 void intercode_arg(intercode* ir){
     fprintf(output, "ARG "); 
@@ -266,6 +266,12 @@ void intercode_write(intercode* ir){
 
 int new_temp(){
     return temp_num++;
+}
+int get_temp(){
+    return (temp_num-1);
+}
+void reset_temp(){
+    temp_num=1;
 }
 
 int new_label(){

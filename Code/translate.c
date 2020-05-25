@@ -10,7 +10,8 @@ void translate_program(node* root){
     codes->tail = NULL;
     if (root->son[0]) {
         translate_extdeflist(root->son[0], codes);
-        intercodes_print(codes);
+        //intercodes_print(codes);
+        mips_generate(codes);
     }
 }
 void translate_extdeflist(node* root, intercodes* codes){
@@ -25,21 +26,38 @@ void translate_extdeflist(node* root, intercodes* codes){
 }
 void translate_extdef(node* root, intercodes* codes){
     if(root->num==3&&strcmp(root->son[2]->name,"CompSt")==0){
+        reset_temp();
+        intercodes *codes1 = malloc(sizeof(intercodes));
+        codes1->head = NULL;
+        codes1->tail = NULL;
         symbol* func_entry=find_symbol(root->son[1]->son[0]->type_char);
         intercode* code1=intercode_new(IR_FUNCTION);
         code1->func_name=func_entry->name;
         //printf("%s\n",code1->func_name);
-        intercodes_add(codes,code1);
+        intercodes_add(codes1,code1);
+
+        intercode* code3=intercode_new(IR_DEC);
+        code3->result.var_name=0;
+        code3->size=0;
+        intercodes_add(codes1,code3);
+
         symbol_list* temp=func_entry->param_head->list;
         while(temp){
             intercode* code2=intercode_new(IR_PARAM);
             code2->result.kind=IR_VARIABLE;
+            if(temp->entry->entry_name==-1){
+                temp->entry->entry_name=new_temp();
+            }
             code2->result.var_name=temp->entry->entry_name;
-            intercodes_add(codes,code2);
+            intercodes_add(codes1,code2);
             temp=temp->next;
         }
 
-        translate_compst(root->son[2],codes);
+        translate_compst(root->son[2],codes1);
+        code3->size=4*get_temp();
+        code3->result.var_name=new_temp();
+
+        intercodes_merge(codes,codes1);
 
         //intercode* code3=intercode_new(IR_VOID);
         //intercodes_add(codes,code3);
@@ -94,6 +112,13 @@ void translate_dec(node* root, intercodes* codes){
 void translate_vardec(node* root, intercodes* codes){
     if(root->num==1){
         symbol* entry=find_symbol(root->son[0]->type_char);
+        if(entry->entry_name==-1){
+            int size=entry->size;
+            while(size>0){
+                entry->entry_name=new_temp();
+                size=size-4;
+            }
+        }
         if(entry->type==SYMBOL_STRUCT||entry->array_flag==1){
             intercode* code=intercode_new(IR_DEC);
             code->result.var_name=entry->entry_name;
@@ -1165,7 +1190,7 @@ intercodes* translate_array_struct1(node* root,operand* op){
         op1->kind=IR_VARIABLE;
         op1->temp_flag=1;
         op1->u.var_no=t1;
-        op1->var_name="";
+        //op1->var_name="";
         intercodes* codes1=translate_exp(root->son[2],op1);
         intercodes_merge(codes,codes1);
 
@@ -1894,6 +1919,7 @@ intercodes* array_assignop(node* root){
     }
 }
 int exp_int(node* root){
+    return 0;
     if(root->num==1&&strcmp(root->son[0]->name,"INT")==0){
         return 1;
     }
@@ -1903,6 +1929,7 @@ int exp_int(node* root){
 }
 
 int exp_id(node* root){
+    return 0;
     if(root->num==1&&strcmp(root->son[0]->name,"ID")==0){
         return 1;
     }

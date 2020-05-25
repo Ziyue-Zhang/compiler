@@ -5,6 +5,7 @@
 #include<stdlib.h>
 #include<assert.h>
 #include<stdio.h>
+#include"intercode.h"
 
 #define SYMBOL_VOID 0
 #define SYMBOL_INT 1
@@ -60,7 +61,7 @@ struct symbol_t{
     param_list* param_head;
     struct_list* struct_head;
 
-    char* entry_name;
+    int entry_name;
     int param_flag;
 };
 

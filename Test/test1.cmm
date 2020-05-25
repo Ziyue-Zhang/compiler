@@ -1,5 +1,8 @@
+int func(int x, int y){
+    int nmsl;
+}
 int main() {
-    int a[3][3], b[3][3];
+    int a;
+    int b;
     a=b;
-    return 0;
 }

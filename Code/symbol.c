@@ -100,7 +100,7 @@ symbol* add_entry(int type,char* name,int array_flag,int func_flag,int struct_fl
         new_entry->size=4;
     }
     new_entry->left_value_flag=0;
-    new_entry->entry_name="";
+    new_entry->entry_name=-1;
     return new_entry;
 }
 
@@ -238,18 +238,19 @@ int add_symbol(symbol* entry, int struct_entry){
     }
     symbol_tbl* new_symbol_tbl=malloc(sizeof(symbol_tbl));
     if(entry->func_flag==0){
-        /*entry->entry_name=malloc(40);
-        snprintf(entry->entry_name,40,"v%d",symbol_num);
+        //entry->entry_name=malloc(40);
+        //int n=new_temp();
+        //snprintf(entry->entry_name,40,"%d",temp);
+        //entry->entry_name=n;
         //printf("%s\n",entry->entry_name);
-        symbol_num++;*/
-        if(entry->name!=NULL&&(entry->name[0]=='t'||entry->name[0]=='_')){
+        /*if(entry->name!=NULL&&(entry->name[0]=='t'||entry->name[0]=='_')){
             entry->entry_name=malloc(40);
             snprintf(entry->entry_name,40,"t%s",entry->name);
             //printf("%s\n",entry->entry_name);
         }
         else{
             entry->entry_name=entry->name;
-        }
+        }*/
         //printf("%s\n",entry->entry_name);
     }
     new_symbol_tbl->entry=entry;

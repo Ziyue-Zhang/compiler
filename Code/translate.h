@@ -4,6 +4,7 @@
 #include "intercode.h"
 #include "symbol.h"
 #include"tree.h"
+#include"mips.h"
 
 typedef struct arg_list_t arg_list;
 typedef struct arglist_t arglist;

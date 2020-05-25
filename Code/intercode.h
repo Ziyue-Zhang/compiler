@@ -29,7 +29,7 @@ struct operand_t{
         int var_no;
         int value;
     } u;
-    char* var_name;
+    int var_name;
 };
 
 struct intercode_t {
@@ -76,6 +76,8 @@ void intercode_param(intercode* ir);
 void intercode_read(intercode* ir);
 void intercode_write(intercode* ir);
 int new_temp();
+int get_temp();
+void reset_temp();
 int new_label();
 
 #endif
