@@ -21,11 +21,56 @@ write:
   jr $ra
 
 func :
-  addi $sp, $sp, -12
+  lw t0, 12($fp)
+  sw t0, -4($fp)
+  lw t0, 16($fp)
+  sw t0, -8($fp)
+  addi $sp, $sp, -24
+  li $t0, 1
+  sw $t0, -12($fp)
+  li $t0, 1
+  sw $t0, -16($fp)
+  lw $t0, -16($fp)
+  sw $t0, -4($fp)
+  li $t0, 2
+  sw $t0, -20($fp)
+  lw $t0, -20($fp)
+  sw $t0, -8($fp)
+  lw $t0, -12($fp)
+  sw $t0, -24($fp)
+  lw $v0, -24($fp)
+  jr $ra
 main :
   move $fp, $sp
-  addi $sp, $sp, -12
-  lw $t0, -8($fp)
+  addi $sp, $sp, -28
+  li $t0, 3
   sw $t0, -12($fp)
   lw $t0, -12($fp)
   sw $t0, -4($fp)
+  lw $t0, -4($fp)
+  sw $t0, -16($fp)
+  lw $t0, -16($fp)
+  sw $t0, -8($fp)
+  lw $t0, -4($fp)
+  sw $t0, -24($fp)
+  lw $t0, -8($fp)
+  sw $t0, -28($fp)
+  lw $t0, -28($fp)
+  addi $sp, $sp, -4
+  sw $t0, 0($sp)
+  lw $t0, -24($fp)
+  addi $sp, $sp, -4
+  sw $t0, 0($sp)
+  addi $sp, $sp, -12
+  sw $ra, 8($sp)
+  sw $fp, 4($sp)
+  sw $sp, 0($sp)
+  move $fp, $sp
+  jal func
+  lw $sp, 0($fp)
+  lw $fp, 4($sp)
+  lw $ra, 8($sp)
+  add $sp, $sp, 8
+  sw $v0, -20($fp)
+  lw $t0, -20($fp)
+  sw $t0, -8($fp)

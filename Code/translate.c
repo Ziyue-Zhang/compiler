@@ -36,11 +36,6 @@ void translate_extdef(node* root, intercodes* codes){
         //printf("%s\n",code1->func_name);
         intercodes_add(codes1,code1);
 
-        intercode* code3=intercode_new(IR_DEC);
-        code3->result.var_name=0;
-        code3->size=0;
-        intercodes_add(codes1,code3);
-
         symbol_list* temp=func_entry->param_head->list;
         while(temp){
             intercode* code2=intercode_new(IR_PARAM);
@@ -52,6 +47,11 @@ void translate_extdef(node* root, intercodes* codes){
             intercodes_add(codes1,code2);
             temp=temp->next;
         }
+
+        intercode* code3=intercode_new(IR_DEC);
+        code3->result.var_name=0;
+        code3->size=0;
+        intercodes_add(codes1,code3);
 
         translate_compst(root->son[2],codes1);
         code3->size=4*get_temp();

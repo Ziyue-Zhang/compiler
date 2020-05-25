@@ -187,6 +187,10 @@ void mips_call(intercode* code){
         }
     }
 }
+void mips_param(intercode* code){
+    fprintf(output, "  lw t0, %d($fp)\n", 8+4*code->result.var_name);
+    fprintf(output, "  sw t0, %d($fp)\n", -4*code->result.var_name);
+}
 void mips_read(intercode* code){
     fprintf(output, "  addi $sp, $sp, -4\n");
     fprintf(output, "  sw $ra, 0($sp)\n");
@@ -267,6 +271,7 @@ void mips_print(intercode* code){
         mips_call(code);
     }
     else if(code->kind==IR_PARAM){
+        mips_param(code);
     }
     else if(code->kind==IR_READ){
         mips_read(code);
