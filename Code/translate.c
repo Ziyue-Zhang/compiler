@@ -1919,7 +1919,7 @@ intercodes* array_assignop(node* root){
     }
 }
 int exp_int(node* root){
-    return 0;
+    //return 0;
     if(root->num==1&&strcmp(root->son[0]->name,"INT")==0){
         return 1;
     }
@@ -1929,7 +1929,7 @@ int exp_int(node* root){
 }
 
 int exp_id(node* root){
-    return 0;
+    //return 0;
     if(root->num==1&&strcmp(root->son[0]->name,"ID")==0){
         return 1;
     }

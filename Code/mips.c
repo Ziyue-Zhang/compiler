@@ -25,7 +25,6 @@ void mips_init(){
 
 void mips_reg(operand op,char* reg_name,int reg_num){
     if(op.kind==IR_ADDRESS){
-        fprintf(output, "&");
         if(op.temp_flag==1){
             fprintf(output, "  addi $%s%d, $fp, %d\n", reg_name, reg_num, -4*op.u.var_no);
         }
@@ -79,10 +78,10 @@ void mips_exp(intercode* code){
 
     if(code->result.kind==IR_POINTER){
         if(code->result.temp_flag==1){
-            fprintf(output, "  lw t3, %d($fp)\n", -4*code->result.u.var_no);
+            fprintf(output, "  lw $t3, %d($fp)\n", -4*code->result.u.var_no);
         }
         else{
-            fprintf(output, "  lw t3, %d($fp)\n", -4*code->result.var_name);
+            fprintf(output, "  lw $t3, %d($fp)\n", -4*code->result.var_name);
         }
         fprintf(output, "  sw $t2, 0($t3)\n");
     }
@@ -101,10 +100,10 @@ void mips_assign(intercode* code){
 
     if(code->result.kind==IR_POINTER){
         if(code->result.temp_flag==1){
-            fprintf(output, "  lw t1, %d($fp)\n", -4*code->result.u.var_no);
+            fprintf(output, "  lw $t1, %d($fp)\n", -4*code->result.u.var_no);
         }
         else{
-            fprintf(output, "  lw t1, %d($fp)\n", -4*code->result.var_name);
+            fprintf(output, "  lw $t1, %d($fp)\n", -4*code->result.var_name);
         }
         fprintf(output, "  sw $t0, 0($t1)\n");
     }
@@ -156,24 +155,22 @@ void mips_call(intercode* code){
     fprintf(output, "  sw $ra, 8($sp)\n");
     fprintf(output, "  sw $fp, 4($sp)\n");
     fprintf(output, "  sw $sp, 0($sp)\n");
-    fprintf(output, "  move $fp, $sp\n");
+
     fprintf(output, "  jal %s\n", code->func_name);
     
     fprintf(output, "  lw $sp, 0($fp)\n");
     fprintf(output, "  lw $fp, 4($sp)\n");
     fprintf(output, "  lw $ra, 8($sp)\n");
 
-    if(arg_num>0){
-        fprintf(output, "  add $sp, $sp, %d\n", 4*arg_num);
-        arg_num=0;
-    }
+    fprintf(output, "  add $sp, $sp, %d\n", 12+4*arg_num);
+    arg_num=0;
 
     if(code->result.kind==IR_POINTER){
         if(code->result.temp_flag==1){
-            fprintf(output, "  lw t0, %d($fp)\n", -4*code->result.u.var_no);
+            fprintf(output, "  lw $t0, %d($fp)\n", -4*code->result.u.var_no);
         }
         else{
-            fprintf(output, "  lw t0, %d($fp)\n", -4*code->result.var_name);
+            fprintf(output, "  lw $t0, %d($fp)\n", -4*code->result.var_name);
         }
         fprintf(output, "  sw $v0, 0($t0)\n");
     }
@@ -188,8 +185,8 @@ void mips_call(intercode* code){
     }
 }
 void mips_param(intercode* code){
-    fprintf(output, "  lw t0, %d($fp)\n", 8+4*code->result.var_name);
-    fprintf(output, "  sw t0, %d($fp)\n", -4*code->result.var_name);
+    fprintf(output, "  lw $t0, %d($fp)\n", 8+4*code->result.var_name);
+    fprintf(output, "  sw $t0, %d($fp)\n", -4*code->result.var_name);
 }
 void mips_read(intercode* code){
     fprintf(output, "  addi $sp, $sp, -4\n");
@@ -200,10 +197,10 @@ void mips_read(intercode* code){
 
     if(code->result.kind==IR_POINTER){
         if(code->result.temp_flag==1){
-            fprintf(output, "  lw t0, %d($fp)\n", -4*code->result.u.var_no);
+            fprintf(output, "  lw $t0, %d($fp)\n", -4*code->result.u.var_no);
         }
         else{
-            fprintf(output, "  lw t0, %d($fp)\n", -4*code->result.var_name);
+            fprintf(output, "  lw $t0, %d($fp)\n", -4*code->result.var_name);
         }
         fprintf(output, "  sw $v0, 0($t0)\n");
     }
@@ -232,10 +229,8 @@ void mips_print(intercode* code){
         fprintf(output, "label%d:\n", code->label);
     }
     else if(code->kind==IR_FUNCTION){
-        fprintf(output, "%s :\n", code->func_name);
-        if(strcmp(code->func_name,"main")==0){
-            fprintf(output, "  move $fp, $sp\n");
-        }
+        fprintf(output, "%s:\n", code->func_name);
+        fprintf(output, "  move $fp, $sp\n");
     }
     else if(code->kind==IR_ASSIGN){
         mips_assign(code);
