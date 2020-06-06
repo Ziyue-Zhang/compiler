@@ -151,18 +151,17 @@ void mips_arg(intercode* code){
     fprintf(output, "  sw $t0, 0($sp)\n");
 }
 void mips_call(intercode* code){
-    fprintf(output, "  addi $sp, $sp, -12\n");
-    fprintf(output, "  sw $ra, 8($sp)\n");
-    fprintf(output, "  sw $fp, 4($sp)\n");
-    fprintf(output, "  sw $sp, 0($sp)\n");
+    fprintf(output, "  addi $sp, $sp, -8\n");
+    fprintf(output, "  sw $ra, 4($sp)\n");
+    fprintf(output, "  sw $fp, 0($sp)\n");
 
     fprintf(output, "  jal %s\n", code->func_name);
     
-    fprintf(output, "  lw $sp, 0($fp)\n");
-    fprintf(output, "  lw $fp, 4($sp)\n");
-    fprintf(output, "  lw $ra, 8($sp)\n");
+    fprintf(output, "  move $sp, $fp\n");
+    fprintf(output, "  lw $fp, 0($sp)\n");
+    fprintf(output, "  lw $ra, 4($sp)\n");
 
-    fprintf(output, "  add $sp, $sp, %d\n", 12+4*arg_num);
+    fprintf(output, "  add $sp, $sp, %d\n", 8+4*arg_num);
     arg_num=0;
 
     if(code->result.kind==IR_POINTER){
@@ -185,7 +184,7 @@ void mips_call(intercode* code){
     }
 }
 void mips_param(intercode* code){
-    fprintf(output, "  lw $t0, %d($fp)\n", 8+4*code->result.var_name);
+    fprintf(output, "  lw $t0, %d($fp)\n", 4+4*code->result.var_name);
     fprintf(output, "  sw $t0, %d($fp)\n", -4*code->result.var_name);
 }
 void mips_read(intercode* code){

@@ -22,13 +22,13 @@ write:
 
 Swap:
   move $fp, $sp
-  lw $t0, 12($fp)
-  sw $t0, -4($fp)
-  lw $t0, 16($fp)
-  sw $t0, -8($fp)
-  lw $t0, 20($fp)
-  sw $t0, -12($fp)
   addi $sp, $sp, -80
+  lw $t0, 8($fp)
+  sw $t0, -4($fp)
+  lw $t0, 12($fp)
+  sw $t0, -8($fp)
+  lw $t0, 16($fp)
+  sw $t0, -12($fp)
   li $t0, 0
   sw $t0, -24($fp)
   lw $t0, -8($fp)
@@ -129,13 +129,13 @@ Swap:
   jr $ra
 Partition:
   move $fp, $sp
-  lw $t0, 12($fp)
-  sw $t0, -4($fp)
-  lw $t0, 16($fp)
-  sw $t0, -8($fp)
-  lw $t0, 20($fp)
-  sw $t0, -12($fp)
   addi $sp, $sp, -152
+  lw $t0, 8($fp)
+  sw $t0, -4($fp)
+  lw $t0, 12($fp)
+  sw $t0, -8($fp)
+  lw $t0, 16($fp)
+  sw $t0, -12($fp)
   li $t0, 0
   sw $t0, -20($fp)
   lw $t0, -8($fp)
@@ -232,15 +232,14 @@ label6:
   lw $t0, -80($fp)
   addi $sp, $sp, -4
   sw $t0, 0($sp)
-  addi $sp, $sp, -12
-  sw $ra, 8($sp)
-  sw $fp, 4($sp)
-  sw $sp, 0($sp)
+  addi $sp, $sp, -8
+  sw $ra, 4($sp)
+  sw $fp, 0($sp)
   jal Swap
-  lw $sp, 0($fp)
-  lw $fp, 4($sp)
-  lw $ra, 8($sp)
-  add $sp, $sp, 24
+  move $sp, $fp
+  lw $fp, 0($sp)
+  lw $ra, 4($sp)
+  add $sp, $sp, 20
   sw $v0, -92($fp)
 label8:
   lw $t0, -8($fp)
@@ -305,15 +304,14 @@ label10:
   lw $t0, -136($fp)
   addi $sp, $sp, -4
   sw $t0, 0($sp)
-  addi $sp, $sp, -12
-  sw $ra, 8($sp)
-  sw $fp, 4($sp)
-  sw $sp, 0($sp)
+  addi $sp, $sp, -8
+  sw $ra, 4($sp)
+  sw $fp, 0($sp)
   jal Swap
-  lw $sp, 0($fp)
-  lw $fp, 4($sp)
-  lw $ra, 8($sp)
-  add $sp, $sp, 24
+  move $sp, $fp
+  lw $fp, 0($sp)
+  lw $ra, 4($sp)
+  add $sp, $sp, 20
   sw $v0, -148($fp)
   j label1
 label3:
@@ -321,13 +319,13 @@ label3:
   jr $ra
 QuickSort:
   move $fp, $sp
-  lw $t0, 12($fp)
-  sw $t0, -4($fp)
-  lw $t0, 16($fp)
-  sw $t0, -8($fp)
-  lw $t0, 20($fp)
-  sw $t0, -12($fp)
   addi $sp, $sp, -88
+  lw $t0, 8($fp)
+  sw $t0, -4($fp)
+  lw $t0, 12($fp)
+  sw $t0, -8($fp)
+  lw $t0, 16($fp)
+  sw $t0, -12($fp)
   lw $t0, -8($fp)
   sw $t0, -16($fp)
   lw $t0, -12($fp)
@@ -352,15 +350,14 @@ label12:
   lw $t0, -28($fp)
   addi $sp, $sp, -4
   sw $t0, 0($sp)
-  addi $sp, $sp, -12
-  sw $ra, 8($sp)
-  sw $fp, 4($sp)
-  sw $sp, 0($sp)
+  addi $sp, $sp, -8
+  sw $ra, 4($sp)
+  sw $fp, 0($sp)
   jal Partition
-  lw $sp, 0($fp)
-  lw $fp, 4($sp)
-  lw $ra, 8($sp)
-  add $sp, $sp, 24
+  move $sp, $fp
+  lw $fp, 0($sp)
+  lw $ra, 4($sp)
+  add $sp, $sp, 20
   sw $v0, -24($fp)
   lw $t0, -4($fp)
   sw $t0, -40($fp)
@@ -379,15 +376,14 @@ label12:
   lw $t0, -40($fp)
   addi $sp, $sp, -4
   sw $t0, 0($sp)
-  addi $sp, $sp, -12
-  sw $ra, 8($sp)
-  sw $fp, 4($sp)
-  sw $sp, 0($sp)
+  addi $sp, $sp, -8
+  sw $ra, 4($sp)
+  sw $fp, 0($sp)
   jal QuickSort
-  lw $sp, 0($fp)
-  lw $fp, 4($sp)
-  lw $ra, 8($sp)
-  add $sp, $sp, 24
+  move $sp, $fp
+  lw $fp, 0($sp)
+  lw $ra, 4($sp)
+  add $sp, $sp, 20
   sw $v0, -60($fp)
   lw $t0, -4($fp)
   sw $t0, -64($fp)
@@ -406,15 +402,14 @@ label12:
   lw $t0, -64($fp)
   addi $sp, $sp, -4
   sw $t0, 0($sp)
-  addi $sp, $sp, -12
-  sw $ra, 8($sp)
-  sw $fp, 4($sp)
-  sw $sp, 0($sp)
+  addi $sp, $sp, -8
+  sw $ra, 4($sp)
+  sw $fp, 0($sp)
   jal QuickSort
-  lw $sp, 0($fp)
-  lw $fp, 4($sp)
-  lw $ra, 8($sp)
-  add $sp, $sp, 24
+  move $sp, $fp
+  lw $fp, 0($sp)
+  lw $ra, 4($sp)
+  add $sp, $sp, 20
   sw $v0, -84($fp)
 label13:
   li $v0, 0
@@ -491,15 +486,14 @@ label16:
   lw $t0, -80($fp)
   addi $sp, $sp, -4
   sw $t0, 0($sp)
-  addi $sp, $sp, -12
-  sw $ra, 8($sp)
-  sw $fp, 4($sp)
-  sw $sp, 0($sp)
+  addi $sp, $sp, -8
+  sw $ra, 4($sp)
+  sw $fp, 0($sp)
   jal QuickSort
-  lw $sp, 0($fp)
-  lw $fp, 4($sp)
-  lw $ra, 8($sp)
-  add $sp, $sp, 24
+  move $sp, $fp
+  lw $fp, 0($sp)
+  lw $ra, 4($sp)
+  add $sp, $sp, 20
   sw $v0, -100($fp)
   li $t0, 0
   sw $t0, -40($fp)
