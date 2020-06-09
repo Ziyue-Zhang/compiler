@@ -142,7 +142,12 @@ void mips_call(intercode* code){
     fprintf(output, "  sw $ra, 4($sp)\n");
     fprintf(output, "  sw $fp, 0($sp)\n");
 
-    fprintf(output, "  jal _%s\n", code->func_name);
+    if(strcmp(code->func_name,"main")==0){
+        fprintf(output, "  jal %s\n", code->func_name);
+    }
+    else{
+        fprintf(output, "  jal _%s\n", code->func_name);
+    }
     
     fprintf(output, "  move $sp, $fp\n");
     fprintf(output, "  lw $fp, 0($sp)\n");
