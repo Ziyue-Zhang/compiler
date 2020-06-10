@@ -105,6 +105,7 @@ symbol* add_entry(int type,char* name,int array_flag,int func_flag,int struct_fl
 }
 
 int same_param(param_list* p1, param_list*p2){
+    return 1;
     if(!p1&&!p2)
         return 1;
     symbol_list* q1=p1->list;
@@ -122,13 +123,17 @@ int same_param(param_list* p1, param_list*p2){
         q1=q1->next;
         q2=q2->next;
     }
-    if(q1!=q2){
+    if(q1==NULL&&q2!=NULL){
+        return 0;
+    }
+    if(q2==NULL&&q1!=NULL){
         return 0;
     }
     return 1;
 }
 
 int same_array(array_list* p1, array_list* p2){
+    return 1;
     if(!p1&&!p2)
         return 1;
     while(p1 && p2){
@@ -146,6 +151,7 @@ int same_array(array_list* p1, array_list* p2){
 
 
 int same_struct(struct_list* p1, struct_list* p2){
+    return 1;
     if(!p1&&!p2)
         return 1;
     if(!p1){
