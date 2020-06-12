@@ -126,10 +126,12 @@ void mips_if(intercode* code){
         fprintf(output, "  bne $t0, $t1, label%d\n", code->label);
     }
 }
+
 void mips_return(intercode* code){
     mips_reg(code->result,"v",0);
     fprintf(output, "  jr $ra\n");
 }
+
 void mips_arg(intercode* code){
     arg_num++;
     mips_reg(code->result,"t",0);
@@ -137,6 +139,7 @@ void mips_arg(intercode* code){
     fprintf(output, "  addi $sp, $sp, -4\n");
     fprintf(output, "  sw $t0, 0($sp)\n");
 }
+
 void mips_call(intercode* code){
     fprintf(output, "  addi $sp, $sp, -8\n");
     fprintf(output, "  sw $ra, 4($sp)\n");
@@ -153,15 +156,17 @@ void mips_call(intercode* code){
     fprintf(output, "  lw $fp, 0($sp)\n");
     fprintf(output, "  lw $ra, 4($sp)\n");
 
-    fprintf(output, "  add $sp, $sp, %d\n", 8+4*arg_num);
+    fprintf(output, "  addi $sp, $sp, %d\n", 8+4*arg_num);
     arg_num=0;
 
     mips_res(code->result,"t",0,"v",0);
 }
+
 void mips_param(intercode* code){
     fprintf(output, "  lw $t0, %d($fp)\n", 4+4*code->result.var_name);
     fprintf(output, "  sw $t0, %d($fp)\n", -4*code->result.var_name);
 }
+
 void mips_read(intercode* code){
     fprintf(output, "  addi $sp, $sp, -4\n");
     fprintf(output, "  sw $ra, 0($sp)\n");
@@ -171,6 +176,7 @@ void mips_read(intercode* code){
 
     mips_res(code->result,"t",0,"v",0);
 }
+
 void mips_write(intercode* code){
     mips_reg(code->result,"a",0);
 

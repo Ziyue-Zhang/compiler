@@ -124,10 +124,10 @@ void translate_vardec(node* root, intercodes* codes){
             }
         }
         if(entry->type==SYMBOL_STRUCT||entry->array_flag==1){
-            intercode* code=intercode_new(IR_DEC);
+            /*intercode* code=intercode_new(IR_DEC);
             code->result.var_name=entry->entry_name;
             code->size=entry->size;
-            intercodes_add(codes,code);
+            intercodes_add(codes,code);*/
         }
     }
     else if(root->num==4){
@@ -1923,7 +1923,7 @@ intercodes* array_assignop(node* root){
     }
 }
 int exp_int(node* root){
-    //return 0;
+    return 0;
     if(root->num==1&&strcmp(root->son[0]->name,"INT")==0){
         return 1;
     }
@@ -1933,7 +1933,7 @@ int exp_int(node* root){
 }
 
 int exp_id(node* root){
-    //return 0;
+    return 0;
     if(root->num==1&&strcmp(root->son[0]->name,"ID")==0){
         return 1;
     }
